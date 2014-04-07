@@ -1,0 +1,93 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# This has to be exported to make some magic below work.
+export DH_OPTIONS
+
+INSTANCECOUNT := 4
+PACKAGE	  := imio-webservice
+CURDIR    := $(shell pwd)
+BUILDDIR  := $(CURDIR)/tmp/$(PACKAGE)
+DEBIANCORE    := $(CURDIR)/debian/$(PACKAGE)
+DEBIANZEO    := $(CURDIR)/debian/$(PACKAGE)-zeoserver
+INSTALLDIR   := /srv/$(PACKAGE)
+
+distribution := $(shell lsb_release -is)
+
+clean:
+	#rm -rf $(BUILDDIR)/
+	dh_testdir
+	dh_testroot
+	rm -rf build
+	rm -f build-stamp
+	dh_clean
+
+build:
+	mkdir -p $(BUILDDIR)
+	cp -ap ./bootstrap.py $(BUILDDIR)
+	cp -ap ./setup.py $(BUILDDIR)
+	cp -ap ./*.txt $(BUILDDIR)
+	cp -ap ./*.cfg $(BUILDDIR)
+	cp -apr ./imiowebservicejson $(BUILDDIR)
+	cd $(BUILDDIR) && virtualenv .
+	rm -f $(BUILDDIR)/lib/python2.7/site-packages/easy-install.pth
+	rm -rf $(BUILDDIR)/lib/python2.7/site-packages/setuptools*
+	mkdir -p $(BUILDDIR)/eggs
+	cd $(BUILDDIR) && bin/python bootstrap.py buildout:eggs-directory=$(BUILDDIR)/eggs
+	cd $(BUILDDIR) && bin/buildout buildout:eggs-directory=$(BUILDDIR)/eggs
+	echo $(DEBIANCORE)
+	touch build-stamp
+
+install-base:
+	rm -rf $(DEBIANCORE)
+	dh_testdir
+	dh_testroot
+	dh_clean -k -s
+	dh_installdirs -s
+	rm -f ${BUILDDIR}/.mr.developer.cfg
+	rm -f ${BUILDDIR}/.installed.cfg
+	rm -f ${BUILDDIR}/versions-picked.cfg
+	rm -fr ${BUILDDIR}/downloads
+
+install-core:
+	find ${BUILDDIR}/bin -executable -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
+	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)/${INSTALLDIR}
+	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)/${INSTALLDIR}
+	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
+	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
+	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyo" -delete;
+
+install: install-base install-core
+	#rm -rf $(BUILDDIR)/
+
+binary-common:
+	dh_testdir
+	dh_testroot
+
+	dh_installchangelogs
+
+	dh_installdocs
+	dh_installdebconf
+	dh_installinit
+	dh_installman
+	dh_link
+	dh_strip
+	dh_fixperms
+	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary-indep: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+binary-arch: install
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+binary: binary-arch
+
+.PHONY: build clean binary install

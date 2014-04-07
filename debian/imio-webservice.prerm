@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+set -x
+
+PACKAGE="imio-webservice-core"
+
+
+case "$1" in
+    remove|deconfigure)
+	find /srv/imio-webservice/eggs /srv/imio-webservice/devel -name "*.pyc" -delete;
+	find /srv/imio-webservice/eggs /srv/imio-webservice/devel -name "*.pyo" -delete;
+	find /srv/imio-webservice/eggs /srv/imio-webservice/devel -name "*.bin" -delete;
+    ;;
+
+    upgrade|failed-upgrade)
+    ;;
+
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+exit 0
