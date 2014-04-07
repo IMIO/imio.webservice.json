@@ -37,7 +37,6 @@ class BaseModel(object):
             return getattr(self.json_object, key)
 
 
-
 class TestSchema(BaseModel):
     implements(ITestSchema)
 

@@ -6,7 +6,6 @@ from warlock import model_factory
 
 from pyramid.view import view_config
 
-from .exception import ValidationError
 from .schema import get_schemas
 from .models.test_schema import TestSchema
 
@@ -125,7 +124,7 @@ def file(request):
 
     input_file.seek(0)
     while True:
-        data = input_file.read(2<<16)
+        data = input_file.read(2 << 16)
         if not data:
             break
         output_file.write(data)
