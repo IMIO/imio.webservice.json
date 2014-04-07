@@ -1,40 +1,14 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from warlock.model import Model
 
 from zope.interface import implements
 from pyramid.events import subscriber
 
+from .base import BaseModel
+from .base import get_id
 from ..event import ValidatorEvent
 from ..exception import ValidationError
 from ..interfaces import ITestSchema
-
-UID = -1
-
-
-def get_id():
-    global UID
-    UID += 1
-    return UID
-
-
-class BaseJSONObject(Model):
-
-    def __init__(self, schema, *args, **kwargs):
-        self.__dict__['schema'] = schema
-        Model.__init__(self, *args, **kwargs)
-
-
-class BaseModel(object):
-
-    def __init__(self, *args, **kwargs):
-        self.json_object = BaseJSONObject(self.schema, *args, **kwargs)
-
-    def __getattr__(self, key):
-        try:
-            return self.__getattribute__(key)
-        except AttributeError:
-            return getattr(self.json_object, key)
 
 
 class TestSchema(BaseModel):
