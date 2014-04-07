@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Json validation schema for input document",
+    "description": "This schema is used to validate json data sent when proposing a document to the imio webservice.",
+    "type": "object",
+    "properties": {
+        "external_id": {
+            "description": "The unique identifier of a document",
+            "type": "string",
+            "pattern": "^.+$"
+        },
+        "type": {
+            "description": "The type of the document",
+            "enum": ["FACT", "COUR_E", "COUR_S"]
+        },
+        "pages_number": {
+            "description": "The number of pages",
+            "type": "integer",
+            "minimum": 1
+        },
+        "client_id": {
+            "description": "The id of the client",
+            "type": "string",
+            "minLength": 1
+        },
+        "scan_date": {
+            "description": "The scan date with format YYYY-MM-DD",
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "scan_hour": {
+            "description": "The scan hour with format HH:mm:SS",
+            "type": "string",
+            "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+        },
+        "user": {
+            "description": "The scanner post login name",
+            "type": "string"
+        },
+        "pc": {
+            "description": "The scanner post computer",
+            "type": "string"
+        },
+        "creator": {
+            "description": "The plone login name used for object creation",
+            "type": "string",
+            "minLength": 1
+        },
+        "filesize": {
+            "description": "The scan file size in bytes",
+            "type": "integer",
+            "minimum": 0,
+            "exclusiveMinimum": true
+        },
+        "filename": {
+            "description": "The scan file name",
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "additionalProperties": false,
+    "required": ["external_id", "type", "client_id", "scan_date", "scan_hour", "creator", "filesize", "filename"]
+}
