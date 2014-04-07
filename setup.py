@@ -13,7 +13,6 @@ requires = [
     'pyramid',
     'pyramid_chameleon',
     'pyramid_debugtoolbar',
-    'pyramid_rpc',
     'waitress',
     'warlock',
     ]
