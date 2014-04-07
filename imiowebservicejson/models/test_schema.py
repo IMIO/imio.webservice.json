@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from datetime import datetime
 
 from zope.interface import implements
@@ -22,7 +23,8 @@ class TestSchema(BaseModel):
 
     @property
     def filepath(self):
-        return "/home/vagrant/json/%s.json" % self.uid
+        return os.path.join(os.environ.get('GED_LOG_PATH', '/tmp'),
+                            '%s.json' % self.uid)
 
     @property
     def date(self):

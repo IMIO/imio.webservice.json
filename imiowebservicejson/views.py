@@ -129,7 +129,9 @@ def file(request):
             break
         output_file.write(data)
 
-    shutil.move(tmp_path, '/home/vagrant/file/%s' % filename)
+    upload_path = os.path.join(os.environ.get('GED_UPLOAD_PATH', '/tmp'),
+                               filename)
+    shutil.move(tmp_path, upload_path)
 
     return {
         "success": True,
