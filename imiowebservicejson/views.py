@@ -11,6 +11,7 @@ from pyramid.view import view_config
 from .event import ValidatorEvent
 from .schema import get_schemas
 from .models.test_schema import TestSchema
+from .models.dms_metadata import DMSMetadata
 
 
 def exception_handler(message=u"An error occured during the process"):
@@ -111,6 +112,20 @@ def test_json_view(request, input, response):
     json_file.close()
     response.message = "Well done"
     response.id = str(input.uid)
+    return response
+
+
+@view_config(route_name='dms_metadata', renderer='json')
+@exception_handler()
+@json_validator(schema_name='dms_metadata', model=DMSMetadata)
+def dms_metadata(request, input, response):
+    dms_file = File(external_id=input.external_id,
+                    user='test',
+                    json=json.dumps(request.json))
+    dms_file.insert(flush=True)
+    response.message = "Well done"
+    response.id = dms_file.id
+    response.external_id = input.external_id
     return response
 
 

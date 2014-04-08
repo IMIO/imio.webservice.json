@@ -8,4 +8,8 @@ class IValidatorEvent(Interface):
 
 
 class ITestSchema(Interface):
-    pass
+    """ Marker interface for test_schema json model """
+
+
+class IDMSMetadata(Interface):
+    """ Marker interface for dms_metadata json model """
