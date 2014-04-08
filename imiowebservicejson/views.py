@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
-import shutil
 import json
 import traceback
 from jsonschema import validate, ValidationError
@@ -9,7 +7,9 @@ from warlock import model_factory
 from pyramid.view import view_config
 
 from .event import ValidatorEvent
+from .fileupload import FileUpload
 from .schema import get_schemas
+from .mappers.file import File
 from .models.test_schema import TestSchema
 from .models.dms_metadata import DMSMetadata
 
@@ -132,25 +132,15 @@ def dms_metadata(request, input, response):
 @view_config(route_name='file', renderer='json')
 @exception_handler()
 def file(request):
-    request_file = request.POST['filedata']
-    ext = os.path.splitext(request_file.filename)[-1]
-    filename = '%(name)s%(ext)s' % {'name': request.matchdict.get('id'),
-                                    'ext': ext}
+    upload = FileUpload(request)
+    upload.save_tmpfile()
 
-    tmp_path = '/tmp/%s' % filename
-    input_file = request_file.file
-    output_file = open(tmp_path, 'wb')
+    error = validate_object(request, upload)
+    if error is not None:
+        return failure(error)
 
-    input_file.seek(0)
-    while True:
-        data = input_file.read(2 << 16)
-        if not data:
-            break
-        output_file.write(data)
-
-    upload_path = os.path.join(os.environ.get('GED_UPLOAD_PATH', '/tmp'),
-                               filename)
-    shutil.move(tmp_path, upload_path)
+    upload.move()
+    upload.save_reference()
 
     return {
         "success": True,
