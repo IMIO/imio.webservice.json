@@ -43,3 +43,9 @@ class MapperBase(object):
             else:
                 query = query.order_by(order_by)
         return query.filter(cls._build_filter(**kwargs)).first()
+
+    @classmethod
+    def count(cls, options=[], **kwargs):
+        query = DBSession.query(cls)
+        query = query.options(options)
+        return query.filter(cls._build_filter(**kwargs)).count()

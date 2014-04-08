@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
 import traceback
+from datetime import datetime
 from jsonschema import validate, ValidationError
+from sqlalchemy import desc
 from warlock import model_factory
 
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import forget
+from pyramid.security import unauthenticated_userid
 from pyramid.view import view_config
 
 from .event import ValidatorEvent
@@ -122,9 +125,20 @@ def test_json_view(request, input, response):
 @exception_handler()
 @json_validator(schema_name='dms_metadata', model=DMSMetadata)
 def dms_metadata(request, input, response):
-    dms_file = File(external_id=input.external_id,
-                    user='test',
-                    json=json.dumps(request.json))
+    userid = unauthenticated_userid(request)
+    dms_file = File.first(user=userid,
+                          external_id=input.external_id,
+                          order_by=[desc(File.version)])
+    if dms_file is None or input.update_flag is True and \
+       dms_file.filepath is not None:
+        version = File.count(user=userid, external_id=input.external_id) + 1
+        dms_file = File()
+        dms_file.version = version
+    else:
+        dms_file.update_date = datetime.now()
+    dms_file.external_id = input.external_id
+    dms_file.user = userid
+    dms_file.file_metadata = json.dumps(request.json)
     dms_file.insert(flush=True)
     response.message = "Well done"
     response.id = dms_file.id

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import os
 from datetime import datetime
+from sqlalchemy import desc
 
 from zope.interface import implements
 from pyramid.events import subscriber
+from pyramid.security import unauthenticated_userid
 
 from .base import BaseModel
 from .base import get_id
@@ -23,9 +24,8 @@ class DMSMetadata(BaseModel):
         return self._uid
 
     @property
-    def filepath(self):
-        return os.path.join(os.environ.get('GED_LOG_PATH', '/tmp'),
-                            '%s.json' % self.uid)
+    def update_flag(self):
+        return self.get('update', False)
 
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata)
@@ -45,8 +45,14 @@ def scan_hour_validation(event):
 
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata)
-def external_id(event):
+def unicity_validation(event):
+    if event.context.update_flag is True:
+        return
+    userid = unauthenticated_userid(event.request)
     external_id = event.context.external_id
-    if File.exists(user='test', external_id=external_id) is True:
+    file_data = File.first(user=userid,
+                           external_id=external_id,
+                           order_by=[desc(File.version)])
+    if file_data is not None and file_data.filepath is not None:
         raise ValidationError("The value for the field 'external_id' "
                               "already exist")

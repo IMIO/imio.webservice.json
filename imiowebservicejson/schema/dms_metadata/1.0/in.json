@@ -5,7 +5,7 @@
     "type": "object",
     "properties": {
         "external_id": {
-            "description": "The unique identifier of a document",
+            "description": "The client unique identifier of a document",
             "type": "string",
             "pattern": "^.+$"
         },
@@ -56,6 +56,10 @@
             "description": "The scan file name",
             "type": "string",
             "minLength": 1
+        },
+        "update": {
+            "description": "Update flag",
+            "type": "boolean"
         }
     },
     "additionalProperties": false,

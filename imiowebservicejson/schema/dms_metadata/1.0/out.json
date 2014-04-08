@@ -12,8 +12,12 @@
             "description": "Status message",
             "type": "string"
         },
-        "external_id": {
+        "id": {
             "description": "The unique identifier of a document",
+            "type": "integer"
+        },
+        "external_id": {
+            "description": "The client unique identifier of a document",
             "type": "string"
         },
         "error": {
