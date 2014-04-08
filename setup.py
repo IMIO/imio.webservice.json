@@ -47,5 +47,7 @@ setup(
     entry_points="""\
     [paste.app_factory]
     main = imiowebservicejson:main
+    [console_scripts]
+    init_db = imiowebservicejson.scripts.init_db:main
     """,
 )
