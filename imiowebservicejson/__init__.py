@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from sqlalchemy import engine_from_config
+
 from pyramid.config import Configurator
 from pyramid.settings import asbool
 
+from .db import DBSession
+from .db import DeclarativeBase
 from .predicates import ImplementPredicate
 from .predicates import VersionPredicate
 
@@ -9,6 +13,10 @@ from .predicates import VersionPredicate
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
+    engine = engine_from_config(settings, 'sqlalchemy.')
+    DBSession.configure(bind=engine)
+    DeclarativeBase.metadata.bind = engine
+
     settings['traceback.debug'] = asbool(settings.get('traceback.debug',
                                                       'false'))
     config = Configurator(settings=settings)

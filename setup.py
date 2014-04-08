@@ -13,8 +13,12 @@ requires = [
     'pyramid',
     'pyramid_chameleon',
     'pyramid_debugtoolbar',
+    'pyramid_tm',
     'waitress',
     'warlock',
+    'psycopg2',
+    'SQLAlchemy',
+    'zope.sqlalchemy',
 ]
 
 setup(
