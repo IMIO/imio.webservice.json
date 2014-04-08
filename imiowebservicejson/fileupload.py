@@ -97,6 +97,8 @@ def validate_file(event):
     if event.context.data is None:
         raise ValidationError(u"There is no metadata for the file id '%s'"
                               % event.context.id)
+    if event.context.data.filepath is not None:
+        raise ValidationError(u"This file already exist")
     filesize = event.context.size
     metadata_filesize = event.context.data.file_metadata.get('filesize')
     if filesize != metadata_filesize:
