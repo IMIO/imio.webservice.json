@@ -4,6 +4,9 @@ import traceback
 from jsonschema import validate, ValidationError
 from warlock import model_factory
 
+from pyramid.httpexceptions import HTTPForbidden
+from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.security import forget
 from pyramid.view import view_config
 
 from .event import ValidatorEvent
@@ -84,7 +87,7 @@ def my_view(request):
     return {'project': 'imio.webservice.json'}
 
 
-@view_config(route_name='schema', renderer='json')
+@view_config(route_name='schema', renderer='json', permission='view')
 @exception_handler()
 def schema(request):
     schema_name = request.matchdict.get('name')
@@ -103,7 +106,7 @@ def schema(request):
         'schemas': definition}
 
 
-@view_config(route_name='test', renderer='json')
+@view_config(route_name='test', renderer='json', permission='query')
 @exception_handler()
 @json_validator(schema_name='test_schema', model=TestSchema)
 def test_json_view(request, input, response):
@@ -115,7 +118,7 @@ def test_json_view(request, input, response):
     return response
 
 
-@view_config(route_name='dms_metadata', renderer='json')
+@view_config(route_name='dms_metadata', renderer='json', permission='query')
 @exception_handler()
 @json_validator(schema_name='dms_metadata', model=DMSMetadata)
 def dms_metadata(request, input, response):
@@ -129,7 +132,7 @@ def dms_metadata(request, input, response):
     return response
 
 
-@view_config(route_name='file', renderer='json')
+@view_config(route_name='file', renderer='json', permission='query')
 @exception_handler()
 def file(request):
     upload = FileUpload(request)
@@ -145,3 +148,10 @@ def file(request):
     return {
         "success": True,
         "message": "File uploaded successfully"}
+
+
+@view_config(context=HTTPForbidden)
+def basic_challenge(request):
+    response = HTTPUnauthorized()
+    response.headers.update(forget(request))
+    return response
