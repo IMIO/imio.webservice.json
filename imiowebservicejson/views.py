@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
 import shutil
+import json
+import traceback
 from jsonschema import validate, ValidationError
 from warlock import model_factory
 
 from pyramid.view import view_config
 
+from .event import ValidatorEvent
 from .schema import get_schemas
 from .models.test_schema import TestSchema
 
@@ -16,6 +19,8 @@ def exception_handler(message=u"An error occured during the process"):
             try:
                 return func(request)
             except Exception as e:
+                if request.registry.settings.get('traceback.debug') is True:
+                    print traceback.format_exc()
                 return failure(message, error=str(e))
         return replacement
     return decorator
@@ -37,7 +42,7 @@ def json_validator(schema_name, model):
 
             input_model = model_factory(input_schema, base_class=model)
             input = input_model(**json)
-            error = validate_model(request, input)
+            error = validate_object(request, input)
             if error is not None:
                 return failure(error)
 
@@ -65,9 +70,8 @@ def validate_json_schema(json, schema):
         return u"%s: %s" % (msg, ve_obj.message)
 
 
-def validate_model(request, obj):
+def validate_object(request, obj):
     notify = request.registry.notify
-    from .event import ValidatorEvent
     try:
         notify(ValidatorEvent(request, obj))
     except ValidationError as e:
@@ -98,10 +102,10 @@ def schema(request):
         'schemas': definition}
 
 
-@view_config(route_name='json', renderer='json')
+@view_config(route_name='test', renderer='json')
 @exception_handler()
 @json_validator(schema_name='test_schema', model=TestSchema)
-def json_view(request, input, response):
+def test_json_view(request, input, response):
     json_file = open(input.filepath, 'wb')
     json_file.write(request.body)
     json_file.close()
