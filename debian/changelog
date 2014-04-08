@@ -1,0 +1,107 @@
+imio-webservice (0.1) UNRELEASED; urgency=low
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+  [ Martin Peeters ]
+  * Initial commit
+  * Remove the dependency to pyramid_rpc
+  * Define the packages versions
+  * Add gitignore
+  * Update package metadata
+  * Flake8 fix
+  * Code refactoring
+  * Use environment variables for the log and upload paths
+  * Add DMS metadata 0.1 schema
+
+  [ Jean-François Roche ]
+  * release
+
+ -- Jean-François Roche <jfroche@jfroche-lenovo>  Mon, 07 Apr 2014 17:04:27 +0200
+
+imio-webservice (0.0-1) stable; urgency=low
+
+  * Update package to use new egg names schema
+
+ -- Jean-François Roche <jfroche@affinitic.be>  Thu, 10 Jan 2013 12:00:00 +0100
