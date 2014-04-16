@@ -27,3 +27,9 @@ class BaseModel(object):
             return self.__getattribute__(key)
         except AttributeError:
             return getattr(self.json_object, key)
+
+    def __setattr__(self, key, value):
+        if hasattr(self, 'json_object') is True:
+            if key in self.json_object:
+                setattr(self.json_object, key, value)
+        self.__dict__[key] = value
