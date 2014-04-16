@@ -16,7 +16,6 @@ from .event import ValidatorEvent
 from .fileupload import FileUpload
 from .schema import get_schemas
 from .mappers.file import File
-from .models.test_schema import TestSchema
 from .models.dms_metadata import DMSMetadata
 
 
@@ -107,18 +106,6 @@ def schema(request):
     return {
         'success': True,
         'schemas': definition}
-
-
-@view_config(route_name='test', renderer='json', permission='query')
-@exception_handler()
-@json_validator(schema_name='test_schema', model=TestSchema)
-def test_json_view(request, input, response):
-    json_file = open(input.filepath, 'wb')
-    json_file.write(request.body)
-    json_file.close()
-    response.message = "Well done"
-    response.id = str(input.uid)
-    return response
 
 
 @view_config(route_name='dms_metadata', renderer='json', permission='query')
