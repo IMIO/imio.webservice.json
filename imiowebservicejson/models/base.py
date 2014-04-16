@@ -30,6 +30,6 @@ class BaseModel(object):
 
     def __setattr__(self, key, value):
         if hasattr(self, 'json_object') is True:
-            if key in self.json_object:
+            if key in self.json_object.schema.get('properties'):
                 setattr(self.json_object, key, value)
         self.__dict__[key] = value
