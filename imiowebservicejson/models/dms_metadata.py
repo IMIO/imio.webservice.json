@@ -4,7 +4,7 @@ from sqlalchemy import desc
 
 from zope.interface import implements
 from pyramid.events import subscriber
-from pyramid.security import unauthenticated_userid
+from pyramid import security
 
 from .base import BaseModel
 from .base import get_id
@@ -48,7 +48,7 @@ def scan_hour_validation(event):
 def unicity_validation(event):
     if event.context.update_flag is True:
         return
-    userid = unauthenticated_userid(event.request)
+    userid = security.unauthenticated_userid(event.request)
     external_id = event.context.external_id
     file_data = File.first(user=userid,
                            external_id=external_id,
