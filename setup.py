@@ -44,6 +44,10 @@ setup(
     install_requires=requires,
     tests_require=requires,
     test_suite="imiowebservicejson",
+    extras_require=dict(
+        test=[
+            'mock',
+        ]),
     entry_points="""\
     [paste.app_factory]
     main = imiowebservicejson:main
