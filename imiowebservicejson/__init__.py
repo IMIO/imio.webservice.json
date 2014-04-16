@@ -42,7 +42,7 @@ def main(global_config, **settings):
 
     config.add_subscriber_predicate('implement', ImplementPredicate)
     config.add_subscriber_predicate('version', VersionPredicate)
-    config.scan()
+    config.scan(ignore='.tests')
     return config.make_wsgi_app()
 
 
