@@ -14,11 +14,11 @@ def get_schemas(name, version):
     output_file = open(os.path.join(schema_path, 'out.json'), 'r')
 
     input = json.load(input_file)
-    input['version'] = version
-    input['name'] = name
+    input[u'version'] = version
+    input[u'name'] = name
     input_file.close()
     output = json.load(output_file)
-    output['version'] = version
-    output['name'] = name
+    output[u'version'] = version
+    output[u'name'] = name
     output_file.close()
     return input, output
