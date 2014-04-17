@@ -30,6 +30,7 @@ build:
 	cp -ap ./bootstrap.py $(BUILDDIR)
 	cp -ap ./setup.py $(BUILDDIR)
 	cp -ap ./*.txt $(BUILDDIR)
+	cp -ap ./*.rst $(BUILDDIR)
 	cp -ap ./*.cfg $(BUILDDIR)
 	cp -apr ./imiowebservicejson $(BUILDDIR)
 	cd $(BUILDDIR) && virtualenv -p python2.7 .
