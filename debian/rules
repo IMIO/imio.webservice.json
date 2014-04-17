@@ -32,7 +32,7 @@ build:
 	cp -ap ./*.txt $(BUILDDIR)
 	cp -ap ./*.cfg $(BUILDDIR)
 	cp -apr ./imiowebservicejson $(BUILDDIR)
-	cd $(BUILDDIR) && virtualenv .
+	cd $(BUILDDIR) && virtualenv -p python2.7 .
 	rm -f $(BUILDDIR)/lib/python2.7/site-packages/easy-install.pth
 	rm -rf $(BUILDDIR)/lib/python2.7/site-packages/setuptools*
 	mkdir -p $(BUILDDIR)/eggs
