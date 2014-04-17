@@ -6,3 +6,7 @@ install:
   - bin/buildout -N -q -t 3
 script:
   - bin/py.test
+before_script:
+  - psql -c 'create database testdb;' -U postgres
+addons:
+  postgresql: "9.3"
