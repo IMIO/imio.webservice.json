@@ -6,10 +6,10 @@ from jsonschema import validate, ValidationError
 from sqlalchemy import desc
 from warlock import model_factory
 
+from pyramid import security
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import forget
-from pyramid.security import unauthenticated_userid
 from pyramid.view import view_config
 
 from .event import ValidatorEvent
@@ -41,13 +41,13 @@ def json_validator(schema_name, model):
                 msg = u"The schema '%s %s' doesn't exist" % (schema_name, version)
                 return failure(msg)
 
-            json = request.json_body
-            error = validate_json_schema(json, input_schema)
+            input_json = request.json_body
+            error = validate_json_schema(input_json, input_schema)
             if error is not None:
                 return failure(error)
 
             input_model = model_factory(input_schema, base_class=model)
-            input = input_model(**json)
+            input = input_model(**input_json)
             error = validate_object(request, input)
             if error is not None:
                 return failure(error)
@@ -66,9 +66,9 @@ def failure(message, error=None):
     return msg
 
 
-def validate_json_schema(json, schema):
+def validate_json_schema(input_json, schema):
     try:
-        validate(json, schema)
+        validate(input_json, schema)
     except ValidationError, ve_obj:
         msg = 'Validation error'
         if len(ve_obj.path):
@@ -112,7 +112,7 @@ def schema(request):
 @exception_handler()
 @json_validator(schema_name='dms_metadata', model=DMSMetadata)
 def dms_metadata(request, input, response):
-    userid = unauthenticated_userid(request)
+    userid = security.unauthenticated_userid(request)
     dms_file = File.first(user=userid,
                           external_id=input.external_id,
                           order_by=[desc(File.version)])

@@ -1,0 +1,13 @@
+{
+    "external_id": "CH-00004",
+    "type": "FACT",
+    "pages_number": 1,
+    "client_id": "CH",
+    "scan_date": "2014-04-07",
+    "scan_hour": "13:24:12",
+    "user": "testuser",
+    "pc": "pc-scan01",
+    "creator": "ploneuser",
+    "filesize": 3030,
+    "filename": "testdoc.txt"
+}
