@@ -55,7 +55,7 @@ install-base:
 	rm -fr ${BUILDDIR}/downloads
 
 install-core:
-	find ${BUILDDIR}/bin -executable -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
+	find ${BUILDDIR}/bin -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
 	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)/${INSTALLDIR}
 	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)/${INSTALLDIR}
 	cp -ap $(BUILDDIR)/setup.py $(DEBIANCORE)/${INSTALLDIR}
@@ -63,6 +63,8 @@ install-core:
 	cp -apr $(BUILDDIR)/imiowebservicejson $(DEBIANCORE)/${INSTALLDIR}
 	cp -apr $(BUILDDIR)/lib $(DEBIANCORE)/${INSTALLDIR}
 	cp -apr $(BUILDDIR)/include $(DEBIANCORE)/${INSTALLDIR}
+	find ${BUILDDIR}/develop-eggs -executable -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
+	cp -apr $(BUILDDIR)/develop-eggs $(DEBIANCORE)/${INSTALLDIR}
 	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyo" -delete;
