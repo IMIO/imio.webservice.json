@@ -20,4 +20,7 @@ def pytest_sessionstart():
     DeclarativeBase.metadata.bind = engine
     DeclarativeBase.metadata.create_all()  # Create tables
 
+    # Initialize the sequence
+    DBSession.execute("select nextval('file_id_seq')").fetchall()
+
     os.environ['GED_UPLOAD_PATH'] = './'

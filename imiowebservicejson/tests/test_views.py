@@ -76,7 +76,7 @@ class TestViews(unittest.TestCase):
         self.assertEqual(out_json, result)
 
     def _get_last_file_id(self):
-        return DBSession.execute('select last_value from file_id_seq').fetchone()[0]
+        return DBSession.execute("select currval('file_id_seq')").fetchone()[0]
 
     def test_failure(self):
         self.assertEqual({"success": False, "message": "FOO"},
