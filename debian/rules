@@ -59,6 +59,7 @@ install-core:
 	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)/${INSTALLDIR}
 	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)/${INSTALLDIR}
 	cp -ap $(BUILDDIR)/setup.py $(DEBIANCORE)/${INSTALLDIR}
+	cp -ap $(BUILDDIR)/production.ini $(DEBIANCORE)/${INSTALLDIR}
 	cp -apr $(BUILDDIR)/imiowebservicejson $(DEBIANCORE)/${INSTALLDIR}
 	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
