@@ -1,14 +1,6 @@
 # -*- coding: utf-8 -*-
 from warlock.model import Model
 
-UID = -1
-
-
-def get_id():
-    global UID
-    UID += 1
-    return UID
-
 
 class BaseJSONObject(Model):
 

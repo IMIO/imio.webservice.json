@@ -7,7 +7,6 @@ from pyramid.events import subscriber
 from pyramid import security
 
 from .base import BaseModel
-from .base import get_id
 from ..event import ValidatorEvent
 from ..exception import ValidationError
 from ..interfaces import IDMSMetadata
@@ -16,12 +15,6 @@ from ..mappers.file import File
 
 class DMSMetadata(BaseModel):
     implements(IDMSMetadata)
-
-    @property
-    def uid(self):
-        if hasattr(self, '_uid') is False:
-            self._uid = get_id()
-        return self._uid
 
     @property
     def update_flag(self):
