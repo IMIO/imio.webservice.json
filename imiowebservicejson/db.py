@@ -35,6 +35,21 @@ class MapperBase(object):
 
     @classmethod
     def first(cls, options=[], order_by=[], **kwargs):
+        query = cls.query(options=options, order_by=order_by, **kwargs)
+        return query.first()
+
+    @classmethod
+    def count(cls, options=[], **kwargs):
+        query = cls.query(options=options, **kwargs)
+        return query.count()
+
+    @classmethod
+    def get(cls, options=[], order_by=[], limit=None, **kwargs):
+        query = cls.query(options=options, order_by=order_by, **kwargs)
+        return query.all()
+
+    @classmethod
+    def query(cls, options=[], order_by=[], **kwargs):
         query = DBSession.query(cls)
         query = query.options(options)
         if order_by:
@@ -42,10 +57,4 @@ class MapperBase(object):
                 query = query.order_by(*order_by)
             else:
                 query = query.order_by(order_by)
-        return query.filter(cls._build_filter(**kwargs)).first()
-
-    @classmethod
-    def count(cls, options=[], **kwargs):
-        query = DBSession.query(cls)
-        query = query.options(options)
-        return query.filter(cls._build_filter(**kwargs)).count()
+        return query.filter(cls._build_filter(**kwargs))
