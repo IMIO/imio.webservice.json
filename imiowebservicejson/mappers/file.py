@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json as jsonmodule
 
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Text
@@ -36,6 +37,9 @@ class File(DeclarativeBase, MapperBase):
     #file_metadata = Column(u'metadata', JSON, nullable=False)
 
     filepath = Column(u'filepath', Text)
+
+    amqp_status = Column(u'amqp_status', Boolean, nullable=False,
+                         server_default="false")
 
     @property
     def file_metadata(self):
