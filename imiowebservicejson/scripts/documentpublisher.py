@@ -4,13 +4,15 @@ import transaction
 
 from pyramid.paster import bootstrap
 
-from ..amqp import BasePublisher
-from ..mappers.file import File
+from imiowebservicejson.mappers.file import File
+from imio.document.amqp import BasePublisher
 
 
 class DocumentPublisher(BasePublisher):
     queue = 'ged.document'
     routing_key = 'dms_metadata'
+    logger_name = 'document_notifier'
+    log_file = 'docnotifier.log'
 
     def add_messages(self):
         query = File.query(amqp_status=False)
