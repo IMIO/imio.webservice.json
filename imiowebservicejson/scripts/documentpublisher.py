@@ -29,10 +29,10 @@ def main():
     parser.add_argument('config_uri', type=str)
 
     args = parser.parse_args()
-    bootstrap(args.config_uri)
-    publisher = DocumentPublisher('amqp://guest:guest@127.0.0.1:5672/%2F?'
-                                  'connection_attempts=3&'
-                                  'heartbeat_interval=3600')
+    registry = bootstrap(args.config_uri).get('registry')
+    url = registry.settings.get('rabbitmq.url')
+    publisher = DocumentPublisher('{0}/%2F?connection_attempts=3&'
+                                  'heartbeat_interval=3600'.format(url))
     try:
         publisher.start()
     except KeyboardInterrupt:
