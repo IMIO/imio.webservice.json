@@ -6,6 +6,7 @@ from pyramid.paster import bootstrap
 
 from imiowebservicejson.mappers.file import File
 from imio.document.amqp import BasePublisher
+from imio.document.document import create_document
 
 
 class DocumentPublisher(BasePublisher):
@@ -19,6 +20,9 @@ class DocumentPublisher(BasePublisher):
         query = query.filter(File.filepath != None)
         query = query.limit(100)
         return query.all()
+
+    def transform_message(self, message):
+        return create_document(message)
 
     def mark_message(self, message):
         message.amqp_status = True

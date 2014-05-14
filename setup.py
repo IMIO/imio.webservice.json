@@ -19,6 +19,7 @@ requires = [
     'psycopg2',
     'SQLAlchemy',
     'zope.sqlalchemy',
+    'imio.document',
     'imio.document.amqp',
 ]
 
