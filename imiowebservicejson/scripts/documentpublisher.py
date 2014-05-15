@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from ConfigParser import ConfigParser
+from sqlalchemy import engine_from_config
 import argparse
-import transaction
 
-from pyramid.paster import bootstrap
-
+from imiowebservicejson.db import DBSession
+from imiowebservicejson.db import DeclarativeBase
 from imiowebservicejson.mappers.file import File
 from imio.document.amqp import BasePublisher
 from imio.document.document import create_document
@@ -26,8 +27,7 @@ class DocumentPublisher(BasePublisher):
 
     def mark_message(self, message):
         message.amqp_status = True
-        message.update()
-        transaction.commit()
+        message.update(commit=True)
 
 
 def main():
@@ -35,8 +35,17 @@ def main():
     parser.add_argument('config_uri', type=str)
 
     args = parser.parse_args()
-    registry = bootstrap(args.config_uri).get('registry')
-    url = registry.settings.get('rabbitmq.url')
+    config = ConfigParser()
+    config.read(args.config_uri)
+
+    engine = engine_from_config(config._sections.get('app:main'),
+                                prefix='sqlalchemy.')
+    # Remove the transaction manager
+    del DBSession.session_factory.kw['extension']
+    DBSession.configure(bind=engine)
+    DeclarativeBase.metadata.bind = engine
+
+    url = config.get('app:main', 'rabbitmq.url')
     publisher = DocumentPublisher('{0}/%2F?connection_attempts=3&'
                                   'heartbeat_interval=3600'.format(url))
     try:
