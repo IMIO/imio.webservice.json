@@ -22,10 +22,12 @@ class MapperBase(object):
             filters.append(column == value)
         return operator(*filters)
 
-    def insert(self, flush=False):
+    def insert(self, flush=False, commit=False):
         DBSession.add(self)
         if flush is True:
             DBSession.flush()
+        if commit is True:
+            DBSession.commit()
 
     update = insert
 
