@@ -6,8 +6,8 @@ import argparse
 from imiowebservicejson.db import DBSession
 from imiowebservicejson.db import DeclarativeBase
 from imiowebservicejson.mappers.file import File
-from imio.document.amqp import BasePublisher
-from imio.document.document import create_document
+from imio.amqp import BasePublisher
+from imio.dataexchange.core.document import create_document
 
 
 class DocumentPublisher(BasePublisher):
