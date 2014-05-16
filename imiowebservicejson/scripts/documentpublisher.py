@@ -11,7 +11,7 @@ from imio.dataexchange.core.document import create_document
 
 
 class DocumentPublisher(BasePublisher):
-    queue = 'ged.document'
+    queue = 'dms.document'
     routing_key = 'dms_metadata'
     logger_name = 'document_notifier'
     log_file = 'docnotifier.log'
