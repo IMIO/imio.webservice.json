@@ -11,8 +11,6 @@ from imio.dataexchange.core.document import create_document
 
 
 class DocumentPublisher(BasePublisher):
-    queue = 'dms.document'
-    routing_key = 'dms_metadata'
     logger_name = 'document_notifier'
     log_file = 'docnotifier.log'
 
@@ -28,6 +26,9 @@ class DocumentPublisher(BasePublisher):
     def mark_message(self, message):
         message.amqp_status = True
         message.update(commit=True)
+
+    def get_routing_key(self, message):
+        return message.file_metadata.get('type')
 
 
 def main():
@@ -48,6 +49,9 @@ def main():
     url = config.get('app:main', 'rabbitmq.url')
     publisher = DocumentPublisher('{0}/%2F?connection_attempts=3&'
                                   'heartbeat_interval=3600'.format(url))
+    publisher.setup_queue('dms.invoice', 'FACT')
+    publisher.setup_queue('dms.incomingmail', 'COUR_E')
+    publisher.setup_queue('dms.outgoingmail', 'COUR_S')
     try:
         publisher.start()
     except KeyboardInterrupt:
