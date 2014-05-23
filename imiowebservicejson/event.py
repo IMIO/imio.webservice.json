@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from zope.interface import implements
 
-from .interfaces import IValidatorEvent
+from imiowebservicejson.interfaces import IValidatorEvent
 
 
 class ValidatorEvent(object):

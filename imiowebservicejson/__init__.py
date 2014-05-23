@@ -11,9 +11,9 @@ from pyramid.settings import asbool
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db import DeclarativeBase
 
-from .authentication import check_authentication
-from .predicates import ImplementPredicate
-from .predicates import VersionPredicate
+from imiowebservicejson.authentication import check_authentication
+from imiowebservicejson.predicates import ImplementPredicate
+from imiowebservicejson.predicates import VersionPredicate
 
 
 def main(global_config, **settings):

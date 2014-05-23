@@ -11,8 +11,8 @@ from pyramid import testing
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file import File
 
-from .. import views
-from ..fileupload import FileUpload
+from imiowebservicejson import views
+from imiowebservicejson.fileupload import FileUpload
 
 
 class TestViews(unittest.TestCase):

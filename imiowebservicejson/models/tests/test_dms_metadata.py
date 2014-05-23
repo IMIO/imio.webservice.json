@@ -8,9 +8,9 @@ from pyramid import security
 
 from imio.dataexchange.db.mappers.file import File
 
-from .. import dms_metadata
-from ...exception import ValidationError
-from ...schema import get_schemas
+from imiowebservicejson.exception import ValidationError
+from imiowebservicejson.schema import get_schemas
+from imiowebservicejson.models import dms_metadata
 
 
 class TestDMSMetadata(unittest.TestCase):

@@ -7,9 +7,9 @@ from pyramid.events import subscriber
 
 from imio.dataexchange.db.mappers.file import File
 
-from .event import ValidatorEvent
-from .exception import ValidationError
-from .interfaces import IFileUpload
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.exception import ValidationError
+from imiowebservicejson.interfaces import IFileUpload
 
 
 def handle_exception(rollback, attr):

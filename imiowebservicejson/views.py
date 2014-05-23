@@ -14,10 +14,10 @@ from pyramid.view import view_config
 
 from imio.dataexchange.db.mappers.file import File
 
-from .event import ValidatorEvent
-from .fileupload import FileUpload
-from .schema import get_schemas
-from .models.dms_metadata import DMSMetadata
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.fileupload import FileUpload
+from imiowebservicejson.schema import get_schemas
+from imiowebservicejson.models.dms_metadata import DMSMetadata
 
 
 def exception_handler(message=u"An error occured during the process"):
