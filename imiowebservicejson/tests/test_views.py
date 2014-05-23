@@ -8,10 +8,11 @@ from mock import Mock
 from pyramid import security
 from pyramid import testing
 
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db.mappers.file import File
+
 from .. import views
-from ..db import DBSession
 from ..fileupload import FileUpload
-from ..mappers.file import File
 
 
 class TestViews(unittest.TestCase):

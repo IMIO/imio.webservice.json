@@ -3,8 +3,8 @@ import argparse
 
 from pyramid.paster import bootstrap
 
-from ..db import DeclarativeBase
-from ..mappers.file import File
+from imio.dataexchange.db import DeclarativeBase
+from imio.dataexchange.db.mappers.file import File
 File  # Pyflakes fix
 
 

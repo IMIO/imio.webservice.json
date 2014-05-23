@@ -5,13 +5,14 @@ import os
 import unittest
 from StringIO import StringIO
 
-from ..db import DBSession
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db.mappers.file import File
+
 from ..event import ValidatorEvent
 from ..exception import ValidationError
 from ..fileupload import FileUpload
 from ..fileupload import remove_file
 from ..fileupload import validate_file
-from ..mappers.file import File
 
 
 class TestFileUpload(unittest.TestCase):

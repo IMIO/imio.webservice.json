@@ -12,10 +12,11 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import forget
 from pyramid.view import view_config
 
+from imio.dataexchange.db.mappers.file import File
+
 from .event import ValidatorEvent
 from .fileupload import FileUpload
 from .schema import get_schemas
-from .mappers.file import File
 from .models.dms_metadata import DMSMetadata
 
 

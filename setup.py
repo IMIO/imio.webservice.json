@@ -20,6 +20,7 @@ requires = [
     'SQLAlchemy',
     'zope.sqlalchemy',
     'imio.dataexchange.core',
+    'imio.dataexchange.db',
     'imio.amqp',
 ]
 

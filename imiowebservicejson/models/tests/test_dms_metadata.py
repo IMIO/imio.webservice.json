@@ -6,10 +6,11 @@ from warlock import model_factory
 
 from pyramid import security
 
+from imio.dataexchange.db.mappers.file import File
+
 from .. import dms_metadata
 from ...exception import ValidationError
 from ...schema import get_schemas
-from ...mappers.file import File
 
 
 class TestDMSMetadata(unittest.TestCase):

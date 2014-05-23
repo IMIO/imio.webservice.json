@@ -8,9 +8,10 @@ from pyramid.security import Allow
 from pyramid.security import Authenticated
 from pyramid.settings import asbool
 
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db import DeclarativeBase
+
 from .authentication import check_authentication
-from .db import DBSession
-from .db import DeclarativeBase
 from .predicates import ImplementPredicate
 from .predicates import VersionPredicate
 
