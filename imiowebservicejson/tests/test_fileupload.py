@@ -7,6 +7,7 @@ from StringIO import StringIO
 
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file import File
+from imio.dataexchange.db.mappers.file_type import FileType
 
 from imiowebservicejson.event import ValidatorEvent
 from imiowebservicejson.exception import ValidationError
@@ -16,6 +17,10 @@ from imiowebservicejson.fileupload import validate_file
 
 
 class TestFileUpload(unittest.TestCase):
+
+    def setUp(self):
+        DBSession.add(FileType(id='FACT', description='description'))
+        DBSession.flush()
 
     def tearDown(self):
         DBSession.rollback()
@@ -80,6 +85,8 @@ class TestFileUpload(unittest.TestCase):
     def test_data(self):
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser')
         record.file_metadata = json.dumps({'filesize': 6})
@@ -103,6 +110,8 @@ class TestFileUpload(unittest.TestCase):
     def test_save_reference(self):
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser',
                       file_metadata=json.dumps({'filesize': 6}))
@@ -129,6 +138,8 @@ class TestFileUpload(unittest.TestCase):
         self._create_tmp_file()
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser',
                       filepath='/tmp/120.txt',
@@ -146,6 +157,8 @@ class TestFileUpload(unittest.TestCase):
         self._create_tmp_file()
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser',
                       file_metadata=json.dumps({'filesize': 4}))
@@ -158,6 +171,8 @@ class TestFileUpload(unittest.TestCase):
         self._create_tmp_file()
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser',
                       file_metadata=json.dumps({'filesize': 6}))

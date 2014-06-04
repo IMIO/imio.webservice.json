@@ -10,6 +10,7 @@ from pyramid import testing
 
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file import File
+from imio.dataexchange.db.mappers.file_type import FileType
 
 from imiowebservicejson import views
 from imiowebservicejson.fileupload import FileUpload
@@ -24,6 +25,8 @@ class TestViews(unittest.TestCase):
         self._save_tmpfile = FileUpload.save_tmpfile
         self._move = FileUpload.move
         self._save_reference = FileUpload.save_reference
+        DBSession.add(FileType(id='FACT', description='description'))
+        DBSession.flush()
 
     def tearDown(self):
         DBSession.rollback()
@@ -131,6 +134,8 @@ class TestViews(unittest.TestCase):
     def test_dms_metadata_update(self):
         data = File(id=1,
                     external_id='CH-00001',
+                    client_id='CH',
+                    type='FACT',
                     version=1,
                     user='testuser',
                     file_metadata=json.dumps({'filesize': 6}))
@@ -146,6 +151,8 @@ class TestViews(unittest.TestCase):
     def test_dms_metadata_new_version(self):
         data = File(id=1,
                     external_id='CH-00002',
+                    client_id='CH',
+                    type='FACT',
                     version=1,
                     user='testuser',
                     filepath='/tmp/test.txt',
