@@ -125,6 +125,8 @@ def dms_metadata(request, input, response):
     else:
         dms_file.update_date = datetime.now()
     dms_file.external_id = input.external_id
+    dms_file.client_id = input.client_id
+    dms_file.type = input.type
     dms_file.user = userid
     dms_file.file_metadata = json.dumps(request.json)
     dms_file.insert(flush=True)
