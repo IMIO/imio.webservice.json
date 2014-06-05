@@ -12,7 +12,6 @@ deb:
 
 .PHONY: bootstrap
 bootstrap:
-	git checkout rabbitmq
 	virtualenv-2.7 .
 	./bin/python bootstrap.py
 
