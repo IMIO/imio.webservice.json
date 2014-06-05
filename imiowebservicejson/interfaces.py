@@ -11,8 +11,6 @@ class IFileUpload(Interface):
     """ Marker interface for uploaded files """
 
 
-class ITestSchema(Interface):
-    """ Marker interface for test_schema json model """
 
 
 class IDMSMetadata(Interface):
