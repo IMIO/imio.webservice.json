@@ -29,7 +29,7 @@ class DocumentPublisher(BasePublisher):
         message.update(commit=True)
 
     def get_routing_key(self, message):
-        return message.file_metadata.get('type')
+        return message.type
 
 
 def main():
