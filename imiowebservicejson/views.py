@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import json
+
 import traceback
 from datetime import datetime
 from jsonschema import validate, ValidationError
@@ -12,11 +12,12 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import forget
 from pyramid.view import view_config
 
-from .event import ValidatorEvent
-from .fileupload import FileUpload
-from .schema import get_schemas
-from .mappers.file import File
-from .models.dms_metadata import DMSMetadata
+from imio.dataexchange.db.mappers.file import File
+
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.fileupload import FileUpload
+from imiowebservicejson.schema import get_schemas
+from imiowebservicejson.models.dms_metadata import DMSMetadata
 
 
 def exception_handler(message=u"An error occured during the process"):
@@ -124,8 +125,10 @@ def dms_metadata(request, input, response):
     else:
         dms_file.update_date = datetime.now()
     dms_file.external_id = input.external_id
+    dms_file.client_id = input.client_id
+    dms_file.type = input.type
     dms_file.user = userid
-    dms_file.file_metadata = json.dumps(request.json)
+    dms_file.file_metadata = input.json_object
     dms_file.insert(flush=True)
     response.message = "Well done"
     response.id = dms_file.id

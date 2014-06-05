@@ -3,7 +3,7 @@
 import unittest
 from warlock import model_factory
 
-from ..base import BaseModel
+from imiowebservicejson.models.base import BaseModel
 
 
 class TestBase(unittest.TestCase):

@@ -5,10 +5,11 @@ import shutil
 from zope.interface import implements
 from pyramid.events import subscriber
 
-from .event import ValidatorEvent
-from .exception import ValidationError
-from .interfaces import IFileUpload
-from .mappers.file import File
+from imio.dataexchange.db.mappers.file import File
+
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.exception import ValidationError
+from imiowebservicejson.interfaces import IFileUpload
 
 
 def handle_exception(rollback, attr):

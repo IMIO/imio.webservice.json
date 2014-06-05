@@ -8,10 +8,12 @@ from mock import Mock
 from pyramid import security
 from pyramid import testing
 
-from .. import views
-from ..db import DBSession
-from ..fileupload import FileUpload
-from ..mappers.file import File
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db.mappers.file import File
+from imio.dataexchange.db.mappers.file_type import FileType
+
+from imiowebservicejson import views
+from imiowebservicejson.fileupload import FileUpload
 
 
 class TestViews(unittest.TestCase):
@@ -23,6 +25,8 @@ class TestViews(unittest.TestCase):
         self._save_tmpfile = FileUpload.save_tmpfile
         self._move = FileUpload.move
         self._save_reference = FileUpload.save_reference
+        DBSession.add(FileType(id='FACT', description='description'))
+        DBSession.flush()
 
     def tearDown(self):
         DBSession.rollback()
@@ -130,9 +134,13 @@ class TestViews(unittest.TestCase):
     def test_dms_metadata_update(self):
         data = File(id=1,
                     external_id='CH-00001',
+                    client_id='CH',
+                    type='FACT',
                     version=1,
-                    user='testuser',
-                    file_metadata=json.dumps({'filesize': 6}))
+                    user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-00001'}
+        data.file_metadata = metadata
         data.insert(flush=True)
         security.unauthenticated_userid = Mock(return_value=u'testuser')
         request = self._request
@@ -140,15 +148,19 @@ class TestViews(unittest.TestCase):
         self._view_test('dms_metadata', 'dms_metadata_update', request)
         data = File.first(id=1)
         self.assertIsNotNone(data.update_date)
-        self.assertEqual(3030, json.loads(data.file_metadata).get('filesize'))
+        self.assertEqual(3030, data.file_metadata.get('filesize'))
 
     def test_dms_metadata_new_version(self):
         data = File(id=1,
                     external_id='CH-00002',
+                    client_id='CH',
+                    type='FACT',
                     version=1,
                     user='testuser',
-                    filepath='/tmp/test.txt',
-                    file_metadata=json.dumps({'filesize': 6}))
+                    filepath='/tmp/test.txt')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-00002'}
+        data.file_metadata = metadata
         data.insert(flush=True)
         security.unauthenticated_userid = Mock(return_value=u'testuser')
         request = self._request

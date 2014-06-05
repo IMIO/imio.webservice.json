@@ -6,11 +6,12 @@ from zope.interface import implements
 from pyramid.events import subscriber
 from pyramid import security
 
-from .base import BaseModel
-from ..event import ValidatorEvent
-from ..exception import ValidationError
-from ..interfaces import IDMSMetadata
-from ..mappers.file import File
+from imio.dataexchange.db.mappers.file import File
+
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.exception import ValidationError
+from imiowebservicejson.interfaces import IDMSMetadata
+from imiowebservicejson.models.base import BaseModel
 
 
 class DMSMetadata(BaseModel):

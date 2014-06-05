@@ -16,9 +16,9 @@ requires = [
     'pyramid_tm',
     'waitress',
     'warlock',
-    'psycopg2',
-    'SQLAlchemy',
-    'zope.sqlalchemy',
+    'imio.dataexchange.core',
+    'imio.dataexchange.db',
+    'imio.amqp',
 ]
 
 setup(
@@ -52,6 +52,6 @@ setup(
     [paste.app_factory]
     main = imiowebservicejson:main
     [console_scripts]
-    init_db = imiowebservicejson.scripts.init_db:main
+    document_publisher = imiowebservicejson.scripts.documentpublisher:main
     """,
 )

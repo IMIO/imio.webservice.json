@@ -1,20 +1,25 @@
 # -*- coding: utf-8 -*-
 
-import json
 import os
 import unittest
 from StringIO import StringIO
 
-from ..db import DBSession
-from ..event import ValidatorEvent
-from ..exception import ValidationError
-from ..fileupload import FileUpload
-from ..fileupload import remove_file
-from ..fileupload import validate_file
-from ..mappers.file import File
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db.mappers.file import File
+from imio.dataexchange.db.mappers.file_type import FileType
+
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.exception import ValidationError
+from imiowebservicejson.fileupload import FileUpload
+from imiowebservicejson.fileupload import remove_file
+from imiowebservicejson.fileupload import validate_file
 
 
 class TestFileUpload(unittest.TestCase):
+
+    def setUp(self):
+        DBSession.add(FileType(id='FACT', description='description'))
+        DBSession.flush()
 
     def tearDown(self):
         DBSession.rollback()
@@ -79,9 +84,13 @@ class TestFileUpload(unittest.TestCase):
     def test_data(self):
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser')
-        record.file_metadata = json.dumps({'filesize': 6})
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         file_data = self._file.data
         self.assertEqual(120, file_data.id)
@@ -102,9 +111,13 @@ class TestFileUpload(unittest.TestCase):
     def test_save_reference(self):
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
-                      user='testuser',
-                      file_metadata=json.dumps({'filesize': 6}))
+                      user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         self._file.save_reference()
         record = File.first(id=120)
@@ -128,10 +141,14 @@ class TestFileUpload(unittest.TestCase):
         self._create_tmp_file()
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
                       user='testuser',
-                      filepath='/tmp/120.txt',
-                      file_metadata=json.dumps({'filesize': 6}))
+                      filepath='/tmp/120.txt')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         file_upload = self._file
         file = open(self._file.filepath, 'w')
@@ -145,9 +162,13 @@ class TestFileUpload(unittest.TestCase):
         self._create_tmp_file()
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
-                      user='testuser',
-                      file_metadata=json.dumps({'filesize': 4}))
+                      user='testuser')
+        metadata = {'filesize': 4, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)
         self.assertRaisesRegexp(ValidationError, '.*filesize does not match.*',
@@ -157,9 +178,13 @@ class TestFileUpload(unittest.TestCase):
         self._create_tmp_file()
         record = File(id=120,
                       external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
                       version=1,
-                      user='testuser',
-                      file_metadata=json.dumps({'filesize': 6}))
+                      user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)
         self.assertIsNone(validate_file(event))

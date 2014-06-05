@@ -7,7 +7,7 @@ from distutils.version import StrictVersion
 from zope.interface import Interface
 from zope.interface import alsoProvides
 
-from .. import predicates
+from imiowebservicejson import predicates
 
 
 class TestPredicates(unittest.TestCase):

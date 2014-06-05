@@ -8,11 +8,12 @@ from pyramid.security import Allow
 from pyramid.security import Authenticated
 from pyramid.settings import asbool
 
-from .authentication import check_authentication
-from .db import DBSession
-from .db import DeclarativeBase
-from .predicates import ImplementPredicate
-from .predicates import VersionPredicate
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db import DeclarativeBase
+
+from imiowebservicejson.authentication import check_authentication
+from imiowebservicejson.predicates import ImplementPredicate
+from imiowebservicejson.predicates import VersionPredicate
 
 
 def main(global_config, **settings):

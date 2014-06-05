@@ -6,10 +6,9 @@ def pytest_sessionstart():
     from paste.deploy.loadwsgi import appconfig
     from sqlalchemy import engine_from_config
 
-    from .db import DBSession
-    from .db import DeclarativeBase
-
-    from .mappers.file import File
+    from imio.dataexchange.db import DBSession
+    from imio.dataexchange.db import DeclarativeBase
+    from imio.dataexchange.db.mappers.file import File
     File  # Pyflakes fix
 
     cwd = os.path.dirname(__file__)
