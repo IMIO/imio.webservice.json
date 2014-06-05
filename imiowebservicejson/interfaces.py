@@ -8,10 +8,10 @@ class IValidatorEvent(Interface):
 
 
 class IFileUpload(Interface):
-    """ Marker interface for uploaded files """
-
-
+    """Marker interface for uploaded files"""
 
 
 class IDMSMetadata(Interface):
-    """ Marker interface for dms_metadata json model """
+    """Marker interface for dms_metadata json model"""
+
+
