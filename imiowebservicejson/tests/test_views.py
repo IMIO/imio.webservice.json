@@ -137,8 +137,10 @@ class TestViews(unittest.TestCase):
                     client_id='CH',
                     type='FACT',
                     version=1,
-                    user='testuser',
-                    file_metadata=json.dumps({'filesize': 6}))
+                    user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-00001'}
+        data.file_metadata = metadata
         data.insert(flush=True)
         security.unauthenticated_userid = Mock(return_value=u'testuser')
         request = self._request
@@ -146,7 +148,7 @@ class TestViews(unittest.TestCase):
         self._view_test('dms_metadata', 'dms_metadata_update', request)
         data = File.first(id=1)
         self.assertIsNotNone(data.update_date)
-        self.assertEqual(3030, json.loads(data.file_metadata).get('filesize'))
+        self.assertEqual(3030, data.file_metadata.get('filesize'))
 
     def test_dms_metadata_new_version(self):
         data = File(id=1,
@@ -155,8 +157,10 @@ class TestViews(unittest.TestCase):
                     type='FACT',
                     version=1,
                     user='testuser',
-                    filepath='/tmp/test.txt',
-                    file_metadata=json.dumps({'filesize': 6}))
+                    filepath='/tmp/test.txt')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-00002'}
+        data.file_metadata = metadata
         data.insert(flush=True)
         security.unauthenticated_userid = Mock(return_value=u'testuser')
         request = self._request

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import json
 import os
 import unittest
 from StringIO import StringIO
@@ -89,7 +88,9 @@ class TestFileUpload(unittest.TestCase):
                       type='FACT',
                       version=1,
                       user='testuser')
-        record.file_metadata = json.dumps({'filesize': 6})
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         file_data = self._file.data
         self.assertEqual(120, file_data.id)
@@ -113,8 +114,10 @@ class TestFileUpload(unittest.TestCase):
                       client_id='CH',
                       type='FACT',
                       version=1,
-                      user='testuser',
-                      file_metadata=json.dumps({'filesize': 6}))
+                      user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         self._file.save_reference()
         record = File.first(id=120)
@@ -142,8 +145,10 @@ class TestFileUpload(unittest.TestCase):
                       type='FACT',
                       version=1,
                       user='testuser',
-                      filepath='/tmp/120.txt',
-                      file_metadata=json.dumps({'filesize': 6}))
+                      filepath='/tmp/120.txt')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         file_upload = self._file
         file = open(self._file.filepath, 'w')
@@ -160,8 +165,10 @@ class TestFileUpload(unittest.TestCase):
                       client_id='CH',
                       type='FACT',
                       version=1,
-                      user='testuser',
-                      file_metadata=json.dumps({'filesize': 4}))
+                      user='testuser')
+        metadata = {'filesize': 4, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)
         self.assertRaisesRegexp(ValidationError, '.*filesize does not match.*',
@@ -174,8 +181,10 @@ class TestFileUpload(unittest.TestCase):
                       client_id='CH',
                       type='FACT',
                       version=1,
-                      user='testuser',
-                      file_metadata=json.dumps({'filesize': 6}))
+                      user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001'}
+        record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)
         self.assertIsNone(validate_file(event))
