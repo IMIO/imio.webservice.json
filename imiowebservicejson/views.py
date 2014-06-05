@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import json
+
 import traceback
 from datetime import datetime
 from jsonschema import validate, ValidationError
@@ -128,7 +128,7 @@ def dms_metadata(request, input, response):
     dms_file.client_id = input.client_id
     dms_file.type = input.type
     dms_file.user = userid
-    dms_file.file_metadata = json.dumps(request.json)
+    dms_file.file_metadata = input.json_object
     dms_file.insert(flush=True)
     response.message = "Well done"
     response.id = dms_file.id
