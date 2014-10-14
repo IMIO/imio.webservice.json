@@ -122,6 +122,8 @@ def dms_metadata(request, input, response):
         version = File.count(user=userid, external_id=input.external_id) + 1
         dms_file = File()
         dms_file.version = version
+        if input.update_flag is True:
+            dms_file.update_date = datetime.now()
     else:
         dms_file.update_date = datetime.now()
     dms_file.external_id = input.external_id
