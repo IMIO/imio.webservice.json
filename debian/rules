@@ -65,6 +65,7 @@ install-core:
 	cp -apr $(BUILDDIR)/include $(DEBIANCORE)/${INSTALLDIR}
 	find ${BUILDDIR}/develop-eggs -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
 	cp -apr $(BUILDDIR)/develop-eggs $(DEBIANCORE)/${INSTALLDIR}
+	cp -apr $(BUILDDIR)/devel $(DEBIANCORE)/${INSTALLDIR}
 	cp -apr $(BUILDDIR)/imio.webservice.json.egg-info $(DEBIANCORE)/${INSTALLDIR}
 	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
