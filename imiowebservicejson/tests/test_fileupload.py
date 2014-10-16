@@ -39,8 +39,11 @@ class TestFileUpload(unittest.TestCase):
                                  {'filename': 'test.txt',
                                   'file': uploaded_file})}
         matchdict = {'id': '120'}
+        registry = type('registry', (object, ),
+                        {'settings': {'dms.storage.path': './'}})()
         return type('request', (object, ), {'POST': post,
-                                            'matchdict': matchdict})()
+                                            'matchdict': matchdict,
+                                            'registry': registry})()
 
     @property
     def _file(self):
