@@ -11,6 +11,7 @@ from imio.dataexchange.db.mappers.file_type import FileType
 from imiowebservicejson.event import ValidatorEvent
 from imiowebservicejson.exception import ValidationError
 from imiowebservicejson.fileupload import FileUpload
+from imiowebservicejson.fileupload import get_blob_path
 from imiowebservicejson.fileupload import remove_file
 from imiowebservicejson.fileupload import validate_file
 
@@ -63,13 +64,21 @@ class TestFileUpload(unittest.TestCase):
         self.assertFalse(os.path.exists('/tmp/120.txt'))
 
     def test_id(self):
-        self.assertEqual('120', self._file.id)
+        self.assertEqual(120, self._file.id)
 
     def test_filename(self):
         self.assertEqual('120.txt', self._file.filename)
 
+    def test_basepath(self):
+        path = get_blob_path(12345678901234)
+        self.assertEqual('12/34/56/78/90/12', path)
+        path = get_blob_path(3411)
+        self.assertEqual('00/00/00/00/00/34', path)
+        path = get_blob_path(3567)
+        self.assertEqual('00/00/00/00/00/35', path)
+
     def test_filepath(self):
-        self.assertEqual('./120.txt', self._file.filepath)
+        self.assertEqual('./00/00/00/00/00/01/120.txt', self._file.filepath)
 
     def test_tmp_path(self):
         self.assertEqual('/tmp/120.txt', self._file.tmp_path)
@@ -124,7 +133,7 @@ class TestFileUpload(unittest.TestCase):
         record.insert(flush=True)
         self._file.save_reference()
         record = File.first(id=120)
-        self.assertEqual('./120.txt', record.filepath)
+        self.assertEqual('./00/00/00/00/00/01/120.txt', record.filepath)
 
     def test_handle_exception(self):
         self._create_tmp_file()

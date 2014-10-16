@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import hashlib
 import os
+import re
 import shutil
 
 from zope.interface import implements
@@ -31,6 +32,13 @@ def remove_file(attr, obj, *args, **kwargs):
     os.remove(getattr(obj, attr))
 
 
+def get_blob_path(id):
+    """Return the blob path associated to a given id"""
+    full_id = '%014d' % id
+    path = os.path.join(*re.findall(r'.{1,2}', full_id[:-2], re.DOTALL))
+    return path
+
+
 class FileUpload(object):
     implements(IFileUpload)
 
@@ -40,7 +48,7 @@ class FileUpload(object):
 
     @property
     def id(self):
-        return self.request.matchdict.get('id')
+        return int(self.request.matchdict.get('id'))
 
     @property
     def filename(self):
@@ -48,9 +56,13 @@ class FileUpload(object):
         return '%(name)s%(ext)s' % {'name': self.id, 'ext': ext}
 
     @property
-    def filepath(self):
+    def basepath(self):
         path = self.request.registry.settings.get('dms.storage.path')
-        return os.path.join(path, self.filename)
+        return os.path.join(path, get_blob_path(self.id))
+
+    @property
+    def filepath(self):
+        return os.path.join(self.basepath, self.filename)
 
     @property
     def tmp_path(self):
@@ -89,6 +101,8 @@ class FileUpload(object):
     @handle_exception(remove_file, 'tmp_path')
     def move(self):
         """ Move the temporary file """
+        if os.path.exists(self.basepath) is False:
+            os.makedirs(self.basepath)
         shutil.move(self.tmp_path, self.filepath)
 
     @handle_exception(remove_file, 'filepath')
