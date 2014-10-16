@@ -48,8 +48,8 @@ class FileUpload(object):
 
     @property
     def filepath(self):
-        return os.path.join(os.environ.get('GED_UPLOAD_PATH', '/tmp'),
-                            self.filename)
+        path = self.request.registry.settings.get('dms.storage.path')
+        return os.path.join(path, self.filename)
 
     @property
     def tmp_path(self):
