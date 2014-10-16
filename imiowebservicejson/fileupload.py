@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import hashlib
 import os
 import shutil
 
@@ -68,6 +69,11 @@ class FileUpload(object):
             self._data = File.first(id=self.id)
         return self._data
 
+    @property
+    def md5(self):
+        f = open(self.filepath, 'r')
+        return hashlib.md5(f.read()).hexdigest()
+
     @handle_exception(remove_file, 'tmp_path')
     def save_tmpfile(self):
         input_file = self._file.file
@@ -89,6 +95,7 @@ class FileUpload(object):
     def save_reference(self):
         reference = self.data
         reference.filepath = self.filepath
+        reference.file_md5 = self.md5
         reference.update()
 
 
