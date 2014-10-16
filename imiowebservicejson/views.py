@@ -9,12 +9,14 @@ from warlock import model_factory
 from pyramid import security
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import forget
 from pyramid.view import view_config
 
 from imio.dataexchange.db.mappers.file import File
 
 from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.filerender import FileRender
 from imiowebservicejson.fileupload import FileUpload
 from imiowebservicejson.schema import get_schemas
 from imiowebservicejson.models.dms_metadata import DMSMetadata
@@ -138,9 +140,9 @@ def dms_metadata(request, input, response):
     return response
 
 
-@view_config(route_name='file', renderer='json', permission='query')
+@view_config(route_name='file_upload', renderer='json', permission='query')
 @exception_handler()
-def file(request):
+def file_upload(request):
     upload = FileUpload(request)
     upload.save_tmpfile()
 
@@ -154,6 +156,14 @@ def file(request):
     return {
         "success": True,
         "message": "File uploaded successfully"}
+
+
+@view_config(route_name='file', renderer='string', permission='access')
+def file(request):
+    renderer = FileRender(request)
+    if renderer.dms_file is None:
+        raise HTTPNotFound
+    return renderer.render()
 
 
 @view_config(context=HTTPForbidden)

@@ -173,19 +173,19 @@ class TestViews(unittest.TestCase):
         self.assertEqual(2, data.version)
         self.assertEqual(2, File.count(external_id='CH-00002'))
 
-    def test_file(self):
+    def test_file_upload(self):
         FileUpload.save_tmpfile = Mock(return_value=None)
         FileUpload.move = Mock(return_value=None)
         FileUpload.save_reference = Mock(return_value=None)
         request = self._request
         request.POST = {'filedata': None}
-        result = views.file(request)
+        result = views.file_upload(request)
         self.assertEqual('File uploaded successfully', result['message'])
         self.assertTrue(result['success'])
 
     def test_exception_handler(self):
         request = self._request
-        result = views.file(request)
+        result = views.file_upload(request)
         self.assertFalse(result['success'])
         self.assertEqual('An error occured during the process',
                          result['message'])
