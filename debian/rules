@@ -7,12 +7,13 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
-INSTANCECOUNT := 4
 PACKAGE	  := imio-webservice
 CURDIR    := $(shell pwd)
 BUILDDIR  := $(CURDIR)/tmp/$(PACKAGE)
-DEBIANCORE    := $(CURDIR)/debian/$(PACKAGE)
-DEBIANZEO    := $(CURDIR)/debian/$(PACKAGE)-zeoserver
+DEBIANCORE               := $(CURDIR)/debian/$(PACKAGE)-instance
+DEBIANPUBLISHER          := $(CURDIR)/debian/$(PACKAGE)-publisher
+DEBIANINVOICEDISPATCHER	 := $(CURDIR)/debian/$(PACKAGE)-invoice-dispatcher
+DEBIANINCOMINGDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-incomingmail-dispatcher
 INSTALLDIR   := /srv/$(PACKAGE)
 
 distribution := $(shell lsb_release -is)
@@ -45,6 +46,9 @@ build:
 
 install-base:
 	rm -rf $(DEBIANCORE)
+	rm -rf $(DEBIANPUBLISHER)
+	rm -rf $(DEBIANINVOICEDISPATCHER)
+	rm -rf $(DEBIANINCOMINGDISPATCHER)
 	dh_testdir
 	dh_testroot
 	dh_clean -k -s
@@ -70,6 +74,13 @@ install-core:
 	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyo" -delete;
+
+install-publisher:
+	mkdir -p $(DEBIANPUBLISHER)/home/gdw/$(PACKAGE)
+	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/document_publisher
+	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
 
 install: install-base install-core
 	#rm -rf $(BUILDDIR)/
