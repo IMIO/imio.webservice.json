@@ -91,14 +91,14 @@ install-invoice-dispatcher:
 	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
 	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/invoice_dispatcher
-	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/invoice_dispatcher $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
 
 install-incomingmail-dispatcher:
 	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}
 	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
 	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/incomingmail_dispatcher
-	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/incomingmail_dispatcher $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
 
 install: install-base install-core install-publisher install-invoice-dispatcher install-incomingmail-dispatcher
 	#rm -rf $(BUILDDIR)/
