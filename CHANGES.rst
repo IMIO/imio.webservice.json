@@ -1,4 +1,8 @@
-0.0
----
+Changelog
+=========
 
--  Initial version
+0.4-dev (unreleased)
+--------------------
+
+- Initial release
+  [mpeeters]

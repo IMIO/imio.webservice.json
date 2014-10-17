@@ -7,6 +7,8 @@ with open(os.path.join(here, 'README.rst')) as f:
     README = f.read()
 with open(os.path.join(here, 'CHANGES.rst')) as f:
     CHANGES = f.read()
+with open(os.path.join(here, 'version.txt')) as f:
+    version = f.read().strip()
 
 requires = [
     'jsonschema',
@@ -23,7 +25,7 @@ requires = [
 
 setup(
     name='imio.webservice.json',
-    version='0.0',
+    version=version,
     description='imio.webservice.json',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
