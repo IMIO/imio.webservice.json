@@ -4,7 +4,8 @@ Changelog
 prod/0.4.2 (unreleased)
 -----------------------
 
-- Nothing changed yet.
+- Remove the tag from the deb version
+  [mpeeters]
 
 
 prod/0.4.1 (2014-10-17)
