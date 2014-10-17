@@ -59,6 +59,7 @@ install-base:
 	rm -fr ${BUILDDIR}/downloads
 
 install-core:
+	mkdir -p $(DEBIANCORE)/${INSTALLDIR}
 	find ${BUILDDIR}/bin -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
 	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)/${INSTALLDIR}
 	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)/${INSTALLDIR}
@@ -76,7 +77,7 @@ install-core:
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyo" -delete;
 
 install-publisher:
-	mkdir -p $(DEBIANPUBLISHER)/home/gdw/$(PACKAGE)
+	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}
 	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
 	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/document_publisher
