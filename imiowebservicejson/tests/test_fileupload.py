@@ -167,8 +167,7 @@ class TestFileUpload(unittest.TestCase):
         file.write('FOOBAR')
         file.close()
         event = ValidatorEvent(None, file_upload)
-        self.assertRaisesRegexp(ValidationError, '.*file already exist.*',
-                                validate_file, event)
+        self.assertIsNone(validate_file(event))
 
     def test_validate_file_filesize_mismatch(self):
         self._create_tmp_file()
