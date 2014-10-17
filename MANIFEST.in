@@ -1,2 +1,7 @@
 include *.txt *.ini *.cfg *.rst
-recursive-include imiowebservicejson *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
+include *.py
+include buildout.cfg
+include .travis.yml
+include Makefile
+recursive-include debian *
+recursive-include imiowebservicejson *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml *.json *.ini
