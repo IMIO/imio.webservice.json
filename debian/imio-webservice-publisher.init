@@ -11,7 +11,7 @@
 
 dir="/srv/imio-webservice/"
 user="zope"
-cmd="bin/document_publisher"
+cmd="bin/document_publisher production.ini"
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"
