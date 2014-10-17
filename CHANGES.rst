@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.4-dev (unreleased)
---------------------
+prod/0.4-dev (unreleased)
+-------------------------
 
 - Initial release
   [mpeeters]
