@@ -13,7 +13,7 @@ BUILDDIR  := $(CURDIR)/tmp/$(PACKAGE)
 DEBIANCORE               := $(CURDIR)/debian/$(PACKAGE)-instance
 DEBIANPUBLISHER          := $(CURDIR)/debian/$(PACKAGE)-publisher
 DEBIANINVOICEDISPATCHER	 := $(CURDIR)/debian/$(PACKAGE)-invoice-dispatcher
-DEBIANINCOMINGDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-incomingmail-dispatcher
+DEBIANINCOMINGMAILDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-incomingmail-dispatcher
 INSTALLDIR   := /srv/$(PACKAGE)
 
 distribution := $(shell lsb_release -is)
