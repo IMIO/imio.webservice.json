@@ -17,3 +17,15 @@ Architecture: any
 Depends: imio-webservice-instance (= ${binary:Version})
 Conflicts: plone33-demo
 Description: IMIO Webservices document publisher
+
+Package: imio-webservice-invoice-dispatcher
+Architecture: any
+Depends: imio-webservice-instance (= ${binary:Version})
+Conflicts: plone33-demo
+Description: IMIO Webservices invoice dispatcher
+
+Package: imio-webservice-incomingmail-dispatcher
+Architecture: any
+Depends: imio-webservice-instance (= ${binary:Version})
+Conflicts: plone33-demo
+Description: IMIO Webservices incoming mail dispatcher
