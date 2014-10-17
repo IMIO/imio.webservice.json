@@ -83,7 +83,7 @@ install-publisher:
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/document_publisher
 	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
 
-install: install-base install-core
+install: install-base install-core install-publisher
 	#rm -rf $(BUILDDIR)/
 
 binary-common:
