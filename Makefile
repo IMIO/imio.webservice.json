@@ -2,7 +2,7 @@
 #
 # Makefile for Debian
 #
-VERSION=`cat version.txt|cut -d/ -f1`
+VERSION=`cat version.txt|cut -d/ -f2`
 deb:
 	git-dch -a --ignore-branch
 	dch -v $(VERSION).$(BUILD_NUMBER) release --no-auto-nmu
