@@ -1,7 +1,7 @@
 Changelog
 =========
 
-prod/0.4.2 (unreleased)
+prod/0.4.2 (2014-10-17)
 -----------------------
 
 - Remove the tag from the deb version
