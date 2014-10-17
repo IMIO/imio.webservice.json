@@ -9,9 +9,9 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir=""
-user=""
-cmd=""
+dir="/srv/imio-webservice/"
+user="zope"
+cmd="bin/document_publisher"
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"
