@@ -1,7 +1,7 @@
 Changelog
 =========
 
-prod/0.4.1 (unreleased)
+prod/0.4.1 (2014-10-17)
 -----------------------
 
 - Fix the version in the Makefile
