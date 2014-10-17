@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
+import logging
 import os
 import re
 import shutil
@@ -12,6 +13,9 @@ from imio.dataexchange.db.mappers.file import File
 from imiowebservicejson.event import ValidatorEvent
 from imiowebservicejson.exception import ValidationError
 from imiowebservicejson.interfaces import IFileUpload
+
+
+logger = logging.getLogger('root')
 
 
 def handle_exception(rollback, attr):
@@ -120,7 +124,7 @@ def validate_file(event):
         raise ValidationError(u"There is no metadata for the file id '%s'"
                               % event.context.id)
     if event.context.data.filepath is not None:
-        raise ValidationError(u"This file already exist")
+        logger.warning(u'file updated %s' % event.context.data.filepath)
     filesize = event.context.size
     metadata_filesize = event.context.data.file_metadata.get('filesize')
     if filesize != metadata_filesize:
