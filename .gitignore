@@ -12,6 +12,7 @@
 webservice-json.wsgi
 bin/*
 !bin/daemon-*
+!bin/webservice-test
 devel/
 develop-eggs/
 parts/
