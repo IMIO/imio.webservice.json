@@ -4,6 +4,7 @@ AUTH="testuser:test"
 DOMAIN="http://0.0.0.0:6543"
 NB=1
 SIMUL=0
+FILESIZE=`ls -al README.rst | awk '{print $5}'`
 COUR_E="
 {
     \"external_id\": \"IMIO0105000\",
@@ -15,9 +16,8 @@ COUR_E="
     \"user\": \"testuser\",
     \"pc\": \"pc-scan01\",
     \"creator\": \"scanner\",
-    \"filesize\": 234,
-    \"filename\": \"README.rst\",
-	\"update\": false
+    \"filesize\": $FILESIZE,
+    \"filename\": \"README.rst\"
 }
 "
 
