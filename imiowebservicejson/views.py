@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import traceback
 from datetime import datetime
 from jsonschema import validate, ValidationError
 from sqlalchemy import desc
 from warlock import model_factory
+import traceback
 
 from pyramid import security
 from pyramid.httpexceptions import HTTPForbidden
