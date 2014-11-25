@@ -4,6 +4,9 @@ Changelog
 prod/0.4.3 (unreleased)
 -----------------------
 
+- Fix https for production
+  [mpeeters]
+
 - Get the latest version of the file
   [mpeeters]
 
