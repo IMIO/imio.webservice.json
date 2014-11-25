@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# the next line is for chkconfig
+# chkconfig: 345 90 10
+# description: please, please work
+
+NAME="webservice"
+P_PATH="/srv/imio-webservice"
+DAEMON="$P_PATH/bin/pserve $P_PATH/production.ini"
+USER=zope
+GROUP=zope
+PIDFILE="$P_PATH/$NAME.pid"
+LOGFILE="$P_PATH/$NAME.log"
+
+case "$1" in
+  start|stop|restart|status)
+    echo "$1 $NAME app server: "
+    cd $P_PATH
+    $DAEMON $1 --pid-file=$PIDFILE --user=$USER --group=$GROUP --log-file=$LOGFILE
+    RETVAL=$?
+    if [ "$RETVAL" -eq "0" ]; then
+        echo "Success"
+    fi
+    ;;
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+
+exit 0

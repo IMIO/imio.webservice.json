@@ -7,12 +7,13 @@
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
-INSTANCECOUNT := 4
 PACKAGE	  := imio-webservice
 CURDIR    := $(shell pwd)
 BUILDDIR  := $(CURDIR)/tmp/$(PACKAGE)
-DEBIANCORE    := $(CURDIR)/debian/$(PACKAGE)
-DEBIANZEO    := $(CURDIR)/debian/$(PACKAGE)-zeoserver
+DEBIANCORE               := $(CURDIR)/debian/$(PACKAGE)-instance
+DEBIANPUBLISHER          := $(CURDIR)/debian/$(PACKAGE)-publisher
+DEBIANINVOICEDISPATCHER	 := $(CURDIR)/debian/$(PACKAGE)-invoice-dispatcher
+DEBIANINCOMINGMAILDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-incomingmail-dispatcher
 INSTALLDIR   := /srv/$(PACKAGE)
 
 distribution := $(shell lsb_release -is)
@@ -34,7 +35,7 @@ build:
 	cp -ap ./*.cfg $(BUILDDIR)
 	cp -ap ./production.ini $(BUILDDIR)
 	cp -apr ./imiowebservicejson $(BUILDDIR)
-	cd $(BUILDDIR) && virtualenv -p python2.7 .
+	cd $(BUILDDIR) && virtualenv-2.7 .
 	rm -f $(BUILDDIR)/lib/python2.7/site-packages/easy-install.pth
 	rm -rf $(BUILDDIR)/lib/python2.7/site-packages/setuptools*
 	mkdir -p $(BUILDDIR)/eggs
@@ -45,6 +46,9 @@ build:
 
 install-base:
 	rm -rf $(DEBIANCORE)
+	rm -rf $(DEBIANPUBLISHER)
+	rm -rf $(DEBIANINVOICEDISPATCHER)
+	rm -rf $(DEBIANINCOMINGDISPATCHER)
 	dh_testdir
 	dh_testroot
 	dh_clean -k -s
@@ -55,6 +59,7 @@ install-base:
 	rm -fr ${BUILDDIR}/downloads
 
 install-core:
+	mkdir -p $(DEBIANCORE)/${INSTALLDIR}
 	find ${BUILDDIR}/bin -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
 	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)/${INSTALLDIR}
 	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)/${INSTALLDIR}
@@ -65,12 +70,37 @@ install-core:
 	cp -apr $(BUILDDIR)/include $(DEBIANCORE)/${INSTALLDIR}
 	find ${BUILDDIR}/develop-eggs -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
 	cp -apr $(BUILDDIR)/develop-eggs $(DEBIANCORE)/${INSTALLDIR}
+	cp -apr $(BUILDDIR)/devel $(DEBIANCORE)/${INSTALLDIR}
 	cp -apr $(BUILDDIR)/imio.webservice.json.egg-info $(DEBIANCORE)/${INSTALLDIR}
+	rm -r $(DEBIANCORE)/${INSTALLDIR}/bin/document_publisher
+	rm -r $(DEBIANCORE)/${INSTALLDIR}/bin/invoice_dispatcher
+	rm -r $(DEBIANCORE)/${INSTALLDIR}/bin/incomingmail_dispatcher
 	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
 	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyo" -delete;
 
-install: install-base install-core
+install-publisher:
+	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}
+	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/document_publisher
+	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
+
+install-invoice-dispatcher:
+	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}
+	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/invoice_dispatcher
+	cp -ap $(BUILDDIR)/bin/invoice_dispatcher $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
+
+install-incomingmail-dispatcher:
+	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}
+	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/incomingmail_dispatcher
+	cp -ap $(BUILDDIR)/bin/incomingmail_dispatcher $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
+
+install: install-base install-core install-publisher install-invoice-dispatcher install-incomingmail-dispatcher
 	#rm -rf $(BUILDDIR)/
 
 binary-common:

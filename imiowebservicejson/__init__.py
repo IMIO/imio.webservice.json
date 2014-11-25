@@ -39,7 +39,8 @@ def main(global_config, **settings):
     config.add_route('test', '/test/{webservice}/{commune}/{version}/{type}')
     config.add_route('schema', '/schema/{name}/{version}')
     config.add_route('dms_metadata', '/dms_metadata/{client_id}/{version}')
-    config.add_route('file', '/file/{id}')
+    config.add_route('file_upload', '/file_upload/{id}')
+    config.add_route('file', '/file/{client_id}/{external_id}')
 
     config.add_subscriber_predicate('implement', ImplementPredicate)
     config.add_subscriber_predicate('version', VersionPredicate)
@@ -51,6 +52,7 @@ class Root(object):
     __acl__ = [
         (Allow, Authenticated, 'view'),
         (Allow, Authenticated, 'query'),
+        (Allow, Authenticated, 'access'),
     ]
 
     def __init__(self, request):

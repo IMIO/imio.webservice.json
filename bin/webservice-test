@@ -1,0 +1,51 @@
+#!/bin/bash
+
+AUTH="testuser:test"
+DOMAIN="http://0.0.0.0:6543"
+NB=1
+SIMUL=0
+FILESIZE=`ls -al README.rst | awk '{print $5}'`
+COUR_E="
+{
+    \"external_id\": \"IMIO0105000\",
+    \"type\": \"COUR_E\",
+    \"pages_number\": 1,
+    \"client_id\": \"0105000\",
+    \"scan_date\": \"2014-11-20\",
+    \"scan_hour\": \"15:00:00\",
+    \"user\": \"testuser\",
+    \"pc\": \"pc-scan01\",
+    \"creator\": \"scanner\",
+    \"filesize\": $FILESIZE,
+    \"filename\": \"README.rst\"
+}
+"
+
+if [ "$1" != "" ]
+then
+    NB=$1
+fi
+NB=`printf "%08d" $NB`
+COUR_E=${COUR_E/IMIO0105000/IMIO0105000$NB}
+if [ "$2" == "update" ]
+then
+    COUR_E=${COUR_E/\}/,    \"update\": true\}}
+fi
+# sending metadata
+if [ "$SIMUL" -eq "1" ];
+then
+    echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_E\" $DOMAIN/dms_metadata/0105000/1.0"
+else
+    RET=`curl -u $AUTH -X POST -H "Content-Type: application/json" -d "$COUR_E" $DOMAIN/dms_metadata/0105000/1.0`
+    echo $RET
+    ID=`expr "$RET" : '.*"id": \([0-9]*\)'`
+fi
+if [ "$SIMUL" -eq "1" ];
+then
+    ID=1
+    echo "curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID"
+elif [ "$ID" != "" ]
+then
+    RET=`curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID`
+    echo $RET
+fi

@@ -1,2 +1,11 @@
 include *.txt *.ini *.cfg *.rst
-recursive-include imiowebservicejson *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml
+include *.py
+include buildout.cfg
+include .travis.yml
+include Makefile
+include bin/daemon-dispatcher
+include bin/daemon-publisher
+include bin/daemon-webservice
+include bin/webservice-test
+recursive-include debian *
+recursive-include imiowebservicejson *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml *.json *.ini
