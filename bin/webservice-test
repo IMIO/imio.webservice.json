@@ -27,7 +27,7 @@ then
 fi
 NB=`printf "%08d" $NB`
 COUR_E=${COUR_E/IMIO0105000/IMIO0105000$NB}
-if [ "$2" != "" ]
+if [ "$2" == "update" ]
 then
     COUR_E=${COUR_E/\}/,    \"update\": true\}}
 fi
