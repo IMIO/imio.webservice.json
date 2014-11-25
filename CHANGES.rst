@@ -4,7 +4,8 @@ Changelog
 prod/0.4.3 (unreleased)
 -----------------------
 
-- Nothing changed yet.
+- Get the latest version of the file
+  [mpeeters]
 
 
 prod/0.4.2 (2014-10-17)
