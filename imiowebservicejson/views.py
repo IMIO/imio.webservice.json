@@ -4,6 +4,7 @@ from datetime import datetime
 from jsonschema import validate, ValidationError
 from sqlalchemy import desc
 from warlock import model_factory
+import cPickle
 import traceback
 import uuid
 
@@ -23,8 +24,10 @@ from imiowebservicejson.fileupload import FileUpload
 from imiowebservicejson.schema import get_schemas
 from imiowebservicejson.models.dms_metadata import DMSMetadata
 from imiowebservicejson.models.test_request import TestRequest
+from imiowebservicejson.models.test_response import TestResponse
 from imiowebservicejson.request import SinglePublisher
 from imiowebservicejson.request import Request as RequestMessage
+from imiowebservicejson.request import SingleConsumer
 
 
 def exception_handler(message=u"An error occured during the process"):
@@ -192,6 +195,29 @@ def test_request(request, input, response):
 
     response.message = "Well done"
     response.request_id = uid
+    return response
+
+
+@view_config(route_name='test_response', renderer='json', permission='query')
+@exception_handler()
+@json_validator(schema_name='test_response', model=TestResponse)
+def test_response(request, input, response):
+    amqp_url = request.registry.settings.get('rabbitmq.url')
+    consumer = SingleConsumer('{0}/%2Frequest?connection_attempts=3&'
+                              'heartbeat_interval=3600'.format(amqp_url))
+    consumer.queue = input.request_id
+    consumer.routing_key = input.request_id
+    consumer.start()
+    message = consumer.get_message()
+    if not message:
+        response.success = False
+        response.message = "No message"
+    else:
+        response.success = True
+        response.message = "Well done"
+        response.response = cPickle.loads(message)
+        consumer.acknowledge_message()
+    consumer.stop()
     return response
 
 
