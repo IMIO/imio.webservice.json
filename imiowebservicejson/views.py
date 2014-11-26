@@ -5,6 +5,7 @@ from jsonschema import validate, ValidationError
 from sqlalchemy import desc
 from warlock import model_factory
 import traceback
+import uuid
 
 from pyramid import security
 from pyramid.httpexceptions import HTTPForbidden
@@ -14,12 +15,16 @@ from pyramid.security import forget
 from pyramid.view import view_config
 
 from imio.dataexchange.db.mappers.file import File
+from imio.dataexchange.db.mappers.request import Request
 
 from imiowebservicejson.event import ValidatorEvent
 from imiowebservicejson.filerender import FileRender
 from imiowebservicejson.fileupload import FileUpload
 from imiowebservicejson.schema import get_schemas
 from imiowebservicejson.models.dms_metadata import DMSMetadata
+from imiowebservicejson.models.test_request import TestRequest
+from imiowebservicejson.request import SinglePublisher
+from imiowebservicejson.request import Request as RequestMessage
 
 
 def exception_handler(message=u"An error occured during the process"):
@@ -164,6 +169,30 @@ def file(request):
     if renderer.dms_file is None:
         raise HTTPNotFound
     return renderer.render()
+
+
+@view_config(route_name='test_request', renderer='json', permission='query')
+@exception_handler()
+@json_validator(schema_name='test_request', model=TestRequest)
+def test_request(request, input, response):
+    uid = uuid.uuid4().hex
+
+    amqp_url = request.registry.settings.get('rabbitmq.url')
+    publisher = SinglePublisher('{0}/%2Frequest?connection_attempts=3&'
+                                'heartbeat_interval=3600'.format(amqp_url))
+    publisher.setup_queue('request.{0}.{1}'.format(input.application_id,
+                                                   input.client_id),
+                          input.client_id)
+    msg = RequestMessage(input.request_type, input.request_parameters,
+                         input.client_id, uid)
+    record = Request(uid=uid)
+    record.insert()
+    publisher.add_message(msg)
+    publisher.start()
+
+    response.message = "Well done"
+    response.request_id = uid
+    return response
 
 
 @view_config(context=HTTPForbidden)
