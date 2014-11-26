@@ -15,3 +15,5 @@ class IDMSMetadata(Interface):
     """Marker interface for dms_metadata json model"""
 
 
+class ITestRequest(Interface):
+    """Marker interface for test_request json model"""

@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Json validation schema for output document",
+    "description": "This schema is used to validate json data sent when making a request to an imio application.",
+    "type": "object",
+    "properties": {
+        "success": {
+            "description": "Status flag",
+            "type": "boolean"
+        },
+        "message": {
+            "description": "Status message",
+            "type": "string"
+        },
+        "request_id": {
+            "description": "The unique identifier of the request",
+            "type": "string"
+        },
+        "error": {
+            "description": "Error message with traceback. Only when uncatched error",
+            "type": "string"
+        }
+    },
+    "required": ["success", "message"]
+}
