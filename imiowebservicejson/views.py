@@ -27,6 +27,7 @@ from imiowebservicejson.models.test_request import TestRequest
 from imiowebservicejson.models.test_response import TestResponse
 from imiowebservicejson.request import SinglePublisher
 from imiowebservicejson.request import Request as RequestMessage
+from imiowebservicejson.request import RequestFile
 from imiowebservicejson.request import SingleConsumer
 
 
@@ -190,6 +191,15 @@ def test_request(request, input, response):
                          input.client_id, uid)
     record = Request(uid=uid)
     record.insert()
+    if input.files:
+        response.files_id = []
+    for file in input.files:
+        f_uid = uuid.uuid4().hex
+        request_file = RequestFile(f_uid, file)
+        msg.add_file(request_file)
+        Request(uid=f_uid).insert()
+        response.files_id.append(f_uid)
+
     publisher.add_message(msg)
     publisher.start()
 

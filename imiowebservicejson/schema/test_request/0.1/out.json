@@ -16,6 +16,10 @@
             "description": "The unique identifier of the request",
             "type": "string"
         },
+        "files_id": {
+            "description": "The unique identifiers of the files linked to the request",
+            "type": "array"
+        },
         "error": {
             "description": "Error message with traceback. Only when uncatched error",
             "type": "string"

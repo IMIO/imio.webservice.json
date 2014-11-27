@@ -19,6 +19,10 @@
             "type": "string",
             "minLength": 1
         },
+        "files": {
+            "description": "List of files linked to the request",
+            "type": "array"
+        },
         "request_parameters": {
             "description": "The parameters of the request",
             "type": "object"
