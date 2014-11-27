@@ -15,6 +15,8 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyramid.security import forget
 from pyramid.view import view_config
 
+from imio.dataexchange.core import Request as RequestMessage
+from imio.dataexchange.core import RequestFile
 from imio.dataexchange.db.mappers.file import File
 from imio.dataexchange.db.mappers.request import Request
 
@@ -26,8 +28,6 @@ from imiowebservicejson.models.dms_metadata import DMSMetadata
 from imiowebservicejson.models.test_request import TestRequest
 from imiowebservicejson.models.test_response import TestResponse
 from imiowebservicejson.request import SinglePublisher
-from imiowebservicejson.request import Request as RequestMessage
-from imiowebservicejson.request import RequestFile
 from imiowebservicejson.request import SingleConsumer
 
 
@@ -182,10 +182,11 @@ def test_request(request, input, response):
     uid = uuid.uuid4().hex
 
     amqp_url = request.registry.settings.get('rabbitmq.url')
-    publisher = SinglePublisher('{0}/%2Frequest?connection_attempts=3&'
+    publisher = SinglePublisher('{0}/%2Fwsrequest?connection_attempts=3&'
                                 'heartbeat_interval=3600'.format(amqp_url))
-    publisher.setup_queue('request.{0}.{1}'.format(input.application_id,
-                                                   input.client_id),
+    publisher.setup_queue('{0}.{1}.{2}'.format(input.application_id,
+                                               input.request_type,
+                                               input.client_id),
                           input.client_id)
     msg = RequestMessage(input.request_type, input.request_parameters,
                          input.client_id, uid)
@@ -213,7 +214,7 @@ def test_request(request, input, response):
 @json_validator(schema_name='test_response', model=TestResponse)
 def test_response(request, input, response):
     amqp_url = request.registry.settings.get('rabbitmq.url')
-    consumer = SingleConsumer('{0}/%2Frequest?connection_attempts=3&'
+    consumer = SingleConsumer('{0}/%2Fwsresponse?connection_attempts=3&'
                               'heartbeat_interval=3600'.format(amqp_url))
     consumer.queue = input.request_id
     consumer.routing_key = input.request_id
