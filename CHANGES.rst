@@ -1,8 +1,17 @@
 Changelog
 =========
 
-prod/0.4.3 (unreleased)
+prod/0.4.4 (unreleased)
 -----------------------
+
+- Nothing changed yet.
+
+
+prod/0.4.3 (2014-11-25)
+-----------------------
+
+- Fix https for production
+  [mpeeters]
 
 - Get the latest version of the file
   [mpeeters]
