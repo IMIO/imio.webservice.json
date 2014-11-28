@@ -226,7 +226,7 @@ def test_response(request, input, response):
     else:
         response.success = True
         response.message = "Well done"
-        response.response = cPickle.loads(message)
+        response.response = cPickle.loads(message).parameters
         consumer.acknowledge_message()
     consumer.stop()
     return response
