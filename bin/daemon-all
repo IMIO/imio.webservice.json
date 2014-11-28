@@ -1,0 +1,26 @@
+#!/bin/bash
+
+ScriptLocation="."
+if [[ $0 == '/'* ]];
+then
+    ScriptLocation="`dirname $0`"
+else
+    ScriptLocation="`pwd`"/"`dirname $0`"
+fi
+
+NAME="daemon-all"
+
+case "$1" in
+  start|stop|restart|status)
+    echo "$1 $NAME: "
+    $ScriptLocation/daemon-webservice $1
+    $ScriptLocation/daemon-publisher $1
+    $ScriptLocation/daemon-dispatcher $1
+    ;;
+  *)
+    echo "Usage: bin/$NAME {start|stop|restart|status}"
+    exit 1
+    ;;
+esac
+
+exit 0
