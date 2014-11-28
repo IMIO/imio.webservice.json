@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Json validation schema for input document",
+    "description": "This schema is used to validate json data sent when making a request to an imio application.",
+    "type": "object",
+    "properties": {
+        "client_id": {
+            "description": "The id of the client",
+            "type": "string",
+            "minLength": 1
+        },
+        "application_id": {
+            "description": "The id of the application",
+            "type": "string",
+            "minLength": 1
+        },
+        "request_type": {
+            "description": "The type of the request",
+            "type": "string",
+            "minLength": 1
+        },
+        "files": {
+            "description": "List of files linked to the request",
+            "type": "array"
+        },
+        "request_parameters": {
+            "description": "The parameters of the request",
+            "type": "object"
+        }
+    },
+    "additionalProperties": false,
+    "required": ["client_id", "application_id", "request_type", "request_parameters"]
+}

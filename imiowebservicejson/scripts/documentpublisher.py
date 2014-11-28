@@ -33,7 +33,7 @@ class DocumentPublisher(BasePublisher):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=u"Initialize the database")
+    parser = argparse.ArgumentParser(description=u"Publish the documents in queue")
     parser.add_argument('config_uri', type=str)
 
     args = parser.parse_args()

@@ -8,12 +8,16 @@ class IValidatorEvent(Interface):
 
 
 class IFileUpload(Interface):
-    """ Marker interface for uploaded files """
-
-
-class ITestSchema(Interface):
-    """ Marker interface for test_schema json model """
+    """Marker interface for uploaded files"""
 
 
 class IDMSMetadata(Interface):
-    """ Marker interface for dms_metadata json model """
+    """Marker interface for dms_metadata json model"""
+
+
+class ITestRequest(Interface):
+    """Marker interface for test_request json model"""
+
+
+class ITestResponse(Interface):
+    """Marker interface for test_response json model"""
