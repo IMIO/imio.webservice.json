@@ -120,13 +120,55 @@ class FileUpload(object):
 @subscriber(ValidatorEvent, implement=IFileUpload)
 @handle_exception(remove_file, 'tmp_path')
 def validate_file(event):
-    if event.context.data is None:
-        raise ValidationError(u"There is no metadata for the file id '%s'"
-                              % event.context.id)
-    if event.context.data.filepath is not None:
-        logger.warning(u'file updated %s' % event.context.data.filepath)
-    filesize = event.context.size
-    metadata_filesize = event.context.data.file_metadata.get('filesize')
-    if filesize != metadata_filesize:
-        raise ValidationError(u"The filesize does not match (%s != %s)"
-                              % (filesize, metadata_filesize))
+    FileValidator(event).validate()
+
+
+class FileValidator(object):
+
+    _validations = (
+        '_validate_data',
+        '_verify_filepath',
+        '_validate_filesize',
+        '_validate_md5',
+    )
+
+    def __init__(self, event):
+        self.event = event
+
+    def validate(self):
+        for validator in self._validations:
+            getattr(self, validator)()
+
+    @property
+    def context(self):
+        return self.event.context
+
+    @property
+    def data(self):
+        return self.event.context.data
+
+    @property
+    def metadata(self):
+        return self.data.file_metadata
+
+    @property
+    def filesize(self):
+        return self.context.size
+
+    @property
+    def metadata_filesize(self):
+        return self.metadata.get('filesize')
+
+    def _validate_data(self):
+        if self.data is None:
+            raise ValidationError(u"There is no metadata for the file id '%s'"
+                                  % self.context.id)
+
+    def _verify_filepath(self):
+        if self.data.filepath is not None:
+            logger.warning(u'file updated %s' % self.data.filepath)
+
+    def _validate_filesize(self):
+        if self.filesize != self.metadata_filesize:
+            raise ValidationError(u"The filesize does not match (%s != %s)"
+                                  % (self.filesize, self.metadata_filesize))
