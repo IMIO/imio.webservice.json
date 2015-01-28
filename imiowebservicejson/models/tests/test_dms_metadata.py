@@ -38,6 +38,7 @@ class TestDMSMetadata(unittest.TestCase):
             "creator": "testuser",
             "filesize": 5500,
             "filename": "test.pdf",
+            "filemd5": "901890a8e9c8cf6d5a1a542b229febff",
         }
 
     def _get_model(self, values):

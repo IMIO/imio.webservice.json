@@ -139,7 +139,8 @@ class TestViews(unittest.TestCase):
                     version=1,
                     user='testuser')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-00001'}
+                    'external_id': 'CH-00001',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         data.file_metadata = metadata
         data.insert(flush=True)
         security.unauthenticated_userid = Mock(return_value=u'testuser')
@@ -159,7 +160,8 @@ class TestViews(unittest.TestCase):
                     user='testuser',
                     filepath='/tmp/test.txt')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-00002'}
+                    'external_id': 'CH-00002',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         data.file_metadata = metadata
         data.insert(flush=True)
         security.unauthenticated_userid = Mock(return_value=u'testuser')

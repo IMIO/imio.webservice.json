@@ -101,7 +101,8 @@ class TestFileUpload(unittest.TestCase):
                       version=1,
                       user='testuser')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-0001'}
+                    'external_id': 'CH-0001',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
         record.insert(flush=True)
         file_data = self._file.data
@@ -128,7 +129,8 @@ class TestFileUpload(unittest.TestCase):
                       version=1,
                       user='testuser')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-0001'}
+                    'external_id': 'CH-0001',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
         record.insert(flush=True)
         self._file.save_reference()
@@ -159,7 +161,8 @@ class TestFileUpload(unittest.TestCase):
                       user='testuser',
                       filepath='/tmp/120.txt')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-0001'}
+                    'external_id': 'CH-0001',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
         record.insert(flush=True)
         file_upload = self._file
@@ -178,7 +181,8 @@ class TestFileUpload(unittest.TestCase):
                       version=1,
                       user='testuser')
         metadata = {'filesize': 4, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-0001'}
+                    'external_id': 'CH-0001',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)
@@ -194,7 +198,8 @@ class TestFileUpload(unittest.TestCase):
                       version=1,
                       user='testuser')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-0001'}
+                    'external_id': 'CH-0001',
+                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)

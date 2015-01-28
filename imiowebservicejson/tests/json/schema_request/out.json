@@ -74,7 +74,7 @@
                 }
             },
             "additionalProperties": false,
-            "required": ["external_id", "type", "client_id", "scan_date", "scan_hour", "creator", "filesize", "filename"]
+            "required": ["external_id", "type", "client_id", "scan_date", "scan_hour", "creator", "filesize", "filename", "filemd5"]
         },
         "dms_metadata_out": {
             "$schema": "http://json-schema.org/draft-04/schema#",
