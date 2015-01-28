@@ -162,7 +162,7 @@ class TestFileUpload(unittest.TestCase):
                       filepath='/tmp/120.txt')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
                     'external_id': 'CH-0001',
-                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
+                    'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
         record.insert(flush=True)
         file_upload = self._file
@@ -182,11 +182,29 @@ class TestFileUpload(unittest.TestCase):
                       user='testuser')
         metadata = {'filesize': 4, 'type': 'FACT', 'client_id': 'CH',
                     'external_id': 'CH-0001',
-                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
+                    'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)
         self.assertRaisesRegexp(ValidationError, '.*filesize does not match.*',
+                                validate_file, event)
+
+    def test_validate_file_md5_mismatch(self):
+        self._create_tmp_file()
+        record = File(id=120,
+                      external_id='CH-0001',
+                      client_id='CH',
+                      type='FACT',
+                      version=1,
+                      user='testuser')
+        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+                    'external_id': 'CH-0001',
+                    'filemd5': '95C72A49C488D59F60C022FCFECF4382'}
+        record.file_metadata = metadata
+        record.insert(flush=True)
+        event = ValidatorEvent(None, self._file)
+        self.assertRaisesRegexp(ValidationError,
+                                '.*MD5 check: difference found.*',
                                 validate_file, event)
 
     def test_validate_file(self):
@@ -199,7 +217,7 @@ class TestFileUpload(unittest.TestCase):
                       user='testuser')
         metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
                     'external_id': 'CH-0001',
-                    'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
+                    'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file)

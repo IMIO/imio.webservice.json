@@ -152,6 +152,14 @@ class FileValidator(object):
         return self.data.file_metadata
 
     @property
+    def md5(self):
+        return self.context.md5
+
+    @property
+    def metadata_md5(self):
+        return self.metadata.get('filemd5')
+
+    @property
     def filesize(self):
         return self.context.size
 
@@ -172,3 +180,7 @@ class FileValidator(object):
         if self.filesize != self.metadata_filesize:
             raise ValidationError(u"The filesize does not match (%s != %s)"
                                   % (self.filesize, self.metadata_filesize))
+
+    def _validate_md5(self):
+        if self.md5 != self.metadata_md5:
+            raise ValidationError(u"MD5 check: difference found")
