@@ -4,7 +4,17 @@ Changelog
 prod/0.4.4 (unreleased)
 -----------------------
 
-- Nothing changed yet.
+- Cache uploaded file md5
+  [mpeeters]
+
+- Validate file md5
+  [mpeeters]
+
+- Refactor the file upload validation
+  [mpeeters]
+
+- filemd5 is now required
+  [mpeeters]
 
 
 prod/0.4.3 (2014-11-25)
