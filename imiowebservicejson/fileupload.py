@@ -49,6 +49,7 @@ class FileUpload(object):
     def __init__(self, request):
         self.request = request
         self._file = request.POST['filedata']
+        self._md5 = None
 
     @property
     def id(self):
@@ -87,6 +88,10 @@ class FileUpload(object):
 
     @property
     def md5(self):
+        self._md5 = self._md5 and self._md5 or self.calculate_md5()
+        return self._md5
+
+    def calculate_md5(self):
         f = open(self.filepath, 'r')
         return hashlib.md5(f.read()).hexdigest()
 
