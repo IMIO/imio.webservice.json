@@ -17,7 +17,8 @@ COUR_E="
     \"pc\": \"pc-scan01\",
     \"creator\": \"scanner\",
     \"filesize\": $FILESIZE,
-    \"filename\": \"README.rst\"
+    \"filename\": \"README.rst\",
+    \"filemd5\": \"3ff0c3867d6dfbff81eb77b292ff8338\"
 }
 "
 
