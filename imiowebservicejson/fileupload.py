@@ -92,7 +92,8 @@ class FileUpload(object):
         return self._md5
 
     def calculate_md5(self):
-        f = open(self.filepath, 'r')
+        path = os.path.exists(self.filepath) and self.filepath or self.tmp_path
+        f = open(path, 'r')
         return hashlib.md5(f.read()).hexdigest()
 
     @handle_exception(remove_file, 'tmp_path')
