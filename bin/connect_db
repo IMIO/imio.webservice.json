@@ -1,0 +1,1 @@
+env PGPASSWORD='test' psql -h localhost -U mpeeters imioged
