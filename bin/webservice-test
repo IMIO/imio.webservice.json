@@ -3,7 +3,10 @@
 AUTH="testuser:test"
 DOMAIN="http://0.0.0.0:6543"
 CLIENT="0109999"
-NB=1
+# RANDOM produces a number between 0 - 32767
+RD1=$(($RANDOM/4+1))
+RD2=$(($RANDOM/4+1))
+NB=$(($RD1*$RD2+30000000))
 SIMUL=0
 FILESIZE=`ls -al README.rst | awk '{print $5}'`
 COUR_E="
