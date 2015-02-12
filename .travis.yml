@@ -2,7 +2,7 @@ language: python
 python:
   - 2.7
 install:
-  - python bootstrap.py
+  - python bootstrap.py --setuptools-version=12.0.5
   - bin/buildout -N -q -t 3
 script:
   - bin/py.test
