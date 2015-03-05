@@ -16,7 +16,7 @@ class DocumentPublisher(BasePublisher):
     log_file = 'docnotifier.log'
 
     def add_messages(self):
-        query = File.query(amqp_status=False)
+        query = File.query(amqp_status=False, order_by=['id'])
         query = query.filter(File.filepath != None)
         query = query.limit(100)
         return query.all()
