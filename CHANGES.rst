@@ -3,6 +3,11 @@ Changelog
 
 prod/0.4.4 (unreleased)
 -----------------------
+- Order db row consumption
+  [sgeulette]
+
+- Improved webservice-test
+  [sgeulette]
 
 - Cache uploaded file md5
   [mpeeters]
