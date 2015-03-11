@@ -39,7 +39,11 @@ def exception_handler(message=u"An error occured during the process"):
             except Exception as e:
                 if request.registry.settings.get('traceback.debug') is True:
                     print traceback.format_exc()
-                return failure(message, error=str(e))
+                return failure(
+                    message,
+                    error=str(e),
+                    error_code=getattr(e, 'code', None),
+                )
         return replacement
     return decorator
 
@@ -51,18 +55,19 @@ def json_validator(schema_name, model):
             input_schema, output_schema = get_schemas(schema_name, version)
             if input_schema is None or output_schema is None:
                 msg = u"The schema '%s %s' doesn't exist" % (schema_name, version)
-                return failure(msg)
+                return failure(msg, error_code='SCHEMA_ERROR')
 
             input_json = request.json_body
             error = validate_json_schema(input_json, input_schema)
             if error is not None:
-                return failure(error)
+                return failure(error, error_code='SCHEMA_VALIDATION_ERROR')
 
             input_model = model_factory(input_schema, base_class=model)
             input = input_model(**input_json)
             error = validate_object(request, input)
             if error is not None:
-                return failure(error)
+                return failure(str(error),
+                               error_code=getattr(error, 'code', None))
 
             output_model = model_factory(output_schema)
             response = output_model(success=True, message="")
@@ -71,11 +76,12 @@ def json_validator(schema_name, model):
     return decorator
 
 
-def failure(message, error=None):
-    msg = {"success": False, "message": message}
+def failure(message, error=None, error_code=None):
+    result = {'success': False, 'message': message}
+    result['error_code'] = error_code and error_code or 'INTERNAL_ERROR'
     if error is not None:
-        msg['error'] = error
-    return msg
+        result['error'] = error
+    return result
 
 
 def validate_json_schema(input_json, schema):
@@ -93,7 +99,7 @@ def validate_object(request, obj):
     try:
         notify(ValidatorEvent(request, obj))
     except ValidationError as e:
-        return str(e)
+        return e
 
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
@@ -110,7 +116,7 @@ def schema(request):
 
     if input_schema is None or output_schema is None:
         msg = u"The asked schema '%s %s' doesn't exist" % (schema_name, version)
-        return failure(msg)
+        return failure(msg, error_code='UNKNOWN_SCHEMA')
 
     definition = {'%s_in' % schema_name: input_schema,
                   '%s_out' % schema_name: output_schema}
@@ -157,7 +163,7 @@ def file_upload(request):
 
     error = validate_object(request, upload)
     if error is not None:
-        return failure(error)
+        return failure(str(error), error_code=getattr(error, 'code', None))
 
     upload.move()
     upload.save_reference()
