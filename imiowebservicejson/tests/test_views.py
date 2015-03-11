@@ -82,11 +82,31 @@ class TestViews(unittest.TestCase):
     def _get_last_file_id(self):
         return DBSession.execute("select currval('file_id_seq')").fetchone()[0]
 
-    def test_failure(self):
-        self.assertEqual({"success": False, "message": "FOO"},
-                         views.failure("FOO"))
-        self.assertEqual({"success": False, "message": "FOO", "error": "BAR"},
-                         views.failure("FOO", error="BAR"))
+    def test_failure_basic(self):
+        error_response = {
+            "success": False,
+            "message": "FOO",
+            "error_code": "INTERNAL_ERROR",
+        }
+        self.assertEqual(error_response, views.failure("FOO"))
+
+    def test_failure_with_error(self):
+        error_response = {
+            "success": False,
+            "message": "FOO",
+            "error_code": "INTERNAL_ERROR",
+            "error": "BAR",
+        }
+        self.assertEqual(error_response, views.failure("FOO", error="BAR"))
+
+    def test_failure_with_error_code(self):
+        error_response = {
+            "success": False,
+            "message": "FOO",
+            "error_code": "BAR",
+        }
+        self.assertEqual(error_response,
+                         views.failure("FOO", error_code="BAR"))
 
     def test_validate_json_schema(self):
         input_json = {'id': 'T001'}
@@ -104,7 +124,8 @@ class TestViews(unittest.TestCase):
         request.registry.notify = Mock(return_value=None)
         self.assertIsNone(views.validate_object(request, None))
         request.registry.notify = Mock(side_effect=ValidationError('FOO'))
-        self.assertEqual('FOO', views.validate_object(request, None))
+        error = views.validate_object(request, None)
+        self.assertEqual('FOO', str(error))
 
     def test_schema_request(self):
         security.unauthenticated_userid = Mock(return_value=u'testuser')
