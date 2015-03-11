@@ -19,6 +19,11 @@
             "type": "string",
             "minLength": 1
         },
+        "type_version": {
+            "description": "The version of the request",
+            "type": "string",
+            "minLength": 3
+        },
         "files": {
             "description": "List of files linked to the request",
             "type": "array"
@@ -29,5 +34,5 @@
         }
     },
     "additionalProperties": false,
-    "required": ["client_id", "application_id", "request_type", "request_parameters"]
+    "required": ["client_id", "application_id", "type_version", "request_type", "request_parameters"]
 }
