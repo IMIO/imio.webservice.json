@@ -1,16 +1,23 @@
 #!/bin/bash
+# $1: number of generated elements (optional, default:1)
+# $2: external_id counter (optional, default: random)
+# $3: 'update' (optional, default: nothing)
 
 AUTH="testuser:test"
 DOMAIN="http://0.0.0.0:6543"
-NB=1
+CLIENT="0109999"
+# RANDOM produces a number between 0 - 32767
+RD1=$(($RANDOM/4+1))
+RD2=$(($RANDOM/4+1))
+NB=$(($RD1*$RD2+30000000))
 SIMUL=0
 FILESIZE=`ls -al README.rst | awk '{print $5}'`
 COUR_E="
 {
-    \"external_id\": \"IMIO0105000\",
+    \"external_id\": \"IMIO$CLIENT\",
     \"type\": \"COUR_E\",
     \"pages_number\": 1,
-    \"client_id\": \"0105000\",
+    \"client_id\": \"$CLIENT\",
     \"scan_date\": \"2014-11-20\",
     \"scan_hour\": \"15:00:00\",
     \"user\": \"testuser\",
@@ -22,31 +29,36 @@ COUR_E="
 }
 "
 
-if [ "$1" != "" ]
+if [ "$2" != "" ]
 then
-    NB=$1
+    NB=$2
 fi
-NB=`printf "%08d" $NB`
-COUR_E=${COUR_E/IMIO0105000/IMIO0105000$NB}
-if [ "$2" == "update" ]
+if [ "$3" == "update" ]
 then
     COUR_E=${COUR_E/\}/,    \"update\": true\}}
 fi
 # sending metadata
-if [ "$SIMUL" -eq "1" ];
-then
-    echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_E\" $DOMAIN/dms_metadata/0105000/1.0"
-else
-    RET=`curl -u $AUTH -X POST -H "Content-Type: application/json" -d "$COUR_E" $DOMAIN/dms_metadata/0105000/1.0`
-    echo $RET
-    ID=`expr "$RET" : '.*"id": \([0-9]*\)'`
-fi
-if [ "$SIMUL" -eq "1" ];
-then
-    ID=1
-    echo "curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID"
-elif [ "$ID" != "" ]
-then
-    RET=`curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID`
-    echo $RET
-fi
+for i in `seq 1 $1`;
+do
+    echo "Push element $i"
+    NBi=`printf "%08d" $NB`
+    COUR_Ei=${COUR_E/IMIO$CLIENT/IMIO$CLIENT$NBi}
+    ((NB++))
+    if [ "$SIMUL" -eq "1" ];
+    then
+        echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_Ei\" $DOMAIN/dms_metadata/$CLIENT/1.0"
+    else
+        RET=`curl -u $AUTH -X POST -H "Content-Type: application/json" -d "$COUR_Ei" $DOMAIN/dms_metadata/$CLIENT/1.0`
+        echo $RET
+        ID=`expr "$RET" : '.*"id": \([0-9]*\)'`
+    fi
+    if [ "$SIMUL" -eq "1" ];
+    then
+        ID=1
+        echo "curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID"
+    elif [ "$ID" != "" ]
+    then
+        RET=`curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID`
+        echo $RET
+    fi
+done
