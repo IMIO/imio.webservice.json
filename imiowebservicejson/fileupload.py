@@ -174,8 +174,10 @@ class FileValidator(object):
 
     def _validate_data(self):
         if self.data is None:
-            raise ValidationError(u"There is no metadata for the file id '%s'"
-                                  % self.context.id)
+            raise ValidationError(
+                u'MISSING_METADATA',
+                u"There is no metadata for the file id '%s'" % self.context.id,
+            )
 
     def _verify_filepath(self):
         if self.data.filepath is not None:
@@ -183,9 +185,14 @@ class FileValidator(object):
 
     def _validate_filesize(self):
         if self.filesize != self.metadata_filesize:
-            raise ValidationError(u"The filesize does not match (%s != %s)"
-                                  % (self.filesize, self.metadata_filesize))
+            raise ValidationError(
+                u'FILESIZE_MISMATCH',
+                u"The filesize does not match (%s != %s)" %
+                (self.filesize, self.metadata_filesize))
 
     def _validate_md5(self):
         if self.md5 != self.metadata_md5:
-            raise ValidationError(u"MD5 check: difference found")
+            raise ValidationError(
+                u'MD5_MISMATCH',
+                u"MD5 check: difference found",
+            )
