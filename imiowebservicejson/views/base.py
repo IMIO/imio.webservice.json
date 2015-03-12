@@ -59,7 +59,7 @@ def json_validator(schema_name, model):
             input_schema, output_schema = get_schemas(schema_name, version)
             if input_schema is None or output_schema is None:
                 msg = u"The schema '%s %s' doesn't exist" % (schema_name, version)
-                return failure(msg, error_code='SCHEMA_ERROR')
+                return failure(msg, error_code='INTERNAL_ERROR')
 
             input_json = request.json_body
             error = validate_json_schema(input_json, input_schema)
