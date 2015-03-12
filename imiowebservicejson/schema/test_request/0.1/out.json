@@ -20,6 +20,10 @@
             "description": "The unique identifiers of the files linked to the request",
             "type": "array"
         },
+        "error_code": {
+            "description": "The error code",
+            "type": "string"
+        },
         "error": {
             "description": "Error message with traceback. Only when uncatched error",
             "type": "string"

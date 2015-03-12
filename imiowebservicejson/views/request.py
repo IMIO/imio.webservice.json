@@ -11,13 +11,24 @@ import uuid
 from imiowebservicejson.views.base import exception_handler
 from imiowebservicejson.views.base import json_logging
 from imiowebservicejson.views.base import json_validator
+from imiowebservicejson.views.base import validate_json_schema
+from imiowebservicejson.views.base import failure
 from imiowebservicejson.models.test_request import TestRequest
 from imiowebservicejson.models.test_response import TestResponse
 from imiowebservicejson.request import SinglePublisher
 from imiowebservicejson.request import SingleConsumer
+from imiowebservicejson.schema import get_schemas
 
 
 log = logging.getLogger(__name__)
+
+
+def validate_request_parameters(request, input):
+    input_schema, output_schema = get_schemas(input.request_type,
+                                              input.type_version)
+    if input_schema:
+        error = validate_json_schema(input.request_parameters, input_schema)
+        return error
 
 
 @view_config(route_name='test_request', renderer='json', permission='query')
@@ -26,6 +37,9 @@ log = logging.getLogger(__name__)
 @json_logging(log)
 def test_request(request, input, response):
     uid = uuid.uuid4().hex
+    error = validate_request_parameters(request, input)
+    if error is not None:
+        return failure(error, error_code='SCHEMA_VALIDATION_ERROR')
 
     amqp_url = request.registry.settings.get('rabbitmq.url')
     publisher = SinglePublisher('{0}/%2Fwsrequest?connection_attempts=3&'

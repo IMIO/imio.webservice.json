@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Json validation schema for input document",
+    "description": "This schema is used to valid the request arguments",
+    "type": "object",
+    "properties": {
+        "values": {
+            "description": "The object values",
+            "type": "object"
+        },
+        "external_uid": {
+            "description": "The original object UID",
+            "type": "string",
+            "minLength": 1
+        },
+        "original_url": {
+            "description": "The original object URL",
+            "type": "string",
+            "minLength": 1
+        },
+        "type": {
+            "description": "The object type",
+            "type": "string",
+            "minLength": 1
+        },
+        "title": {
+            "description": "The object title",
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "additionalProperties": false,
+    "required": ["values", "external_uid", "original_url", "type", "title"]
+}
