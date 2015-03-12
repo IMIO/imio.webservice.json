@@ -5,9 +5,11 @@ from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.core import RequestFile
 from imio.dataexchange.db.mappers.request import Request
 import cPickle
+import logging
 import uuid
 
 from imiowebservicejson.views.base import exception_handler
+from imiowebservicejson.views.base import json_logging
 from imiowebservicejson.views.base import json_validator
 from imiowebservicejson.models.test_request import TestRequest
 from imiowebservicejson.models.test_response import TestResponse
@@ -15,9 +17,13 @@ from imiowebservicejson.request import SinglePublisher
 from imiowebservicejson.request import SingleConsumer
 
 
+log = logging.getLogger(__name__)
+
+
 @view_config(route_name='test_request', renderer='json', permission='query')
 @exception_handler()
 @json_validator(schema_name='test_request', model=TestRequest)
+@json_logging(log)
 def test_request(request, input, response):
     uid = uuid.uuid4().hex
 
@@ -52,6 +58,7 @@ def test_request(request, input, response):
 @view_config(route_name='test_response', renderer='json', permission='query')
 @exception_handler()
 @json_validator(schema_name='test_response', model=TestResponse)
+@json_logging(log)
 def test_response(request, input, response):
     amqp_url = request.registry.settings.get('rabbitmq.url')
     consumer = SingleConsumer('{0}/%2Fwsresponse?connection_attempts=3&'

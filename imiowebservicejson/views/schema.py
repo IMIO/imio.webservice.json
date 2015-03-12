@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from pyramid.view import view_config
+import logging
 
 from imiowebservicejson.schema import get_schemas
+from imiowebservicejson.views.base import http_logging
 from imiowebservicejson.views.base import exception_handler
 from imiowebservicejson.views.base import failure
 
 
+log = logging.getLogger(__name__)
+
+
 @view_config(route_name='schema', renderer='json', permission='view')
 @exception_handler()
+@http_logging(log)
 def schema(request):
     schema_name = request.matchdict.get('name')
     version = request.matchdict.get('version')

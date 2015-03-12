@@ -12,6 +12,30 @@ from imiowebservicejson.schema import get_schemas
 from imiowebservicejson.event import ValidatorEvent
 
 
+def json_logging(logger):
+    def decorator(func):
+        def replacement(request, input, response):
+            logger.info('REQUEST : %s - %s' % (request.url,
+                                               input.json_object))
+            return_value = func(request, input, response)
+            logger.info('RESPONSE : %s - %s' % (request.url,
+                                                input.json_object))
+            return return_value
+        return replacement
+    return decorator
+
+
+def http_logging(logger):
+    def decorator(func):
+        def replacement(request):
+            logger.info('REQUEST : %s' % request.url)
+            return_value = func(request)
+            logger.info('RESPONSE : %s' % return_value)
+            return return_value
+        return replacement
+    return decorator
+
+
 def exception_handler(message=u"An error occured during the process"):
     def decorator(func):
         def replacement(request):

@@ -5,18 +5,25 @@ from imio.dataexchange.db.mappers.file import File
 from pyramid import security
 from pyramid.view import view_config
 from sqlalchemy import desc
+import logging
 
 from imiowebservicejson.fileupload import FileUpload
 from imiowebservicejson.models.dms_metadata import DMSMetadata
 from imiowebservicejson.views.base import exception_handler
 from imiowebservicejson.views.base import failure
+from imiowebservicejson.views.base import http_logging
+from imiowebservicejson.views.base import json_logging
 from imiowebservicejson.views.base import json_validator
 from imiowebservicejson.views.base import validate_object
+
+
+log = logging.getLogger(__name__)
 
 
 @view_config(route_name='dms_metadata', renderer='json', permission='query')
 @exception_handler()
 @json_validator(schema_name='dms_metadata', model=DMSMetadata)
+@json_logging(log)
 def dms_metadata(request, input, response):
     userid = security.unauthenticated_userid(request)
     dms_file = File.first(user=userid,
@@ -45,6 +52,7 @@ def dms_metadata(request, input, response):
 
 @view_config(route_name='file_upload', renderer='json', permission='query')
 @exception_handler()
+@http_logging(log)
 def file_upload(request):
     upload = FileUpload(request)
     upload.save_tmpfile()
