@@ -3,6 +3,16 @@ Changelog
 
 prod/0.4.4 (unreleased)
 -----------------------
+
+- Add logging for webservices requests and responses
+  [mpeeters]
+
+- Add the type_version parameter for requests
+  [mpeeters]
+
+- Move the views in separate modules
+  [mpeeters]
+
 - Order db row consumption
   [sgeulette]
 
