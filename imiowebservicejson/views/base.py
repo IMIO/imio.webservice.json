@@ -18,8 +18,7 @@ def json_logging(logger):
             logger.info('REQUEST : %s - %s' % (request.url,
                                                input.json_object))
             return_value = func(request, input, response)
-            logger.info('RESPONSE : %s - %s' % (request.url,
-                                                input.json_object))
+            logger.info('RESPONSE : %s - %s' % (request.url, return_value))
             return return_value
         return replacement
     return decorator
