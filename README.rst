@@ -6,23 +6,27 @@ Error codes List
 global errors
 -------------
 
- - INTERNAL_ERROR
- - SCHEMA_ERROR
- - SCHEMA_VALIDATION_ERROR
+ - **INTERNAL_ERROR** : An internal error occured during the process of the request
+ - **SCHEMA_VALIDATION_ERROR** : The JSON validation failed
 
-file_upload errors
-------------------
+schema webservice errors
+------------------------
 
- - MISSING_METADATA
- - FILESIZE_MISMATCH
- - MD5_MISMATCH
+ - **UNKNOWN_SCHEMA** : The schema name or version is incorrect
 
-dms_metadata errors
--------------------
+file_upload webservice errors
+-----------------------------
 
- - SCAN_DATE_INVALID
- - SCAN_HOUR_INVALID
- - EXTERNAL_ID_DUPLICATE
+ - **MISSING_METADATA** : The metadata is not defined
+ - **FILESIZE_MISMATCH** : The filesize does not match the filesize from the metadata
+ - **MD5_MISMATCH** : The file MD5 does not match the MD5 from the metadata
+
+dms_metadata webservice errors
+------------------------------
+
+ - **SCAN_DATE_INVALID** : The value for the field 'scan_date' is invalid
+ - **SCAN_HOUR_INVALID** : The value for the field 'scan_hour' is invalid
+ - **EXTERNAL_ID_DUPLICATE** : The value for the field 'external_id' already exist
 
 Tests
 =====
