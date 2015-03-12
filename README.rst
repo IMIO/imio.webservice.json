@@ -1,5 +1,29 @@
 .. contents::
 
+Error codes List
+================
+
+global errors
+-------------
+
+ - INTERNAL_ERROR
+ - SCHEMA_ERROR
+ - SCHEMA_VALIDATION_ERROR
+
+file_upload errors
+------------------
+
+ - MISSING_METADATA
+ - FILESIZE_MISMATCH
+ - MD5_MISMATCH
+
+dms_metadata errors
+-------------------
+
+ - SCAN_DATE_INVALID
+ - SCAN_HOUR_INVALID
+ - EXTERNAL_ID_DUPLICATE
+
 Tests
 =====
 
