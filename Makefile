@@ -6,12 +6,12 @@ VERSION=`cat version.txt|cut -d/ -f2`
 DEV_VERSION=`cat version.txt|cut -d/ -f2|cut -d. -f1,2,3`
 deb:
 	git-dch -a --ignore-branch
-	dch -v $(VERSION).$(BUILD_NUMBER) release --no-auto-nmu
+	dch -v $(VERSION)-$(BUILD_NUMBER) release --no-auto-nmu
 	dpkg-buildpackage -b -uc -us
 
 deb-staging:
 	git-dch -a --ignore-branch
-	dch -v $(DEV_VERSION).dev$(BUILD_NUMBER) release --no-auto-nmu
+	dch -v $(DEV_VERSION)-$(BUILD_NUMBER)dev release --no-auto-nmu
 	dpkg-buildpackage -b -uc -us
 
 .PHONY: deb
