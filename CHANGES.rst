@@ -4,6 +4,9 @@ Changelog
 prod/0.4.4 (unreleased)
 -----------------------
 
+- Avoid an error if the MD5 is in uppercase
+  [mpeeters]
+
 - Add logging for webservices requests and responses
   [mpeeters]
 
