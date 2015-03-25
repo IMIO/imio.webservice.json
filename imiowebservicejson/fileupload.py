@@ -192,7 +192,7 @@ class FileValidator(object):
                 (self.filesize, self.metadata_filesize))
 
     def _validate_md5(self):
-        if self.md5 != self.metadata_md5:
+        if self.md5 != self.metadata_md5.lower():
             raise ValidationError(
                 u'MD5_MISMATCH',
                 u"MD5 check: difference found",
