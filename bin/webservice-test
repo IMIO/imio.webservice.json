@@ -12,6 +12,7 @@ RD2=$(($RANDOM/4+1))
 NB=$(($RD1*$RD2+30000000))
 SIMUL=0
 FILESIZE=`ls -al README.rst | awk '{print $5}'`
+VERSION="1.1"
 COUR_E="
 {
     \"external_id\": \"IMIO$CLIENT\",
@@ -25,7 +26,7 @@ COUR_E="
     \"creator\": \"scanner\",
     \"filesize\": $FILESIZE,
     \"filename\": \"README.rst\",
-    \"filemd5\": \"3ff0c3867d6dfbff81eb77b292ff8338\"
+    \"filemd5\": \"1a23faa2ebc30b62784e93850e628781\"
 }
 "
 
@@ -46,19 +47,19 @@ do
     ((NB++))
     if [ "$SIMUL" -eq "1" ];
     then
-        echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_Ei\" $DOMAIN/dms_metadata/$CLIENT/1.0"
+        echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_Ei\" $DOMAIN/dms_metadata/$CLIENT/$VERSION"
     else
-        RET=`curl -u $AUTH -X POST -H "Content-Type: application/json" -d "$COUR_Ei" $DOMAIN/dms_metadata/$CLIENT/1.0`
+        RET=`curl -u $AUTH -X POST -H "Content-Type: application/json" -d "$COUR_Ei" $DOMAIN/dms_metadata/$CLIENT/$VERSION`
         echo $RET
         ID=`expr "$RET" : '.*"id": \([0-9]*\)'`
     fi
     if [ "$SIMUL" -eq "1" ];
     then
         ID=1
-        echo "curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID"
+        echo "curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$VERSION/$ID"
     elif [ "$ID" != "" ]
     then
-        RET=`curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$ID`
+        RET=`curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$VERSION/$ID`
         echo $RET
     fi
 done
