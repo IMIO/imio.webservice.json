@@ -14,6 +14,7 @@ from imiowebservicejson.fileupload import FileUpload
 from imiowebservicejson.fileupload import get_blob_path
 from imiowebservicejson.fileupload import remove_file
 from imiowebservicejson.fileupload import validate_file
+from imiowebservicejson.fileupload import validate_file_11
 
 
 class TestFileUpload(unittest.TestCase):
@@ -50,6 +51,10 @@ class TestFileUpload(unittest.TestCase):
 
     def _file(self, id='120', content='FOOBAR'):
         return FileUpload(self._request(id, content))
+
+    def _event(self, version='1.0'):
+        context = type('context', (object, ), {'version': version})()
+        return type('event', (object, ), {'context': context})()
 
     def test_remove_file(self):
         self._create_tmp_file()
@@ -170,7 +175,7 @@ class TestFileUpload(unittest.TestCase):
         file = open(self._file().filepath, 'w')
         file.write('FOOBAR')
         file.close()
-        event = ValidatorEvent(None, file_upload)
+        event = ValidatorEvent(self._event(), file_upload)
         self.assertIsNone(validate_file(event))
 
     def test_validate_file_filesize_mismatch(self):
@@ -206,7 +211,7 @@ class TestFileUpload(unittest.TestCase):
         event = ValidatorEvent(None, self._file())
         self.assertRaisesRegexp(ValidationError,
                                 '.*MD5 check: difference found.*',
-                                validate_file, event)
+                                validate_file_11, event)
 
     def test_validate_file_md5_uppercase(self):
         self._create_tmp_file()
@@ -222,7 +227,7 @@ class TestFileUpload(unittest.TestCase):
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file())
-        validate_file(event)
+        validate_file_11(event)
 
     def test_validate_file(self):
         self._create_tmp_file()
@@ -238,7 +243,7 @@ class TestFileUpload(unittest.TestCase):
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file())
-        self.assertIsNone(validate_file(event))
+        self.assertIsNone(validate_file_11(event))
 
     def test_validate_file_update(self):
         self._create_tmp_file()
@@ -254,7 +259,7 @@ class TestFileUpload(unittest.TestCase):
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file())
-        validate_file(event)
+        validate_file_11(event)
 
         self._create_tmp_file(id='121', content='FOO')
         record = File(id=121,
@@ -269,4 +274,4 @@ class TestFileUpload(unittest.TestCase):
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file(id='121', content='FOO'))
-        validate_file(event)
+        validate_file_11(event)

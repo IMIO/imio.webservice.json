@@ -126,17 +126,18 @@ class FileUpload(object):
 @subscriber(ValidatorEvent, implement=IFileUpload)
 @handle_exception(remove_file, 'tmp_path')
 def validate_file(event):
-    FileValidator(event).validate()
+    FileValidator10(event).validate()
 
 
-class FileValidator(object):
+@subscriber(ValidatorEvent, implement=IFileUpload, version='>= 1.1')
+@handle_exception(remove_file, 'tmp_path')
+def validate_file_11(event):
+    FileValidator11(event).validate()
 
-    _validations = (
-        '_validate_data',
-        '_verify_filepath',
-        '_validate_filesize',
-        '_validate_md5',
-    )
+
+class FileValidatorBase(object):
+
+    _validations = ()
 
     def __init__(self, event):
         self.event = event
@@ -157,13 +158,14 @@ class FileValidator(object):
     def metadata(self):
         return self.data.file_metadata
 
-    @property
-    def md5(self):
-        return self.context.md5
 
-    @property
-    def metadata_md5(self):
-        return self.metadata.get('filemd5')
+class FileValidator10(FileValidatorBase):
+
+    _validations = (
+        '_validate_data',
+        '_verify_filepath',
+        '_validate_filesize',
+    )
 
     @property
     def filesize(self):
@@ -190,6 +192,21 @@ class FileValidator(object):
                 u'FILESIZE_MISMATCH',
                 u"The filesize does not match (%s != %s)" %
                 (self.filesize, self.metadata_filesize))
+
+
+class FileValidator11(FileValidatorBase):
+
+    _validations = (
+        '_validate_md5',
+    )
+
+    @property
+    def md5(self):
+        return self.context.md5
+
+    @property
+    def metadata_md5(self):
+        return self.metadata.get('filemd5')
 
     def _validate_md5(self):
         if self.md5 != self.metadata_md5.lower():
