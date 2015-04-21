@@ -39,6 +39,7 @@ def main(global_config, **settings):
     config.add_route('test', '/test/{webservice}/{commune}/{version}/{type}')
     config.add_route('schema', '/schema/{name}/{version}')
     config.add_route('dms_metadata', '/dms_metadata/{client_id}/{version}')
+    config.add_route('dms_file_upload', '/file_upload/{version}/{id}')
     config.add_route('file_upload', '/file_upload/{id}')
     config.add_route('file', '/file/{client_id}/{external_id}')
     config.add_route('test_request', '/test_request/{version}')

@@ -54,6 +54,14 @@ def dms_metadata(request, input, response):
 @exception_handler()
 @http_logging(log)
 def file_upload(request):
+    request.matchdict['version'] = '1.0'
+    return dms_file_upload(request)
+
+
+@view_config(route_name='dms_file_upload', renderer='json', permission='query')
+@exception_handler()
+@http_logging(log)
+def dms_file_upload(request):
     upload = FileUpload(request)
     upload.save_tmpfile()
 
