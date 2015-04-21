@@ -32,7 +32,7 @@ class VersionPredicate(object):
     phash = text
 
     def __call__(self, event):
-        current_version = StrictVersion(event.request.context.version)
+        current_version = StrictVersion(event.request.matchdict['version'])
         for expression in self.versions:
             op, version = get_operator_and_version(expression)
             if op(current_version, version) is False:

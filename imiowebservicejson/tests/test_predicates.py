@@ -26,8 +26,8 @@ class TestPredicates(unittest.TestCase):
 
     def test_version_predicate(self):
         predicate = predicates.VersionPredicate(('>= 1.1', '<= 1.2'), None)
-        context = type('context', (object, ), {'version': '1.0'})()
-        request = type('request', (object, ), {'context': context})()
+        matchdict = {'version': '1.0'}
+        request = type('request', (object, ), {'matchdict': matchdict})()
         event = type('event', (object, ), {'request': request})()
         self.assertEqual(False, predicate(event))
 
@@ -35,7 +35,7 @@ class TestPredicates(unittest.TestCase):
                               ('1.2.1', False), ('1.3', False))
 
         for version, result in version_comparison:
-            event.request.context.version = version
+            event.request.matchdict['version'] = version
             self.assertEqual(result, predicate(event))
 
     def test_get_operator_and_version(self):
