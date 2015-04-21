@@ -4,6 +4,12 @@ Changelog
 prod/0.4.4 (unreleased)
 -----------------------
 
+- filemd5 is now required with dms_metadata 1.1
+  [mpeeters]
+
+- Add dms_metadata version 1.1
+  [mpeeters]
+
 - Avoid an error if the MD5 is in uppercase
   [mpeeters]
 
@@ -20,18 +26,15 @@ prod/0.4.4 (unreleased)
   [sgeulette]
 
 - Improved webservice-test
-  [sgeulette]
+  [sgeulette, mpeeters]
 
 - Cache uploaded file md5
   [mpeeters]
 
-- Validate file md5
+- Validate file md5 with version 1.1
   [mpeeters]
 
 - Refactor the file upload validation
-  [mpeeters]
-
-- filemd5 is now required
   [mpeeters]
 
 
