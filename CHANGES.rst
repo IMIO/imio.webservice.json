@@ -1,8 +1,8 @@
 Changelog
 =========
 
-prod/0.4.4 (unreleased)
------------------------
+prod/0.5 (2015-04-22)
+---------------------
 
 - filemd5 is now required with dms_metadata 1.1
   [mpeeters]
