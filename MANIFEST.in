@@ -7,5 +7,7 @@ include bin/daemon-dispatcher
 include bin/daemon-publisher
 include bin/daemon-webservice
 include bin/webservice-test
+include bin/connect_db
+include bin/daemon-all
 recursive-include debian *
 recursive-include imiowebservicejson *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml *.json *.ini
