@@ -1,6 +1,12 @@
 Changelog
 =========
 
+prod/0.5.1 (unreleased)
+-----------------------
+
+- Nothing changed yet.
+
+
 prod/0.5 (2015-04-22)
 ---------------------
 
