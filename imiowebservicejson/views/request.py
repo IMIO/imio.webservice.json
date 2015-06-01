@@ -3,7 +3,7 @@
 from pyramid.view import view_config
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.core import RequestFile
-from imio.dataexchange.db.mappers.request import Request
+from imio.dataexchange.db.mappers.request import Request as RequestTable
 import cPickle
 import logging
 import uuid
@@ -13,8 +13,8 @@ from imiowebservicejson.views.base import json_logging
 from imiowebservicejson.views.base import json_validator
 from imiowebservicejson.views.base import validate_json_schema
 from imiowebservicejson.views.base import failure
-from imiowebservicejson.models.test_request import TestRequest
-from imiowebservicejson.models.test_response import TestResponse
+from imiowebservicejson.models.wsrequest import WSRequest
+from imiowebservicejson.models.wsresponse import WSResponse
 from imiowebservicejson.request import SinglePublisher
 from imiowebservicejson.request import SingleConsumer
 from imiowebservicejson.schema import get_schemas
@@ -31,11 +31,11 @@ def validate_request_parameters(request, input):
         return error
 
 
-@view_config(route_name='test_request', renderer='json', permission='query')
+@view_config(route_name='wsrequest', renderer='json', permission='query')
 @exception_handler()
-@json_validator(schema_name='test_request', model=TestRequest)
+@json_validator(schema_name='wsrequest', model=WSRequest)
 @json_logging(log)
-def test_request(request, input, response):
+def wsrequest(request, input, response):
     uid = uuid.uuid4().hex
     error = validate_request_parameters(request, input)
     if error is not None:
@@ -50,7 +50,7 @@ def test_request(request, input, response):
                           input.client_id)
     msg = RequestMessage(input.request_type, input.request_parameters,
                          input.client_id, uid)
-    record = Request(uid=uid)
+    record = RequestTable(uid=uid)
     record.insert()
     if input.files:
         response.files_id = []
@@ -58,7 +58,7 @@ def test_request(request, input, response):
         f_uid = uuid.uuid4().hex
         request_file = RequestFile(f_uid, file)
         msg.add_file(request_file)
-        Request(uid=f_uid).insert()
+        RequestTable(uid=f_uid).insert()
         response.files_id.append(f_uid)
 
     publisher.add_message(msg)
@@ -69,11 +69,11 @@ def test_request(request, input, response):
     return response
 
 
-@view_config(route_name='test_response', renderer='json', permission='query')
+@view_config(route_name='wsresponse', renderer='json', permission='query')
 @exception_handler()
-@json_validator(schema_name='test_response', model=TestResponse)
+@json_validator(schema_name='wsresponse', model=WSResponse)
 @json_logging(log)
-def test_response(request, input, response):
+def response(request, input, response):
     amqp_url = request.registry.settings.get('rabbitmq.url')
     consumer = SingleConsumer('{0}/%2Fwsresponse?connection_attempts=3&'
                               'heartbeat_interval=3600'.format(amqp_url))

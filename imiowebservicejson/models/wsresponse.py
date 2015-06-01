@@ -2,9 +2,9 @@
 
 from zope.interface import implements
 
-from imiowebservicejson.interfaces import ITestResponse
+from imiowebservicejson.interfaces import IWSResponse
 from imiowebservicejson.models.base import BaseModel
 
 
-class TestResponse(BaseModel):
-    implements(ITestResponse)
+class WSResponse(BaseModel):
+    implements(IWSResponse)
