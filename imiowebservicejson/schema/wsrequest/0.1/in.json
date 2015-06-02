@@ -20,7 +20,7 @@
             "minLength": 1
         },
         "type_version": {
-            "description": "The version of the request",
+            "description": "The version of the request type",
             "type": "string",
             "minLength": 3
         },
