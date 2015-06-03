@@ -44,10 +44,10 @@ def wsrequest(request, input, response):
     amqp_url = request.registry.settings.get('rabbitmq.url')
     publisher = SinglePublisher('{0}/%2Fwsrequest?connection_attempts=3&'
                                 'heartbeat_interval=3600'.format(amqp_url))
-    publisher.setup_queue('{0}.{1}.{2}'.format(input.application_id,
-                                               input.request_type,
-                                               input.client_id),
-                          input.client_id)
+    key = '{0}.{1}.{2}'.format(input.application_id,
+                               input.request_type,
+                               input.client_id)
+    publisher.setup_queue(key, key)
     msg = RequestMessage(input.request_type, input.request_parameters,
                          input.client_id, uid)
     record = RequestTable(uid=uid)
