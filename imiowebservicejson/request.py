@@ -10,7 +10,10 @@ class SinglePublisher(BaseSingleMessagePublisher):
     exchange = 'ws.request'
 
     def get_routing_key(self, message):
-        return message.client_id
+        key = '{0}.{1}.{2}'.format(message.application_id,
+                                   message.type,
+                                   message.client_id)
+        return key.upper()
 
 
 class SingleConsumer(BaseSingleMessageConsumer):
