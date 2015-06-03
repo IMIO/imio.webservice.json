@@ -49,7 +49,7 @@ def wsrequest(request, input, response):
                                input.client_id)
     publisher.setup_queue(key, key)
     msg = RequestMessage(input.request_type, input.request_parameters,
-                         input.client_id, uid)
+                         input.application_id, input.client_id, uid)
     record = RequestTable(uid=uid)
     record.insert()
     if input.files:
