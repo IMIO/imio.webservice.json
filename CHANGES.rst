@@ -4,7 +4,20 @@ Changelog
 prod/0.5.1 (unreleased)
 -----------------------
 
-- Nothing changed yet.
+- Fix typo in wsresponse schema folder
+  [mpeeters]
+
+- Update the routing key of request messages
+  [mpeeters]
+
+- Add the application_id parameter to Request objects
+  [mpeeters]
+
+- Ensure that the routing key is unique for request messages
+  [mpeeters]
+
+- Update the request/response webservices names
+  [mpeeters]
 
 
 prod/0.5 (2015-04-22)
