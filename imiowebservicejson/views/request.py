@@ -47,7 +47,7 @@ def wsrequest(request, input, response):
     key = '{0}.{1}.{2}'.format(input.application_id,
                                input.request_type,
                                input.client_id)
-    publisher.setup_queue(key, key)
+    publisher.setup_queue(key.upper(), key.upper())
     msg = RequestMessage(input.request_type, input.request_parameters,
                          input.application_id, input.client_id, uid)
     record = RequestTable(uid=uid)
