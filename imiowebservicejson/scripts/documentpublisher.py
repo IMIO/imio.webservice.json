@@ -50,9 +50,10 @@ def main():
     url = config.get('app:main', 'rabbitmq.url')
     publisher = DocumentPublisher('{0}/%2Fwebservice?connection_attempts=3&'
                                   'heartbeat_interval=3600'.format(url))
-    publisher.setup_queue('dms.invoice', 'FACT')
+    publisher.setup_queue('dms.deliberation', 'DELIB')
     publisher.setup_queue('dms.incomingmail', 'COUR_E')
     publisher.setup_queue('dms.outgoingmail', 'COUR_S')
+    publisher.setup_queue('dms.outgoinggeneratedmail', 'COUR_S_GEN')
     try:
         publisher.start()
     except KeyboardInterrupt:
