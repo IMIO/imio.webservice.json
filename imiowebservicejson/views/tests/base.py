@@ -20,7 +20,7 @@ class ViewTestCase(unittest.TestCase):
         self._save_tmpfile = FileUpload.save_tmpfile
         self._move = FileUpload.move
         self._save_reference = FileUpload.save_reference
-        DBSession.add(FileType(id='FACT', description='description'))
+        DBSession.add(FileType(id='COUR_E', description='description'))
         DBSession.flush()
 
     def tearDown(self):

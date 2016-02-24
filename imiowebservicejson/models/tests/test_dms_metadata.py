@@ -31,7 +31,7 @@ class TestDMSMetadata(unittest.TestCase):
     def _test_values(self):
         return {
             "external_id": "010462000000005",
-            "type": "FACT",
+            "type": "COUR_E",
             "client_id": "0104620",
             "scan_date": "2014-01-01",
             "scan_hour": "10:30:25",

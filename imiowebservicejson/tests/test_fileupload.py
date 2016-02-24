@@ -20,7 +20,7 @@ from imiowebservicejson.fileupload import validate_file_11
 class TestFileUpload(unittest.TestCase):
 
     def setUp(self):
-        DBSession.add(FileType(id='FACT', description='description'))
+        DBSession.add(FileType(id='COUR_E', description='description'))
         DBSession.flush()
         self._tmp_files = []
 
@@ -103,10 +103,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
@@ -131,10 +131,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata
@@ -162,11 +162,11 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser',
                       filepath='/tmp/120.txt')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
@@ -183,10 +183,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 4, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 4, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
@@ -200,10 +200,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '95c72a49c488d59f60c022fcfecf4382XXX'}
         record.file_metadata = metadata
@@ -218,10 +218,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '95C72A49C488D59F60C022FCFECF4382'}
         record.file_metadata = metadata
@@ -234,10 +234,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
@@ -250,10 +250,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=120,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=1,
                       user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '95c72a49c488d59f60c022fcfecf4382'}
         record.file_metadata = metadata
@@ -265,10 +265,10 @@ class TestFileUpload(unittest.TestCase):
         record = File(id=121,
                       external_id='CH-0001',
                       client_id='CH',
-                      type='FACT',
+                      type='COUR_E',
                       version=2,
                       user='testuser')
-        metadata = {'filesize': 3, 'type': 'FACT', 'client_id': 'CH',
+        metadata = {'filesize': 3, 'type': 'COUR_E', 'client_id': 'CH',
                     'external_id': 'CH-0001',
                     'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         record.file_metadata = metadata

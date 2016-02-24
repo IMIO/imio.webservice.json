@@ -21,17 +21,17 @@ class TestViewsDMS(ViewTestCase):
                         id=file_id)
         data = File.first(id=file_id)
         self.assertEqual('testuser', data.user)
-        self.assertEqual('CH-00004', data.external_id)
+        self.assertEqual('010462000000004', data.external_id)
 
     def test_dms_metadata_update(self):
         data = File(id=1,
-                    external_id='CH-00001',
-                    client_id='CH',
-                    type='FACT',
+                    external_id='010462000000001',
+                    client_id='0104620',
+                    type='COUR_E',
                     version=1,
                     user='testuser')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-00001',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': '0104620',
+                    'external_id': '010462000000001',
                     'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         data.file_metadata = metadata
         data.insert(flush=True)
@@ -45,14 +45,14 @@ class TestViewsDMS(ViewTestCase):
 
     def test_dms_metadata_new_version(self):
         data = File(id=1,
-                    external_id='CH-00002',
-                    client_id='CH',
-                    type='FACT',
+                    external_id='010462000000002',
+                    client_id='0104620',
+                    type='COUR_E',
                     version=1,
                     user='testuser',
                     filepath='/tmp/test.txt')
-        metadata = {'filesize': 6, 'type': 'FACT', 'client_id': 'CH',
-                    'external_id': 'CH-00002',
+        metadata = {'filesize': 6, 'type': 'COUR_E', 'client_id': '0104620',
+                    'external_id': '010462000000002',
                     'filemd5': '901890a8e9c8cf6d5a1a542b229febff'}
         data.file_metadata = metadata
         data.insert(flush=True)
@@ -63,9 +63,9 @@ class TestViewsDMS(ViewTestCase):
         self._view_test('dms_metadata', 'dms_metadata_new_version', request,
                         id=file_id)
         data = File.first(id=file_id)
-        self.assertEqual('CH-00002', data.external_id)
+        self.assertEqual('010462000000002', data.external_id)
         self.assertEqual(2, data.version)
-        self.assertEqual(2, File.count(external_id='CH-00002'))
+        self.assertEqual(2, File.count(external_id='010462000000002'))
 
     def test_file_upload(self):
         FileUpload.save_tmpfile = Mock(return_value=None)

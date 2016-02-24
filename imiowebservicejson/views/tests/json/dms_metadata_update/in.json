@@ -1,8 +1,8 @@
 {
-    "external_id": "CH-00001",
-    "type": "FACT",
+    "external_id": "010462000000001",
+	"type": "COUR_E",
     "pages_number": 1,
-    "client_id": "CH",
+    "client_id": "0104620",
     "scan_date": "2014-04-07",
     "scan_hour": "13:24:12",
     "user": "testuser",
