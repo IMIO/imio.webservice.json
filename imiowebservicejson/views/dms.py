@@ -40,7 +40,7 @@ def dms_metadata(request, input, response):
         dms_file.update_date = datetime.now()
     dms_file.external_id = input.external_id
     dms_file.client_id = input.client_id
-    dms_file.type = input.type
+    dms_file.type = input.document_type
     dms_file.user = userid
     dms_file.file_metadata = input.json_object
     dms_file.insert(flush=True)

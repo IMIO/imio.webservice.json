@@ -17,9 +17,20 @@ from imiowebservicejson.models.base import BaseModel
 class DMSMetadata(BaseModel):
     implements(IDMSMetadata)
 
+    type_codes = {
+        0: 'COUR_E',
+        1: 'COUR_S',
+        2: 'COUR_S_GEN',
+        3: 'DELIB',
+    }
+
     @property
     def update_flag(self):
         return self.get('update', False)
+
+    @property
+    def document_type(self):
+        return self.type_codes[int(self.client_id[2])]
 
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata)
