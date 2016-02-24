@@ -4,6 +4,25 @@ Changelog
 prod/0.5.1 (unreleased)
 -----------------------
 
+- Update the document publisher
+  [mpeeters]
+
+- Get the document type from the external id
+  [mpeeters]
+
+- Make the type parameter optional
+  [mpeeters]
+
+- Add a validator to ensure that the external id contains the client id
+  [mpeeters]
+
+- Add a regexp to ensure that the external id contains 15 digits and a
+  valid document type
+  [mpeeters]
+
+- Add version 1.2 for dms_metadata schema
+  [mpeeters]
+
 - Fix typo in wsresponse schema folder
   [mpeeters]
 
