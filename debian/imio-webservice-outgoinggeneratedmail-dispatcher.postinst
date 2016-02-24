@@ -12,7 +12,7 @@ case "$1" in
 	/usr/bin/find $PACKAGE_HOME -name '*.pyc' -delete
 	/usr/bin/find $PACKAGE_HOME -name '*.pyo' -delete
 	/usr/bin/find $PACKAGE_HOME -name '*.mo' -delete
-	/etc/init.d/imio-webservice-invoice-dispatcher restart
+	/etc/init.d/imio-webservice-outgoinggeneratedmail-dispatcher restart
     ;;
 
     abort-remove|abort-upgrade|abort-deconfigure)

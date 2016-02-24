@@ -12,8 +12,10 @@ CURDIR    := $(shell pwd)
 BUILDDIR  := $(CURDIR)/tmp/$(PACKAGE)
 DEBIANCORE               := $(CURDIR)/debian/$(PACKAGE)-instance
 DEBIANPUBLISHER          := $(CURDIR)/debian/$(PACKAGE)-publisher
-DEBIANINVOICEDISPATCHER	 := $(CURDIR)/debian/$(PACKAGE)-invoice-dispatcher
+DEBIANDELIBERATIONDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-deliberation-dispatcher
 DEBIANINCOMINGMAILDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-incomingmail-dispatcher
+DEBIANOUTGOINGMAILDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-outgoinggeneratedmail-dispatcher
+DEBIANOUTGOINGMAILGENERATEDDISPATCHER := $(CURDIR)/debian/$(PACKAGE)-outgoinggeneratedmail-dispatcher
 INSTALLDIR   := /srv/$(PACKAGE)
 
 distribution := $(shell lsb_release -is)
@@ -47,8 +49,10 @@ build:
 install-base:
 	rm -rf $(DEBIANCORE)
 	rm -rf $(DEBIANPUBLISHER)
-	rm -rf $(DEBIANINVOICEDISPATCHER)
+	rm -rf $(DEBIANDELIBERATIONDISPATCHER)
 	rm -rf $(DEBIANINCOMINGDISPATCHER)
+	rm -rf $(DEBIANOUTGOINGDISPATCHER)
+	rm -rf $(DEBIANOUTGOINGGENERATEDDISPATCHER)
 	dh_testdir
 	dh_testroot
 	dh_clean -k -s
@@ -86,12 +90,12 @@ install-publisher:
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/document_publisher
 	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
 
-install-invoice-dispatcher:
-	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}
-	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
-	mkdir -p $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/var/log
-	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/invoice_dispatcher
-	cp -ap $(BUILDDIR)/bin/invoice_dispatcher $(DEBIANINVOICEDISPATCHER)/${INSTALLDIR}/bin
+install-deliberation-dispatcher:
+	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}
+	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/deliberation_dispatcher
+	cp -ap $(BUILDDIR)/bin/deliberation_dispatcher $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}/bin
 
 install-incomingmail-dispatcher:
 	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}
@@ -100,7 +104,21 @@ install-incomingmail-dispatcher:
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/incomingmail_dispatcher
 	cp -ap $(BUILDDIR)/bin/incomingmail_dispatcher $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
 
-install: install-base install-core install-publisher install-invoice-dispatcher install-incomingmail-dispatcher
+install-outgoingmail-dispatcher:
+	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}
+	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/outgoingmail_dispatcher
+	cp -ap $(BUILDDIR)/bin/outgoingmail_dispatcher $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}/bin
+
+install-outgoinggeneratedmail-dispatcher:
+	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}
+	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}/bin
+	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}/var/log
+	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/outgoinggeneratedmail_dispatcher
+	cp -ap $(BUILDDIR)/bin/outgoinggeneratedmail_dispatcher $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}/bin
+
+install: install-base install-core install-publisher install-deliberation-dispatcher install-incomingmail-dispatcher install-outgoingmail-dispatcher install-outgoinggeneratedmail-dispatcher
 	#rm -rf $(BUILDDIR)/
 
 binary-common:

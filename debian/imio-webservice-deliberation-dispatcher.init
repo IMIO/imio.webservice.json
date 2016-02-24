@@ -11,7 +11,7 @@
 
 dir="/srv/imio-webservice/"
 user="zope"
-cmd="bin/invoice_dispatcher production.ini"
+cmd="bin/deliberation_dispatcher production.ini"
 
 name=`basename $0`
 pid_file="/var/run/$name.pid"
