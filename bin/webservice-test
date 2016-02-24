@@ -43,7 +43,7 @@ for i in `seq 1 $1`;
 do
     echo "Push element $i"
     NBi=`printf "%08d" $NB`
-    COUR_Ei=${COUR_E/IMIO$CLIENT/IMIO$CLIENT$NBi}
+    COUR_Ei=${COUR_E/IMIO$CLIENT/$CLIENT$NBi}
     ((NB++))
     if [ "$SIMUL" -eq "1" ];
     then
