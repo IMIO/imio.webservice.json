@@ -58,3 +58,12 @@ def unicity_validation(event):
             u'EXTERNAL_ID_DUPLICATE',
             u"The value for the field 'external_id' already exist",
         )
+
+
+@subscriber(ValidatorEvent, implement=IDMSMetadata, version='>=1.2')
+def external_id_validation(event):
+    if event.context.external_id[:7] != event.context.client_id:
+        raise ValidationError(
+            u'INVALID_EXTERNAL_ID',
+            u"The value for the field 'external_id' is invalid",
+        )

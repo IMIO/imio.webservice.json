@@ -30,9 +30,9 @@ class TestDMSMetadata(unittest.TestCase):
     @property
     def _test_values(self):
         return {
-            "external_id": "ID-001",
+            "external_id": "010462000000005",
             "type": "FACT",
-            "client_id": "CH",
+            "client_id": "0104620",
             "scan_date": "2014-01-01",
             "scan_hour": "10:30:25",
             "creator": "testuser",
@@ -109,3 +109,16 @@ class TestDMSMetadata(unittest.TestCase):
         model = self._get_model(self._test_values)
         event = type('event', (object, ), {'context': model, 'request': {}})()
         self.assertIsNone(dms_metadata.unicity_validation(event))
+
+    def test_external_id_validation(self):
+        model = self._get_model(self._test_values)
+        event = type('event', (object, ), {'context': model, 'request': {}})()
+        self.assertIsNone(dms_metadata.external_id_validation(event))
+
+    def test_external_id_validation_error(self):
+        values = self._test_values
+        values['client_id'] = 'FOO'
+        model = self._get_model(values)
+        event = type('event', (object, ), {'context': model, 'request': {}})()
+        self.assertRaises(ValidationError, dms_metadata.external_id_validation,
+                          event)
