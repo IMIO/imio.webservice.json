@@ -69,5 +69,5 @@
         }
     },
     "additionalProperties": false,
-    "required": ["external_id", "type", "client_id", "scan_date", "scan_hour", "creator", "filesize", "filename", "filemd5"]
+    "required": ["external_id", "client_id", "scan_date", "scan_hour", "creator", "filesize", "filename", "filemd5"]
 }
