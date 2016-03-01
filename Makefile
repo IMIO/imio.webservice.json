@@ -19,7 +19,7 @@ deb-staging:
 .PHONY: bootstrap
 bootstrap:
 	virtualenv-2.7 .
-	./bin/python bootstrap.py
+	./bin/python bootstrap.py -v 2.3.1 --setuptools-version=12.0.5
 
 .PHONY: buildout
 buildout:
