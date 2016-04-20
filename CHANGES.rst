@@ -4,6 +4,9 @@ Changelog
 prod/0.5.1 (unreleased)
 -----------------------
 
+- Update the file route to add the version parameter
+  [mpeeters]
+
 - Update the document publisher
   [mpeeters]
 

@@ -7,11 +7,17 @@ from imio.dataexchange.db.mappers.file import File
 class FileRender(object):
 
     def __init__(self, request):
-        self.dms_file = File.first(
-            client_id=request.matchdict.get('client_id'),
-            external_id=request.matchdict.get('external_id'),
-            order_by=[desc(File.id)],
-        )
+        filters = {
+            'client_id': request.matchdict.get('client_id'),
+            'external_id': request.matchdict.get('external_id'),
+            'order_by': [desc(File.id)],
+        }
+        if request.matchdict.get('version'):
+            filters['version'] = request.matchdict.get('version')
+        self.dms_file = self.get_file(**filters)
+
+    def get_file(self, **kwargs):
+        return File.first(**kwargs)
 
     def render(self):
         f = open(self.filepath, 'r')

@@ -41,7 +41,8 @@ def main(global_config, **settings):
     config.add_route('dms_metadata', '/dms_metadata/{client_id}/{version}')
     config.add_route('dms_file_upload', '/file_upload/{version}/{id}')
     config.add_route('file_upload', '/file_upload/{id}')
-    config.add_route('file', '/file/{client_id}/{external_id}')
+    config.add_route('file_latest', '/file/{client_id}/{external_id}')
+    config.add_route('file', '/file/{client_id}/{external_id}/{version}')
     config.add_route('wsrequest', '/wsrequest/{version}')
     config.add_route('wsresponse', '/wsresponse/{version}')
 
