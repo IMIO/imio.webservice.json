@@ -1,8 +1,8 @@
 Changelog
 =========
 
-prod/0.5.1 (unreleased)
------------------------
+prod/0.6 (unreleased)
+---------------------
 
 - Update the file route to add the version parameter
   [mpeeters]
