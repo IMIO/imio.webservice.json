@@ -114,11 +114,11 @@ install-outgoingmail-dispatcher:
 	cp -ap $(BUILDDIR)/bin/outgoingmail_dispatcher $(DEBIANOUTGOINGMAILDISPATCHER)${INSTALLDIR}/bin
 
 install-outgoinggeneratedmail-dispatcher:
-	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}
-	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}/bin
-	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}/var/log
+	mkdir -p $(DEBIANOUTGOINGMAILGENERATEDDISPATCHER)${INSTALLDIR}
+	mkdir -p $(DEBIANOUTGOINGMAILGENERATEDDISPATCHER)${INSTALLDIR}/bin
+	mkdir -p $(DEBIANOUTGOINGMAILGENERATEDDISPATCHER)${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/outgoinggeneratedmail_dispatcher
-	cp -ap $(BUILDDIR)/bin/outgoinggeneratedmail_dispatcher $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/outgoinggeneratedmail_dispatcher $(DEBIANOUTGOINGMAILGENERATEDDISPATCHER)${INSTALLDIR}/bin
 
 install: install-base install-core install-publisher install-deliberation-dispatcher install-incomingmail-dispatcher install-outgoingmail-dispatcher install-outgoinggeneratedmail-dispatcher
 	#rm -rf $(BUILDDIR)/
