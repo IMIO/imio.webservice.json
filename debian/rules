@@ -63,60 +63,60 @@ install-base:
 	rm -fr ${BUILDDIR}/downloads
 
 install-core:
-	mkdir -p $(DEBIANCORE)/${INSTALLDIR}
+	mkdir -p $(DEBIANCORE)${INSTALLDIR}
 	find ${BUILDDIR}/bin -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
-	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)/${INSTALLDIR}
-	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)/${INSTALLDIR}
-	cp -ap $(BUILDDIR)/setup.py $(DEBIANCORE)/${INSTALLDIR}
-	cp -ap $(BUILDDIR)/production.ini $(DEBIANCORE)/${INSTALLDIR}
-	cp -apr $(BUILDDIR)/imiowebservicejson $(DEBIANCORE)/${INSTALLDIR}
-	cp -apr $(BUILDDIR)/lib $(DEBIANCORE)/${INSTALLDIR}
-	cp -apr $(BUILDDIR)/include $(DEBIANCORE)/${INSTALLDIR}
+	cp -ap $(BUILDDIR)/bin $(DEBIANCORE)${INSTALLDIR}
+	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)${INSTALLDIR}
+	cp -ap $(BUILDDIR)/setup.py $(DEBIANCORE)${INSTALLDIR}
+	cp -ap $(BUILDDIR)/production.ini $(DEBIANCORE)${INSTALLDIR}
+	cp -apr $(BUILDDIR)/imiowebservicejson $(DEBIANCORE)${INSTALLDIR}
+	cp -apr $(BUILDDIR)/lib $(DEBIANCORE)${INSTALLDIR}
+	cp -apr $(BUILDDIR)/include $(DEBIANCORE)${INSTALLDIR}
 	find ${BUILDDIR}/develop-eggs -type f -exec sed -i s%${BUILDDIR}%${INSTALLDIR}%g {} \;
-	cp -apr $(BUILDDIR)/develop-eggs $(DEBIANCORE)/${INSTALLDIR}
-	cp -apr $(BUILDDIR)/devel $(DEBIANCORE)/${INSTALLDIR}
-	cp -apr $(BUILDDIR)/imio.webservice.json.egg-info $(DEBIANCORE)/${INSTALLDIR}
-	rm -r $(DEBIANCORE)/${INSTALLDIR}/bin/document_publisher
-	rm -r $(DEBIANCORE)/${INSTALLDIR}/bin/invoice_dispatcher
-	rm -r $(DEBIANCORE)/${INSTALLDIR}/bin/incomingmail_dispatcher
-	for i in $(find $(DEBIANCORE)/${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}/${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
-	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyc" -delete;
-	find $(DEBIANCORE)/${INSTALLDIR} -name "*.pyo" -delete;
+	cp -apr $(BUILDDIR)/develop-eggs $(DEBIANCORE)${INSTALLDIR}
+	cp -apr $(BUILDDIR)/devel $(DEBIANCORE)${INSTALLDIR}
+	cp -apr $(BUILDDIR)/imio.webservice.json.egg-info $(DEBIANCORE)${INSTALLDIR}
+	rm -r $(DEBIANCORE)${INSTALLDIR}/bin/document_publisher
+	rm -r $(DEBIANCORE)${INSTALLDIR}/bin/invoice_dispatcher
+	rm -r $(DEBIANCORE)${INSTALLDIR}/bin/incomingmail_dispatcher
+	for i in $(find $(DEBIANCORE)${INSTALLDIR}/parts/omelette -type l); do old_link=$(readlink -m $i); new_link=$(echo $old_link | sed  s%${BUILDDIR}${INSTALLDIR}/); rm $i; ln -f -s $new_link $i; done
+	find $(DEBIANCORE)${INSTALLDIR} -name "*.pyc" -delete;
+	find $(DEBIANCORE)${INSTALLDIR} -name "*.pyo" -delete;
 
 install-publisher:
-	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}
-	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
-	mkdir -p $(DEBIANPUBLISHER)/${INSTALLDIR}/var/log
+	mkdir -p $(DEBIANPUBLISHER)${INSTALLDIR}
+	mkdir -p $(DEBIANPUBLISHER)${INSTALLDIR}/bin
+	mkdir -p $(DEBIANPUBLISHER)${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/document_publisher
-	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANPUBLISHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/document_publisher $(DEBIANPUBLISHER)${INSTALLDIR}/bin
 
 install-deliberation-dispatcher:
-	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}
-	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}/bin
-	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}/var/log
+	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)${INSTALLDIR}
+	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)${INSTALLDIR}/bin
+	mkdir -p $(DEBIANDELIBERATIONDISPATCHER)${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/deliberation_dispatcher
-	cp -ap $(BUILDDIR)/bin/deliberation_dispatcher $(DEBIANDELIBERATIONDISPATCHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/deliberation_dispatcher $(DEBIANDELIBERATIONDISPATCHER)${INSTALLDIR}/bin
 
 install-incomingmail-dispatcher:
-	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}
-	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
-	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/var/log
+	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)${INSTALLDIR}
+	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)${INSTALLDIR}/bin
+	mkdir -p $(DEBIANINCOMINGMAILDISPATCHER)${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/incomingmail_dispatcher
-	cp -ap $(BUILDDIR)/bin/incomingmail_dispatcher $(DEBIANINCOMINGMAILDISPATCHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/incomingmail_dispatcher $(DEBIANINCOMINGMAILDISPATCHER)${INSTALLDIR}/bin
 
 install-outgoingmail-dispatcher:
-	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}
-	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}/bin
-	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}/var/log
+	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)${INSTALLDIR}
+	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)${INSTALLDIR}/bin
+	mkdir -p $(DEBIANOUTGOINGMAILDISPATCHER)${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/outgoingmail_dispatcher
-	cp -ap $(BUILDDIR)/bin/outgoingmail_dispatcher $(DEBIANOUTGOINGMAILDISPATCHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/outgoingmail_dispatcher $(DEBIANOUTGOINGMAILDISPATCHER)${INSTALLDIR}/bin
 
 install-outgoinggeneratedmail-dispatcher:
-	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}
-	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}/bin
-	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}/var/log
+	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}
+	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}/bin
+	mkdir -p $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}/var/log
 	sed -i s%${BUILDDIR}%${INSTALLDIR}%g ${BUILDDIR}/bin/outgoinggeneratedmail_dispatcher
-	cp -ap $(BUILDDIR)/bin/outgoinggeneratedmail_dispatcher $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)/${INSTALLDIR}/bin
+	cp -ap $(BUILDDIR)/bin/outgoinggeneratedmail_dispatcher $(DEBIANOUTGOINGGENERATEDMAILDISPATCHER)${INSTALLDIR}/bin
 
 install: install-base install-core install-publisher install-deliberation-dispatcher install-incomingmail-dispatcher install-outgoingmail-dispatcher install-outgoinggeneratedmail-dispatcher
 	#rm -rf $(BUILDDIR)/
