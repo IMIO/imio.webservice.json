@@ -41,7 +41,7 @@ build:
 	rm -f $(BUILDDIR)/lib/python2.7/site-packages/easy-install.pth
 	rm -rf $(BUILDDIR)/lib/python2.7/site-packages/setuptools*
 	mkdir -p $(BUILDDIR)/eggs
-	cd $(BUILDDIR) && bin/python bootstrap.py buildout:eggs-directory=$(BUILDDIR)/eggs
+	cd $(BUILDDIR) && bin/python bootstrap.py buildout:eggs-directory=$(BUILDDIR)/eggs --setuptools-version=12.0.5 --version=2.3.1
 	cd $(BUILDDIR) && bin/buildout buildout:eggs-directory=$(BUILDDIR)/eggs
 	echo $(DEBIANCORE)
 	touch build-stamp
