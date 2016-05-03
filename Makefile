@@ -11,7 +11,7 @@ deb:
 
 deb-staging:
 	git-dch -a --ignore-branch
-	dch -v $(DEV_VERSION).$(BUILD_NUMBER)dev release --no-auto-nmu
+	dch -v $(DEV_VERSION).$(BUILD_NUMBER) release --no-auto-nmu
 	dpkg-buildpackage -b -uc -us
 
 .PHONY: deb
