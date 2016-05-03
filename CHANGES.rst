@@ -1,6 +1,12 @@
 Changelog
 =========
 
+prod/0.6.1.dev0 (unreleased)
+----------------------------
+
+- Nothing changed yet.
+
+
 prod/0.6 (2016-05-03)
 ---------------------
 
