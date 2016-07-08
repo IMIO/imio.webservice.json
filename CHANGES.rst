@@ -4,8 +4,8 @@ Changelog
 prod/0.6.1.dev0 (unreleased)
 ----------------------------
 
-- Nothing changed yet.
-
+- Add scan_type parameter in webservice-test script.
+  [sgeulette]
 
 prod/0.6 (2016-05-03)
 ---------------------
