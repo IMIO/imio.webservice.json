@@ -4,8 +4,12 @@ Changelog
 prod/0.6.1.dev0 (unreleased)
 ----------------------------
 
+- Remove the document type code from client_id
+  [mpeeters]
+
 - Add scan_type parameter in webservice-test script.
   [sgeulette]
+
 
 prod/0.6 (2016-05-03)
 ---------------------

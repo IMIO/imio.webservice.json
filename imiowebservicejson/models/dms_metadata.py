@@ -30,7 +30,20 @@ class DMSMetadata(BaseModel):
 
     @property
     def document_type(self):
-        return self.type_codes[int(self.client_id[2])]
+        return self.type_codes[int(self.json_object.client_id[2])]
+
+    @property
+    def full_client_id(self):
+        """Return the client_id with the document type"""
+        return self.json_object.client_id
+
+    @property
+    def client_id(self):
+        """Return the client_id without the document type"""
+        return '{0}{1}'.format(
+            self.json_object.client_id[:2],
+            self.json_object.client_id[3:],
+        )
 
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata)
@@ -73,7 +86,7 @@ def unicity_validation(event):
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata, version='>=1.2')
 def external_id_validation(event):
-    if event.context.external_id[:7] != event.context.client_id:
+    if event.context.external_id[:7] != event.context.full_client_id:
         raise ValidationError(
             u'INVALID_EXTERNAL_ID',
             u"The value for the field 'external_id' is invalid",
