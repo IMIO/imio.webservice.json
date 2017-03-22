@@ -1,8 +1,8 @@
 Changelog
 =========
 
-prod/0.6.1.dev0 (unreleased)
-----------------------------
+dev/0.7 (unreleased)
+--------------------
 
 - Manage alphanumerical document type
   [sgeulette]
