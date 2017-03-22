@@ -4,6 +4,9 @@ Changelog
 prod/0.6.1.dev0 (unreleased)
 ----------------------------
 
+- Manage alphanumerical document type
+  [sgeulette]
+
 - Remove the document type code from client_id
   [mpeeters]
 
