@@ -10,6 +10,9 @@ prod/0.6.1.dev0 (unreleased)
 - Add scan_type parameter in webservice-test script.
   [sgeulette]
 
+- Changed input dms_metadata schema to accept alphanumerical type.
+  Added validator to check document_type (client_id) definition and added new error "INVALID_CLIENT_ID".
+  [sgeulette]
 
 prod/0.6 (2016-05-03)
 ---------------------

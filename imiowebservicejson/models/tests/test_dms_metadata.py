@@ -122,3 +122,16 @@ class TestDMSMetadata(unittest.TestCase):
         event = type('event', (object, ), {'context': model, 'request': {}})()
         self.assertRaises(ValidationError, dms_metadata.external_id_validation,
                           event)
+
+    def test_client_id_validation(self):
+        model = self._get_model(self._test_values)
+        event = type('event', (object, ), {'context': model, 'request': {}})()
+        self.assertIsNone(dms_metadata.client_id_validation(event))
+
+    def test_client_id_validation_error(self):
+        values = self._test_values
+        values['client_id'] = '01Y4620'
+        model = self._get_model(values)
+        event = type('event', (object, ), {'context': model, 'request': {}})()
+        self.assertRaises(ValidationError, dms_metadata.client_id_validation,
+                          event)

@@ -18,10 +18,11 @@ class DMSMetadata(BaseModel):
     implements(IDMSMetadata)
 
     type_codes = {
-        0: 'COUR_E',
-        1: 'COUR_S',
-        2: 'COUR_S_GEN',
-        3: 'DELIB',
+        '0': 'COUR_E',
+        '1': 'COUR_S',
+        '2': 'COUR_S_GEN',
+        '3': 'DELIB',
+        'Z': 'COUR_E',
     }
 
     @property
@@ -30,7 +31,7 @@ class DMSMetadata(BaseModel):
 
     @property
     def document_type(self):
-        return self.type_codes[int(self.json_object.client_id[2])]
+        return self.type_codes.get(self.json_object.client_id[2], None)
 
     @property
     def full_client_id(self):
@@ -90,4 +91,13 @@ def external_id_validation(event):
         raise ValidationError(
             u'INVALID_EXTERNAL_ID',
             u"The value for the field 'external_id' is invalid",
+        )
+
+
+@subscriber(ValidatorEvent, implement=IDMSMetadata, version='>=1.2')
+def client_id_validation(event):
+    if event.context.document_type is None:
+        raise ValidationError(
+            u'INVALID_CLIENT_ID',
+            u"The value for the field 'client_id' is invalid",
         )

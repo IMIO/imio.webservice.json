@@ -28,6 +28,7 @@ dms_metadata webservice errors
  - **SCAN_HOUR_INVALID** : The value for the field 'scan_hour' is invalid
  - **EXTERNAL_ID_DUPLICATE** : The value for the field 'external_id' already exist
  - **INVALID_EXTERNAL_ID** : The value for the field 'external_id' is invalid
+ - **INVALID_CLIENT_ID** : The value for the field 'client_id' is invalid
 
 Tests
 =====

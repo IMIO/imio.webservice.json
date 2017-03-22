@@ -7,7 +7,7 @@
         "external_id": {
             "description": "The client unique identifier of a document",
             "type": "string",
-            "pattern": "^\\d{2}[0-3]{1}\\d{12}$"
+            "pattern": "^\\d{2}[0-9a-zA-Z]{1}\\d{12}$"
         },
         "type": {
             "description": "The type of the document",
