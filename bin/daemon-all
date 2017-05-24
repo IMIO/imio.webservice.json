@@ -17,7 +17,7 @@ case "$1" in
     $ScriptLocation/daemon-publisher $1
     $ScriptLocation/daemon-im-dispatcher $1
     $ScriptLocation/daemon-om-dispatcher $1
-#    $ScriptLocation/daemon-omg-dispatcher $1
+    $ScriptLocation/daemon-ogm-dispatcher $1
     ;;
   *)
     echo "Usage: bin/$NAME {start|stop|restart|status}"
