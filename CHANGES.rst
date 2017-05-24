@@ -1,8 +1,11 @@
 Changelog
 =========
 
-prod/0.6.1.dev0 (unreleased)
-----------------------------
+prod/0.7 (2017-03-22)
+---------------------
+
+- Manage alphanumerical document type
+  [sgeulette]
 
 - Remove the document type code from client_id
   [mpeeters]
