@@ -7,8 +7,9 @@
 AUTH="testuser:test"
 DOMAIN="http://0.0.0.0:6543"
 SCAN_TYPE="0"
-SCAN_TYPES="0 1 2 3"
+SCAN_TYPES="0 1 2 3 Y"
 CLIENT="0109999"
+
 # RANDOM produces a number between 0 - 32767
 RD1=$(($RANDOM/4+1))
 RD2=$(($RANDOM/4+1))
@@ -43,7 +44,7 @@ COUR_E="
     \"creator\": \"scanner\",
     \"filesize\": $FILESIZE,
     \"filename\": \"README.rst\",
-    \"filemd5\": \"f087577e82e1580663d221ca64112221\"
+    \"filemd5\": \"23aebcae4ee8f5134da4fa5523abd3dd\"
 }
 "
 
