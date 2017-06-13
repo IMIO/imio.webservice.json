@@ -4,7 +4,8 @@ Changelog
 dev/0.7.2 (unreleased)
 ----------------------
 
-- Nothing changed yet.
+- Update manifest to include version and changelog files
+  [mpeeters]
 
 
 prod/0.7.1 (2017-06-13)
