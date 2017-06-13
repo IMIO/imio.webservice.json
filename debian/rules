@@ -69,6 +69,8 @@ install-core:
 	cp -ap $(BUILDDIR)/eggs $(DEBIANCORE)${INSTALLDIR}
 	cp -ap $(BUILDDIR)/setup.py $(DEBIANCORE)${INSTALLDIR}
 	cp -ap $(BUILDDIR)/production.ini $(DEBIANCORE)${INSTALLDIR}
+	cp -ap $(BUILDDIR)/version.txt $(DEBIANCORE)${INSTALLDIR}
+	cp -ap $(BUILDDIR)/CHANGES.rst $(DEBIANCORE)${INSTALLDIR}
 	cp -apr $(BUILDDIR)/imiowebservicejson $(DEBIANCORE)${INSTALLDIR}
 	cp -apr $(BUILDDIR)/lib $(DEBIANCORE)${INSTALLDIR}
 	cp -apr $(BUILDDIR)/include $(DEBIANCORE)${INSTALLDIR}
