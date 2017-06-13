@@ -1,6 +1,12 @@
 Changelog
 =========
 
+prod/0.7.1 (unreleased)
+-----------------------
+
+- Nothing changed yet.
+
+
 prod/0.7 (2017-03-22)
 ---------------------
 
