@@ -4,6 +4,9 @@ Changelog
 dev/0.7.2 (unreleased)
 ----------------------
 
+- Bump version
+  [mpeeters]
+
 - Update manifest and deb to include version and changelog files
   [mpeeters]
 
