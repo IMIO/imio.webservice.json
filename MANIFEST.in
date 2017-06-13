@@ -3,6 +3,8 @@ include *.py
 include buildout.cfg
 include .travis.yml
 include Makefile
+include CHANGES.rst
+include version.txt
 include bin/daemon-dispatcher
 include bin/daemon-publisher
 include bin/daemon-webservice
