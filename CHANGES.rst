@@ -1,7 +1,7 @@
 Changelog
 =========
 
-prod/0.7.1 (unreleased)
+prod/0.7.1 (2017-06-13)
 -----------------------
 
 - Corrected md5. Added ricoh test scan_type
