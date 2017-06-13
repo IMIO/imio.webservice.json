@@ -1,8 +1,8 @@
 Changelog
 =========
 
-dev/0.7.2 (unreleased)
-----------------------
+prod/0.8.0 (2017-06-13)
+-----------------------
 
 - Bump version
   [mpeeters]
