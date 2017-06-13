@@ -4,7 +4,11 @@ Changelog
 prod/0.7.1 (unreleased)
 -----------------------
 
-- Nothing changed yet.
+- Corrected md5. Added ricoh test scan_type
+  [sgeulette]
+
+- Start daemon-ogm
+  [sgeulette]
 
 
 prod/0.7 (2017-03-22)
