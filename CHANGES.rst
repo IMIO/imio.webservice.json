@@ -1,6 +1,12 @@
 Changelog
 =========
 
+ (unreleased)
+-----------------
+
+- Improved webservice-test
+  [sgeulette]
+
 prod/0.8.0 (2017-06-13)
 -----------------------
 

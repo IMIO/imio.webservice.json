@@ -20,15 +20,16 @@ VERSION="1.2"
 
 if [ "$1" != "" ]
 then
-    if [[ $SCAN_TYPES =~ $1 ]]
-    then
-        SCAN_TYPE=$1
-        CLIENT="${CLIENT:0:2}$SCAN_TYPE${CLIENT:3}"
-        echo $CLIENT
-    else
-        echo "The first parameter must be in the list $SCAN_TYPES"
-        exit
-    fi
+    SCAN_TYPE=$1
+fi
+
+if [[ $SCAN_TYPES =~ $SCAN_TYPE ]]
+then
+    CLIENT="${CLIENT:0:2}$SCAN_TYPE${CLIENT:3}"
+    echo $CLIENT
+else
+    echo "The first parameter must be in the list $SCAN_TYPES"
+    exit
 fi
 
 COUR_E="
