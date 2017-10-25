@@ -6,6 +6,8 @@ Changelog
 
 - Improved webservice-test
   [sgeulette]
+- Added possibility to pass filename as arg to webservice-test
+  [gbastien]
 
 prod/0.8.0 (2017-06-13)
 -----------------------

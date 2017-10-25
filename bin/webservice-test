@@ -3,6 +3,7 @@
 # $2: number of generated elements (optional, default:1)
 # $3: external_id counter (optional, default: random)
 # $4: 'update' (optional, default: nothing)
+# $5: filename (optional, default: README.rst)
 
 AUTH="testuser:test"
 DOMAIN="http://0.0.0.0:6543"
@@ -15,7 +16,16 @@ RD1=$(($RANDOM/4+1))
 RD2=$(($RANDOM/4+1))
 NB=$(($RD1*$RD2+30000000))
 SIMUL=0
-FILESIZE=`ls -al README.rst | awk '{print $5}'`
+FILENAME="README.rst"
+FILEMD5="23aebcae4ee8f5134da4fa5523abd3dd"
+
+if [ "$5" != "" ]
+then
+    FILENAME=$5
+    FILEMD5=`md5sum $FILENAME | awk '{print $1;}'`
+fi
+
+FILESIZE=`ls -al $FILENAME | awk '{print $5}'`
 VERSION="1.2"
 
 if [ "$1" != "" ]
@@ -44,10 +54,12 @@ COUR_E="
     \"pc\": \"pc-scan01\",
     \"creator\": \"scanner\",
     \"filesize\": $FILESIZE,
-    \"filename\": \"README.rst\",
-    \"filemd5\": \"23aebcae4ee8f5134da4fa5523abd3dd\"
+    \"filename\": \"$FILENAME\",
+    \"filemd5\": \"$FILEMD5\"
 }
 "
+echo $FILESIZE
+echo $COUR_E
 
 if [ "$3" != "" ]
 then
@@ -75,10 +87,10 @@ do
     if [ "$SIMUL" -eq "1" ];
     then
         ID=1
-        echo "curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$VERSION/$ID"
+        echo "curl -u $AUTH -i -F filedata=@$FILENAME $DOMAIN/file_upload/$VERSION/$ID"
     elif [ "$ID" != "" ]
     then
-        RET=`curl -u $AUTH -i -F filedata=@README.rst $DOMAIN/file_upload/$VERSION/$ID`
+        RET=`curl -u $AUTH -i -F filedata=@$FILENAME $DOMAIN/file_upload/$VERSION/$ID`
         echo $RET
     fi
 done
