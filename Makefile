@@ -25,3 +25,6 @@ bootstrap:
 buildout:
 	if ! test -f bin/buildout;then make bootstrap;fi
 	bin/buildout -vt 5;
+
+docker-image:
+	docker build --pull -t docker-staging.imio.be/webservicejson/mutual:latest .
