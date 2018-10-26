@@ -1,0 +1,61 @@
+version: '3.4'
+services:
+  instance:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker-staging.imio.be/webservicejson
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /home/imio/imio.webservice.json/bin/pserve /home/imio/config/production.ini
+    ports:
+      - "6543:6543"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6543"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  document_publisher:
+    image: docker-staging.imio.be/webservicejson
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /home/imio/imio.webservice.json/bin/document_publisher /home/imio/config/production.ini
+  incomingmail_dispatcher:
+    image: docker-staging.imio.be/webservicejson
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /home/imio/imio.webservice.json/bin/incomingmail_dispatcher /home/imio/config/production.ini
+  deliberation_dispatcher:
+    image: docker-staging.imio.be/webservicejson
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /home/imio/imio.webservice.json/bin/deliberation_dispatcher /home/imio/config/production.ini
+  outgoingmail_dispatcher:
+    image: docker-staging.imio.be/webservicejson
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /home/imio/imio.webservice.json/bin/outgoingmail_dispatcher /home/imio/config/production.ini
+  outgoinggeneratedmail_dispatcher:
+    image: docker-staging.imio.be/webservicejson
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /home/imio/imio.webservice.json/bin/outgoinggeneratedmail_dispatcher /home/imio/config/production.ini
