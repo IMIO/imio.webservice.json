@@ -28,3 +28,12 @@ buildout:
 
 docker-image:
 	docker build --pull -t docker-staging.imio.be/webservicejson/mutual:latest .
+
+up:
+	docker-compose up
+
+start:
+	docker-compose start
+
+stop:
+	docker-compose stop
