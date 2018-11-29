@@ -24,10 +24,11 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     DeclarativeBase.metadata.bind = engine
-    if engine.execute("select tablename from pg_tables where schemaname = 'public'").rowcount == 0: 
+    initialized_query = "select * from pg_tables where schemaname = 'public'"
+    if engine.execute(initialized_query).rowcount == 0:
         DeclarativeBase.metadata.create_all()
         init_session = temporary_session(engine)
-        import_data(init_session, commit=True)
+        import_data(init_session)
         init_session.close()
 
     settings['traceback.debug'] = asbool(settings.get('traceback.debug',
