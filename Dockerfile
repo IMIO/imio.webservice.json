@@ -10,7 +10,7 @@ ENV PIP=9.0.3 \
   HOME=/home/imio
 COPY default.cfg /home/imio/.buildout/default.cfg
 RUN buildDeps="python-pip build-essential libpq-dev libreadline-dev wget git gcc libc6-dev libpcre3-dev libssl-dev libxml2-dev libxslt1-dev libbz2-dev libffi-dev libjpeg62-dev libopenjp2-7-dev zlib1g-dev python-dev" \
-  && dependencies="postgresql-client-9.5 libpq-dev" \
+  && dependencies="postgresql-client-9.5 libpq-dev netcat" \
   && cd /home/imio/ \
   && apt-get update \
   && apt-get install -y --no-install-recommends $buildDeps \
@@ -29,4 +29,8 @@ RUN buildDeps="python-pip build-essential libpq-dev libreadline-dev wget git gcc
   && apt-get autoremove -y
 VOLUME /home/imio/data
 VOLUME /home/imio/config
+
+COPY start.sh /
 EXPOSE 6543
+
+CMD ["/start.sh"]

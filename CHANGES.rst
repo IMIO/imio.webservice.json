@@ -4,6 +4,9 @@ Changelog
  (unreleased)
 -----------------
 
+- Improve docker image
+  [mpeeters]
+
 - Initialize the database during pyramid startup
   [mpeeters]
 
