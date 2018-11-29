@@ -4,8 +4,12 @@ Changelog
  (unreleased)
 -----------------
 
+- Initialize the database during pyramid startup
+  [mpeeters]
+
 - Improved webservice-test
   [sgeulette]
+
 - Added possibility to pass filename as arg to webservice-test
   [gbastien]
 

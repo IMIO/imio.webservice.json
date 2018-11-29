@@ -10,6 +10,8 @@ from pyramid.settings import asbool
 
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db import DeclarativeBase
+from imio.dataexchange.db import temporary_session
+from imio.dataexchange.db.scripts.init_db import import_data
 
 from imiowebservicejson.authentication import check_authentication
 from imiowebservicejson.predicates import ImplementPredicate
@@ -22,6 +24,11 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     DeclarativeBase.metadata.bind = engine
+    if engine.execute("select tablename from pg_tables where schemaname = 'public'").rowcount == 0: 
+        DeclarativeBase.metadata.create_all()
+        init_session = temporary_session(engine)
+        import_data(init_session, commit=True)
+        init_session.close()
 
     settings['traceback.debug'] = asbool(settings.get('traceback.debug',
                                                       'false'))
