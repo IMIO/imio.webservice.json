@@ -4,6 +4,27 @@ Changelog
  (unreleased)
 -----------------
 
+- Add the async process to handle requests
+  [mpeeters]
+
+- Implement the `router` service
+  [mpeeters]
+
+- Change the implementation for `request` service
+  [mpeeters]
+
+- Add `cornice_swagger` and `requests` to the package dependencies
+  [mpeeters]
+
+- Update to the latest version of pyramid
+  [mpeeters]
+
+- Add cornice to the dependencies
+  [mpeeters]
+
+- Add docker-compose files for development
+  [mpeeters]
+
 - Improve docker image
   [mpeeters]
 
