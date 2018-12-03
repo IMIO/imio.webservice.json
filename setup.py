@@ -47,14 +47,14 @@ setup(
     install_requires=requires,
     tests_require=requires,
     test_suite="imiowebservicejson",
-    extras_require={'test':
-        [
+    extras_require={
+        'test': [
             'mock',
         ],
-        'dev':
-        [
+        'dev': [
             'ipdb',
-        ]},
+        ],
+    },
     entry_points="""\
     [paste.app_factory]
     main = imiowebservicejson:main
