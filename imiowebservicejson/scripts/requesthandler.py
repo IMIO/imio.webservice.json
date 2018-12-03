@@ -60,8 +60,6 @@ class RequestHandler(BaseConsumer):
             result = self.make_request(message, url)
         except:
             session.close()
-            import pdb
-            pdb.set_trace()
         request = session.query(Request).filter(
             Request.uid == message.uid,
         ).first()
