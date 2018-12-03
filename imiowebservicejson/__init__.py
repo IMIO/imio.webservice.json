@@ -51,8 +51,6 @@ def main(global_config, **settings):
     config.add_route('file_upload', '/file_upload/{id}')
     config.add_route('file_latest', '/file/{client_id}/{external_id}')
     config.add_route('file', '/file/{client_id}/{external_id}/{version}')
-    config.add_route('wsrequest', '/wsrequest/{version}')
-    config.add_route('wsresponse', '/wsresponse/{version}')
 
     config.add_subscriber_predicate('implement', ImplementPredicate)
     config.add_subscriber_predicate('version', VersionPredicate)
