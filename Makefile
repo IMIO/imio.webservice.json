@@ -37,3 +37,6 @@ start:
 
 stop:
 	docker-compose stop
+
+dev:
+	docker-compose -f docker-compose-dev.yaml up
