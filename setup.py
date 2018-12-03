@@ -22,6 +22,8 @@ requires = [
     'imio.dataexchange.db',
     'imio.amqp',
     'cornice',
+    'cornice_swagger',
+    'requests',
 ]
 
 setup(
