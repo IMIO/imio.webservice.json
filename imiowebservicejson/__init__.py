@@ -42,6 +42,9 @@ def main(global_config, **settings):
         authorization_policy=authz_policy,
         root_factory=Root,
     )
+    # adds cornice
+    config.include("cornice")
+
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
     config.add_route('test', '/test/{webservice}/{commune}/{version}/{type}')
