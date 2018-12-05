@@ -26,6 +26,22 @@ class PostRouterSubscriptionSchema(colander.MappingSchema):
     )
 
 
+class RouterResponseSchema(colander.MappingSchema):
+    msg = colander.SchemaNode(
+        colander.String(),
+        description='The response message',
+    )
+
+
+class RouterSuccessResponseSchema(colander.MappingSchema):
+    body = RouterResponseSchema()
+
+
+response_schemas = {
+    '200': RouterSuccessResponseSchema(description='Return value'),
+}
+
+
 router = Service(
     name='router',
     path='/router',
@@ -34,7 +50,8 @@ router = Service(
 
 
 @router.post(validators=(colander_body_validator, ),
-             schema=PostRouterSubscriptionSchema())
+             schema=PostRouterSubscriptionSchema(),
+             response_schemas=response_schemas)
 def post_router(request):
     parameters = {
         'client_id': request.validated['client_id'],
@@ -50,7 +67,8 @@ def post_router(request):
 
 
 @router.patch(validators=(colander_body_validator, ),
-              schema=PostRouterSubscriptionSchema())
+              schema=PostRouterSubscriptionSchema(),
+              response_schemas=response_schemas)
 def patch_router(request):
     parameters = {
         'client_id': request.validated['client_id'],
@@ -66,7 +84,8 @@ def patch_router(request):
 
 
 @router.delete(validators=(colander_body_validator, ),
-               schema=PostRouterSubscriptionSchema())
+               schema=PostRouterSubscriptionSchema(),
+               response_schemas=response_schemas)
 def delete_router(request):
     parameters = {
         'client_id': request.validated['client_id'],
@@ -80,7 +99,8 @@ def delete_router(request):
 
 
 @router.get(validators=(colander_body_validator, ),
-            schema=PostRouterSubscriptionSchema())
+            schema=PostRouterSubscriptionSchema(),
+            response_schemas=response_schemas)
 def get_router(request):
     parameters = {
         'client_id': request.validated['client_id'],

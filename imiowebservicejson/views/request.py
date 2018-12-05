@@ -53,15 +53,79 @@ class PostRequestBodySchema(colander.MappingSchema):
 
 class GetRequestBodySchema(colander.MappingSchema):
 
+    request_id = colander.SchemaNode(
+        colander.String(),
+        description='The uid of the request',
+    )
+
     client_id = colander.SchemaNode(
         colander.String(),
         description='The id of the client',
     )
 
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
+
+
+class PostRequestResponseSchema(colander.MappingSchema):
+
     request_id = colander.SchemaNode(
         colander.String(),
         description='The uid of the request',
     )
+
+    client_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the client',
+    )
+
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
+
+
+class PostRequestSuccessResponseSchema(colander.MappingSchema):
+    body = PostRequestResponseSchema()
+
+
+post_response_schemas = {
+    '200': PostRequestSuccessResponseSchema(description='Return value'),
+}
+
+
+class GetRequestResponseSchema(colander.MappingSchema):
+
+    request_id = colander.SchemaNode(
+        colander.String(),
+        description='The uid of the request',
+    )
+
+    client_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the client',
+    )
+
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
+
+    response = colander.SchemaNode(
+        colander.Mapping(unknown='preserve'),
+        description='The response of the request',
+    )
+
+
+class GetRequestSuccessResponseSchema(colander.MappingSchema):
+    body = GetRequestResponseSchema()
+
+
+get_response_schemas = {
+    '200': GetRequestSuccessResponseSchema(description='Return value'),
+}
 
 
 request = Service(
@@ -72,7 +136,8 @@ request = Service(
 
 
 @request.post(validators=(colander_body_validator, ),
-              schema=PostRequestBodySchema())
+              schema=PostRequestBodySchema(),
+              response_schemas=post_response_schemas)
 def post_request(request):
 
     # Insert into the request queue
@@ -106,7 +171,8 @@ def post_request(request):
 
 
 @request.get(validators=(colander_body_validator, ),
-             schema=GetRequestBodySchema())
+             schema=GetRequestBodySchema(),
+             response_schemas=get_response_schemas)
 def get_request(request):
     internal_uid, external_uid = generate_uids(
         client_id=request.validated['client_id'],
