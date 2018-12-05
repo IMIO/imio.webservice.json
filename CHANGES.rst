@@ -4,6 +4,12 @@ Changelog
  (unreleased)
 -----------------
 
+- Add a process for messages in error
+  [mpeeters]
+
+- Add swagger service
+  [mpeeters]
+
 - Add the async process to handle requests
   [mpeeters]
 
