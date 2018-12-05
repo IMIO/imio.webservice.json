@@ -44,6 +44,7 @@ def main(global_config, **settings):
     )
     # adds cornice
     config.include("cornice")
+    config.include('cornice_swagger')
 
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('home', '/')
