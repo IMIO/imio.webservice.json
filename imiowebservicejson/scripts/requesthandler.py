@@ -96,7 +96,7 @@ def main():
     config.read(args.config_uri)
 
     url = config.get('app:main', 'rabbitmq.url')
-    error_count = config.get('app:main', 'handler.error.count', '20')
+    error_count = config.get('app:main', 'handler.error.count')
     connection_parameters = 'connection_attempts=3&heartbeat_interval=3600'
     consumer = RequestHandler(
         '{0}/%2Fwebservice?{1}'.format(url, connection_parameters)

@@ -36,7 +36,7 @@ def main():
     config.read(args.config_uri)
 
     url = config.get('app:main', 'rabbitmq.url')
-    wait_duration = config.get('app:main', 'handler.error.wait', '2')
+    wait_duration = config.get('app:main', 'handler.error.wait')
     connection_parameters = 'connection_attempts=3&heartbeat_interval=3600'
     consumer = RequestError(
         '{0}/%2Fwebservice?{1}'.format(url, connection_parameters)
