@@ -4,6 +4,9 @@ Changelog
  (unreleased)
 -----------------
 
+- Upgrade imio.dataexchange.core to 0.3.1
+  [mpeeters]
+
 - Add a process for messages in error
   [mpeeters]
 
