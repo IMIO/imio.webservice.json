@@ -63,5 +63,6 @@ setup(
     [console_scripts]
     document_publisher = imiowebservicejson.scripts.documentpublisher:main
     request_handler = imiowebservicejson.scripts.requesthandler:main
+    request_error = imiowebservicejson.scripts.requesterror:main
     """,
 )
