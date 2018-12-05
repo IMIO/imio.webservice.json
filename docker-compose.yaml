@@ -97,3 +97,23 @@ services:
     command: /start.sh outgoinggeneratedmail_dispatcher /home/imio/config/development.ini
     depends_on:
       - instance
+  request_handler:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh request_handler /home/imio/config/development.ini
+    depends_on:
+      - instance
+  request_error:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh request_error /home/imio/config/development.ini
+    depends_on:
+      - instance
