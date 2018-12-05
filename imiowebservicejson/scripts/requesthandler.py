@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+
 from ConfigParser import ConfigParser
-from sqlalchemy import engine_from_config
-from imio.dataexchange.db.mappers.request import Request
-from imio.dataexchange.db.mappers.router import Router
+from imio.amqp import BaseConsumer
 from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db import temporary_session
-from imio.amqp import BaseConsumer
+from imio.dataexchange.db.mappers.request import Request
+from imio.dataexchange.db.mappers.router import Router
+from imiowebservicejson.request import SinglePublisher
+from sqlalchemy import engine_from_config
 
 import argparse
 import requests
@@ -20,8 +22,9 @@ class RequestHandler(BaseConsumer):
     queue = 'ws.request'
     routing_key = 'request'
 
-    def start(self, db_config):
+    def start(self, db_config, error_count):
         self.db_config = db_config
+        self.error_count = error_count
         super(RequestHandler, self).start()
 
     def get_url(self, message, session):
@@ -57,13 +60,22 @@ class RequestHandler(BaseConsumer):
         session = self.get_session()
         url = self.get_url(message, session)
         try:
-            result = self.make_request(message, url)
-        except:
+            result = self.make_request(message, url).json()
+        except Exception as e:
             session.close()
+            if message.error_count >= self.error_count:
+                result = {'error': str(e)}
+            else:
+                message.error_count += 1
+                publisher = SinglePublisher(self._url)
+                publisher.setup_queue('ws.error', 'error')
+                publisher.add_message(message)
+                publisher.start()
+                return
         request = session.query(Request).filter(
             Request.uid == message.uid,
         ).first()
-        request.response = json.dumps(result.json())
+        request.response = json.dumps(result)
         session.add(request)
         session.commit()
         session.close()
@@ -84,12 +96,13 @@ def main():
     config.read(args.config_uri)
 
     url = config.get('app:main', 'rabbitmq.url')
+    error_count = config.get('app:main', 'handler.error.count', '20')
     connection_parameters = 'connection_attempts=3&heartbeat_interval=3600'
     consumer = RequestHandler(
         '{0}/%2Fwebservice?{1}'.format(url, connection_parameters)
     )
     consumer.setup_queue('ws.request', 'request')
     try:
-        consumer.start(config._sections.get('app:main'))
+        consumer.start(config._sections.get('app:main'), int(error_count))
     except KeyboardInterrupt:
         consumer.stop()
