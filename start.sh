@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-COMMANDS="pserve document_publisher incomingmail_dispatcher deliberation_dispatcher outgoingmail_dispatcher outgoinggeneratedmail_dispatcher"
+COMMANDS="pserve document_publisher incomingmail_dispatcher deliberation_dispatcher outgoingmail_dispatcher outgoinggeneratedmail_dispatcher request_handler request_error"
 CMD_BASE="/home/imio/imio.webservice.json/bin/"
 CMD="$CMD_BASE/$1"
 
