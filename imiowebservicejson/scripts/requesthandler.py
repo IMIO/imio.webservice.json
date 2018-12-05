@@ -49,7 +49,7 @@ class RequestHandler(BaseConsumer):
             'headers': {'Accept': 'application/json'},
             'auth': ('admin', 'admin'),
         }
-        if message.type.lower() == 'patch':
+        if message.type.lower() in ('patch', 'post', 'put'):
             parameters['headers']['Content-Type'] = 'application/json'
             parameters['headers']['Prefer'] = 'return=representation'
             parameters['json'] = message.parameters
