@@ -11,6 +11,18 @@ import json
 import uuid
 
 
+def generate_uids(client_id, application_id, external_uid=None):
+    """Generate internal and external uids"""
+    if external_uid is None:
+        external_uid = uuid.uuid4().hex
+    internal_uid = '{0}-{1}-{2}'.format(
+        client_id,
+        application_id,
+        external_uid,
+    )
+    return internal_uid, external_uid
+
+
 class PostRequestBodySchema(colander.MappingSchema):
 
     client_id = colander.SchemaNode(
@@ -62,16 +74,15 @@ request = Service(
 @request.post(validators=(colander_body_validator, ),
               schema=PostRequestBodySchema())
 def post_request(request):
-    external_uid = uuid.uuid4().hex
 
     # Insert into the request queue
     amqp_url = request.registry.settings.get('rabbitmq.url')
     publisher = SinglePublisher('{0}/%2Fwebservice?connection_attempts=3&'
                                 'heartbeat_interval=3600'.format(amqp_url))
     publisher.setup_queue('ws.request', 'request')
-    internal_uid = '{0}-{1}'.format(
-        request.validated['client_id'],
-        external_uid,
+    internal_uid, external_uid = generate_uids(
+        client_id=request.validated['client_id'],
+        application_id=request.validated['application_id'],
     )
     msg = RequestMessage(
         request.validated['request_type'],
@@ -87,21 +98,27 @@ def post_request(request):
     publisher.add_message(msg)
     publisher.start()
 
-    return {'uid': external_uid}
+    return {
+        'request_id': external_uid,
+        'client_id': request.validated['client_id'],
+        'application_id': request.validated['application_id'],
+    }
 
 
 @request.get(validators=(colander_body_validator, ),
              schema=GetRequestBodySchema())
 def get_request(request):
-    internal_uid = '{0}-{1}'.format(
-        request.validated['client_id'],
-        request.validated['request_id'],
+    internal_uid, external_uid = generate_uids(
+        client_id=request.validated['client_id'],
+        application_id=request.validated['application_id'],
+        external_uid=request.validated['request_id'],
     )
     record = RequestTable.first(uid=internal_uid)
     if not record:
         return {'error': 'unknown request'}
     return {
-        'request_id': request.validated['request_id'],
+        'request_id': external_uid,
         'client_id': request.validated['client_id'],
+        'application_id': request.validated['application_id'],
         'response': json.loads(record.response),
     }
