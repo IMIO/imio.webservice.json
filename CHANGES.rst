@@ -1,8 +1,8 @@
 Changelog
 =========
 
- (unreleased)
------------------
+0.9.0 (unreleased)
+------------------
 
 - Upgrade imio.dataexchange.core to 0.3.1
   [mpeeters]
