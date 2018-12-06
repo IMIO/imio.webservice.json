@@ -37,21 +37,35 @@ class RouterSuccessResponseSchema(colander.MappingSchema):
     body = RouterResponseSchema()
 
 
+class RouterGetSuccessResponseSchema(colander.MappingSchema):
+    body = PostRouterSubscriptionSchema()
+
+
 response_schemas = {
     '200': RouterSuccessResponseSchema(description='Return value'),
 }
 
+get_response_schemas = {
+    '200': RouterGetSuccessResponseSchema(description='Return value'),
+}
 
-router = Service(
+
+router_post = Service(
     name='router',
     path='/router',
-    description='Register and get application for clients'
+    description='Register and update application for clients',
+)
+
+router_get = Service(
+    name='route',
+    path='/route/{client_id}/{application_id}',
+    description='Get and delete application for clients',
 )
 
 
-@router.post(validators=(colander_body_validator, ),
-             schema=PostRouterSubscriptionSchema(),
-             response_schemas=response_schemas)
+@router_post.post(validators=(colander_body_validator, ),
+                  schema=PostRouterSubscriptionSchema(),
+                  response_schemas=response_schemas)
 def post_router(request):
     parameters = {
         'client_id': request.validated['client_id'],
@@ -66,9 +80,9 @@ def post_router(request):
     return {'msg': 'Route added'}
 
 
-@router.patch(validators=(colander_body_validator, ),
-              schema=PostRouterSubscriptionSchema(),
-              response_schemas=response_schemas)
+@router_post.patch(validators=(colander_body_validator, ),
+                   schema=PostRouterSubscriptionSchema(),
+                   response_schemas=response_schemas)
 def patch_router(request):
     parameters = {
         'client_id': request.validated['client_id'],
@@ -83,13 +97,11 @@ def patch_router(request):
     return {'msg': 'Route updated'}
 
 
-@router.delete(validators=(colander_body_validator, ),
-               schema=PostRouterSubscriptionSchema(),
-               response_schemas=response_schemas)
+@router_get.delete(response_schemas=response_schemas)
 def delete_router(request):
     parameters = {
-        'client_id': request.validated['client_id'],
-        'application_id': request.validated['application_id'],
+        'client_id': request.matchdict['client_id'],
+        'application_id': request.matchdict['application_id'],
     }
     existing_route = RouterTable.first(**parameters)
     if not existing_route:
@@ -98,13 +110,11 @@ def delete_router(request):
     return {'msg': 'Route deleted'}
 
 
-@router.get(validators=(colander_body_validator, ),
-            schema=PostRouterSubscriptionSchema(),
-            response_schemas=response_schemas)
+@router_get.get(response_schemas=get_response_schemas)
 def get_router(request):
     parameters = {
-        'client_id': request.validated['client_id'],
-        'application_id': request.validated['application_id'],
+        'client_id': request.matchdict['client_id'],
+        'application_id': request.matchdict['application_id'],
     }
     existing_route = RouterTable.first(**parameters)
     if not existing_route:
