@@ -3,7 +3,7 @@ services:
   postgres:
     image: postgres:9.6
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -16,7 +16,7 @@ services:
   postgres_test:
     image: postgres:9.6
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: test
       POSTGRES_PASSWORD: password
