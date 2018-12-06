@@ -48,6 +48,7 @@ class PostRequestBodySchema(colander.MappingSchema):
     parameters = colander.SchemaNode(
         colander.Mapping(unknown='preserve'),
         description='The parameters of the request',
+        missing=colander.drop,
     )
 
 
