@@ -13,6 +13,19 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+  postgres_test:
+    image: postgres:9.6
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
   rabbitmq:
     image: rabbitmq:3.6.0-management
     ports:

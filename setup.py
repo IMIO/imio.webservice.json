@@ -52,6 +52,7 @@ setup(
     extras_require={
         'test': [
             'mock',
+            'webtest',
         ],
         'dev': [
             'ipdb',
