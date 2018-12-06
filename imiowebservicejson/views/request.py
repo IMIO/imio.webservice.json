@@ -4,7 +4,7 @@ from cornice import Service
 from cornice.validators import colander_body_validator
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
-from imiowebservicejson.request import SinglePublisher
+from imiowebservicejson import request as rq
 
 import colander
 import json
@@ -143,8 +143,10 @@ def post_request(request):
 
     # Insert into the request queue
     amqp_url = request.registry.settings.get('rabbitmq.url')
-    publisher = SinglePublisher('{0}/%2Fwebservice?connection_attempts=3&'
-                                'heartbeat_interval=3600'.format(amqp_url))
+    publisher_parameters = 'connection_attempts=3&heartbeat_interval=3600'
+    publisher = rq.SinglePublisher(
+        '{0}/%2Fwebservice?{1}'.format(amqp_url, publisher_parameters),
+    )
     publisher.setup_queue('ws.request', 'request')
     internal_uid, external_uid = generate_uids(
         client_id=request.validated['client_id'],
