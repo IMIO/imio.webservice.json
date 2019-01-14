@@ -185,6 +185,8 @@ def get_request(request):
     record = RequestTable.first(uid=internal_uid)
     if not record:
         return {'error': 'unknown request'}
+    if not record.response:
+        return {'message': 'no response yet'}
     return {
         'request_id': external_uid,
         'client_id': request.validated['client_id'],

@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Return a message if the request is still in progress
+  [mpeeters]
+
 - Upgrade imio.dataexchange.core to 0.3.1
   [mpeeters]
 
