@@ -33,6 +33,14 @@ class RouterResponseSchema(colander.MappingSchema):
     )
 
 
+class RoutesSchema(colander.SequenceSchema):
+    route = PostRouterSubscriptionSchema()
+
+
+class DiscoveryRouterSchema(colander.MappingSchema):
+    routes = RoutesSchema()
+
+
 class RouterSuccessResponseSchema(colander.MappingSchema):
     body = RouterResponseSchema()
 
@@ -41,12 +49,20 @@ class RouterGetSuccessResponseSchema(colander.MappingSchema):
     body = PostRouterSubscriptionSchema()
 
 
+class RouterDiscoverySuccessResponseSchema(colander.MappingSchema):
+    body = DiscoveryRouterSchema()
+
+
 response_schemas = {
     '200': RouterSuccessResponseSchema(description='Return value'),
 }
 
 get_response_schemas = {
     '200': RouterGetSuccessResponseSchema(description='Return value'),
+}
+
+discovery_response_schemas = {
+    '200': RouterDiscoverySuccessResponseSchema(description='Return value'),
 }
 
 
@@ -60,6 +76,12 @@ router_get = Service(
     name='route',
     path='/route/{client_id}/{application_id}',
     description='Get and delete application for clients',
+)
+
+route_discovery = Service(
+    name='route_discovery',
+    path='/route/{client_id}',
+    description='Discover routes for a client',
 )
 
 
@@ -123,4 +145,21 @@ def get_router(request):
         'client_id': parameters['client_id'],
         'application_id': parameters['application_id'],
         'url': existing_route.url,
+    }
+
+
+@route_discovery.get(response_schemas=discovery_response_schemas)
+def get_discovery_route(request):
+    parameters = {
+        'client_id': request.matchdict['client_id'],
+    }
+    routes = RouterTable.get(**parameters)
+    if not routes:
+        return {'msg': 'There is no route for this client'}
+    return {
+        'routes': [{
+            'client_id': parameters['client_id'],
+            'application_id': r.application_id,
+            'url': r.url,
+        } for r in routes]
     }

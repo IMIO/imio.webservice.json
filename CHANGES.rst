@@ -4,6 +4,10 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Add the `route_discovery` service that allow to get the applications for
+  a given client
+  [mpeeters]
+
 - Return a message if the request is still in progress
   [mpeeters]
 
