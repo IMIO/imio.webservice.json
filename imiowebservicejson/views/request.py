@@ -1,93 +1,195 @@
 # -*- coding: utf-8 -*-
 
-from pyramid.view import view_config
+from cornice import Service
+from cornice.validators import colander_body_validator
 from imio.dataexchange.core import Request as RequestMessage
-from imio.dataexchange.core import RequestFile
 from imio.dataexchange.db.mappers.request import Request as RequestTable
-import cPickle
-import logging
+from imiowebservicejson import request as rq
+
+import colander
+import json
 import uuid
 
-from imiowebservicejson.views.base import exception_handler
-from imiowebservicejson.views.base import json_logging
-from imiowebservicejson.views.base import json_validator
-from imiowebservicejson.views.base import validate_json_schema
-from imiowebservicejson.views.base import failure
-from imiowebservicejson.models.wsrequest import WSRequest
-from imiowebservicejson.models.wsresponse import WSResponse
-from imiowebservicejson.request import SinglePublisher
-from imiowebservicejson.request import SingleConsumer
-from imiowebservicejson.schema import get_schemas
+
+def generate_uids(client_id, application_id, external_uid=None):
+    """Generate internal and external uids"""
+    if external_uid is None:
+        external_uid = uuid.uuid4().hex
+    internal_uid = '{0}-{1}-{2}'.format(
+        client_id,
+        application_id,
+        external_uid,
+    )
+    return internal_uid, external_uid
 
 
-log = logging.getLogger(__name__)
+class PostRequestBodySchema(colander.MappingSchema):
+
+    client_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the client',
+    )
+
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
+
+    request_type = colander.SchemaNode(
+        colander.String(),
+        description='The type of the request',
+    )
+
+    path = colander.SchemaNode(
+        colander.String(),
+        description='The path to the application',
+    )
+
+    parameters = colander.SchemaNode(
+        colander.Mapping(unknown='preserve'),
+        description='The parameters of the request',
+        missing=colander.drop,
+    )
 
 
-def validate_request_parameters(request, input):
-    input_schema, output_schema = get_schemas(input.request_type,
-                                              input.type_version)
-    if input_schema:
-        error = validate_json_schema(input.request_parameters, input_schema)
-        return error
+class GetRequestBodySchema(colander.MappingSchema):
+
+    request_id = colander.SchemaNode(
+        colander.String(),
+        description='The uid of the request',
+    )
+
+    client_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the client',
+    )
+
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
 
 
-@view_config(route_name='wsrequest', renderer='json', permission='query')
-@exception_handler()
-@json_validator(schema_name='wsrequest', model=WSRequest)
-@json_logging(log)
-def wsrequest(request, input, response):
-    uid = uuid.uuid4().hex
-    error = validate_request_parameters(request, input)
-    if error is not None:
-        return failure(error, error_code='SCHEMA_VALIDATION_ERROR')
+class PostRequestResponseSchema(colander.MappingSchema):
 
+    request_id = colander.SchemaNode(
+        colander.String(),
+        description='The uid of the request',
+    )
+
+    client_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the client',
+    )
+
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
+
+
+class PostRequestSuccessResponseSchema(colander.MappingSchema):
+    body = PostRequestResponseSchema()
+
+
+post_response_schemas = {
+    '200': PostRequestSuccessResponseSchema(description='Return value'),
+}
+
+
+class GetRequestResponseSchema(colander.MappingSchema):
+
+    request_id = colander.SchemaNode(
+        colander.String(),
+        description='The uid of the request',
+    )
+
+    client_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the client',
+    )
+
+    application_id = colander.SchemaNode(
+        colander.String(),
+        description='The id of the application',
+    )
+
+    response = colander.SchemaNode(
+        colander.Mapping(unknown='preserve'),
+        description='The response of the request',
+    )
+
+
+class GetRequestSuccessResponseSchema(colander.MappingSchema):
+    body = GetRequestResponseSchema()
+
+
+get_response_schemas = {
+    '200': GetRequestSuccessResponseSchema(description='Return value'),
+}
+
+
+request = Service(
+    name='request',
+    path='/request',
+    description='Get and post request for application',
+)
+
+
+@request.post(validators=(colander_body_validator, ),
+              schema=PostRequestBodySchema(),
+              response_schemas=post_response_schemas)
+def post_request(request):
+
+    # Insert into the request queue
     amqp_url = request.registry.settings.get('rabbitmq.url')
-    publisher = SinglePublisher('{0}/%2Fwsrequest?connection_attempts=3&'
-                                'heartbeat_interval=3600'.format(amqp_url))
-    key = '{0}.{1}.{2}'.format(input.application_id,
-                               input.request_type,
-                               input.client_id)
-    publisher.setup_queue(key.upper(), key.upper())
-    msg = RequestMessage(input.request_type, input.request_parameters,
-                         input.application_id, input.client_id, uid)
-    record = RequestTable(uid=uid)
-    record.insert()
-    if input.files:
-        response.files_id = []
-    for file in input.files:
-        f_uid = uuid.uuid4().hex
-        request_file = RequestFile(f_uid, file)
-        msg.add_file(request_file)
-        RequestTable(uid=f_uid).insert()
-        response.files_id.append(f_uid)
+    publisher_parameters = 'connection_attempts=3&heartbeat_interval=3600'
+    publisher = rq.SinglePublisher(
+        '{0}/%2Fwebservice?{1}'.format(amqp_url, publisher_parameters),
+    )
+    publisher.setup_queue('ws.request', 'request')
+    internal_uid, external_uid = generate_uids(
+        client_id=request.validated['client_id'],
+        application_id=request.validated['application_id'],
+    )
+    msg = RequestMessage(
+        request.validated['request_type'],
+        request.validated['path'],
+        request.validated.get('parameters', {}),
+        request.validated['application_id'],
+        request.validated['client_id'],
+        internal_uid,
+    )
 
+    record = RequestTable(uid=internal_uid)
+    record.insert()
     publisher.add_message(msg)
     publisher.start()
 
-    response.message = "Well done"
-    response.request_id = uid
-    return response
+    return {
+        'request_id': external_uid,
+        'client_id': request.validated['client_id'],
+        'application_id': request.validated['application_id'],
+    }
 
 
-@view_config(route_name='wsresponse', renderer='json', permission='query')
-@exception_handler()
-@json_validator(schema_name='wsresponse', model=WSResponse)
-@json_logging(log)
-def response(request, input, response):
-    amqp_url = request.registry.settings.get('rabbitmq.url')
-    consumer = SingleConsumer('{0}/%2Fwsresponse?connection_attempts=3&'
-                              'heartbeat_interval=3600'.format(amqp_url))
-    consumer.queue = input.request_id
-    consumer.routing_key = input.request_id
-    consumer.start()
-    message = consumer.get_message()
-    if not message:
-        response.success = False
-        response.message = "No message"
-    else:
-        response.success = True
-        response.message = "Well done"
-        response.response = cPickle.loads(message).parameters
-        consumer.acknowledge_message()
-    consumer.stop()
-    return response
+@request.get(validators=(colander_body_validator, ),
+             schema=GetRequestBodySchema(),
+             response_schemas=get_response_schemas)
+def get_request(request):
+    internal_uid, external_uid = generate_uids(
+        client_id=request.validated['client_id'],
+        application_id=request.validated['application_id'],
+        external_uid=request.validated['request_id'],
+    )
+    record = RequestTable.first(uid=internal_uid)
+    if not record:
+        return {'error': 'unknown request'}
+    if not record.response:
+        return {'message': 'no response yet'}
+    return {
+        'request_id': external_uid,
+        'client_id': request.validated['client_id'],
+        'application_id': request.validated['application_id'],
+        'response': json.loads(record.response),
+    }

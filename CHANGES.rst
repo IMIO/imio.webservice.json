@@ -1,11 +1,51 @@
 Changelog
 =========
 
- (unreleased)
------------------
+0.9.0 (unreleased)
+------------------
+
+- Return a message if the request is still in progress
+  [mpeeters]
+
+- Upgrade imio.dataexchange.core to 0.3.1
+  [mpeeters]
+
+- Add a process for messages in error
+  [mpeeters]
+
+- Add swagger service
+  [mpeeters]
+
+- Add the async process to handle requests
+  [mpeeters]
+
+- Implement the `router` service
+  [mpeeters]
+
+- Change the implementation for `request` service
+  [mpeeters]
+
+- Add `cornice_swagger` and `requests` to the package dependencies
+  [mpeeters]
+
+- Update to the latest version of pyramid
+  [mpeeters]
+
+- Add cornice to the dependencies
+  [mpeeters]
+
+- Add docker-compose files for development
+  [mpeeters]
+
+- Improve docker image
+  [mpeeters]
+
+- Initialize the database during pyramid startup
+  [mpeeters]
 
 - Improved webservice-test
   [sgeulette]
+
 - Added possibility to pass filename as arg to webservice-test
   [gbastien]
 

@@ -1,0 +1,44 @@
+version: '3.4'
+services:
+  postgres:
+    image: postgres:9.6
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  postgres_test:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  rabbitmq:
+    image: rabbitmq:3.6.0-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: "/webservice"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status", "||", "exit", "1"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

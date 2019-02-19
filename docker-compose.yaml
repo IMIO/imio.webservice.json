@@ -1,0 +1,119 @@
+version: '3.4'
+services:
+  postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  rabbitmq:
+    image: rabbitmq:3.6.0-management
+    ports:
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+      RABBITMQ_DEFAULT_VHOST: "/webservice"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status", "||", "exit", "1"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+  instance:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh pserve /home/imio/config/development.ini
+    ports:
+      - "6543:6543"
+    depends_on:
+      - postgres
+      - rabbitmq
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6543"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  document_publisher:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh document_publisher /home/imio/config/development.ini
+    depends_on:
+      - instance
+  incomingmail_dispatcher:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh incomingmail_dispatcher /home/imio/config/development.ini
+    depends_on:
+      - instance
+  deliberation_dispatcher:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh deliberation_dispatcher /home/imio/config/development.ini
+    depends_on:
+      - instance
+  outgoingmail_dispatcher:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh outgoingmail_dispatcher /home/imio/config/development.ini
+    depends_on:
+      - instance
+  outgoinggeneratedmail_dispatcher:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh outgoinggeneratedmail_dispatcher /home/imio/config/development.ini
+    depends_on:
+      - instance
+  request_handler:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh request_handler /home/imio/config/development.ini
+    depends_on:
+      - instance
+  request_error:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh request_error /home/imio/config/development.ini
+    depends_on:
+      - instance

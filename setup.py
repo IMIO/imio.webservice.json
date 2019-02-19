@@ -21,6 +21,9 @@ requires = [
     'imio.dataexchange.core',
     'imio.dataexchange.db',
     'imio.amqp',
+    'cornice',
+    'cornice_swagger',
+    'requests',
 ]
 
 setup(
@@ -46,18 +49,21 @@ setup(
     install_requires=requires,
     tests_require=requires,
     test_suite="imiowebservicejson",
-    extras_require={'test':
-        [
+    extras_require={
+        'test': [
             'mock',
+            'webtest',
         ],
-        'dev':
-        [
+        'dev': [
             'ipdb',
-        ]},
+        ],
+    },
     entry_points="""\
     [paste.app_factory]
     main = imiowebservicejson:main
     [console_scripts]
     document_publisher = imiowebservicejson.scripts.documentpublisher:main
+    request_handler = imiowebservicejson.scripts.requesthandler:main
+    request_error = imiowebservicejson.scripts.requesterror:main
     """,
 )

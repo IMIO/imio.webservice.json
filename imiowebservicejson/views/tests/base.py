@@ -2,13 +2,13 @@
 
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file_type import FileType
+from imiowebservicejson.fileupload import FileUpload
 from mock import Mock
 from pyramid import security
 from pyramid import testing
+
 import json
 import unittest
-
-from imiowebservicejson.fileupload import FileUpload
 
 
 class ViewTestCase(unittest.TestCase):
