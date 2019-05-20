@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Implement `EMAIL` document type
+  [mpeeters]
+
 - Add the `route_discovery` service that allow to get the applications for
   a given client
   [mpeeters]
