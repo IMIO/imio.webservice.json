@@ -54,7 +54,7 @@ def main():
     publisher.setup_queue('dms.incomingmail', 'COUR_E')
     publisher.setup_queue('dms.outgoingmail', 'COUR_S')
     publisher.setup_queue('dms.outgoinggeneratedmail', 'COUR_S_GEN')
-    publisher.setup_queue('dms.email', 'EMAIL')
+    publisher.setup_queue('dms.incoming.email', 'EMAIL_E')
     try:
         publisher.start()
     except KeyboardInterrupt:

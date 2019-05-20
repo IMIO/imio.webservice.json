@@ -22,7 +22,7 @@ class DMSMetadata(BaseModel):
         '1': 'COUR_S',
         '2': 'COUR_S_GEN',
         '3': 'DELIB',
-        '4': 'EMAIL',
+        '4': 'EMAIL_E',
         'Z': 'COUR_E',
     }
 
