@@ -27,7 +27,7 @@ buildout:
 	bin/buildout -vt 5;
 
 docker-image:
-	docker build --pull -t docker-staging.imio.be/webservicejson/mutual:latest .
+	docker build --pull -t webservicejson/mutual:latest .
 
 up:
 	docker-compose up
