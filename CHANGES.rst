@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Upgrade imio.dataexchange.db to 0.3.2
+  [mpeeters]
+
 - Implement `EMAIL` document type
   [mpeeters]
 
