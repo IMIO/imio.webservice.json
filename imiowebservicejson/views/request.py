@@ -2,10 +2,10 @@
 
 from cornice import Service
 from cornice.validators import colander_body_validator
-from datetime import datetime
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson import request as rq
+from imiowebservicejson import utils
 
 import colander
 import json
@@ -169,7 +169,9 @@ def post_request(request):
         'application_id': request.validated['application_id'],
     }
     if record:
-        if record.expiration_date and record.expiration_date > datetime.now():
+        if not record.expiration_date or (
+            record.expiration_date and record.expiration_date > utils.now()
+        ):
             return result
     msg = RequestMessage(
         request.validated['request_type'],
