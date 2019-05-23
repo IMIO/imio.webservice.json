@@ -126,6 +126,8 @@ class GetRequestSuccessResponseSchema(colander.MappingSchema):
 
 get_response_schemas = {
     '200': GetRequestSuccessResponseSchema(description='Return value'),
+    '204': GetRequestSuccessResponseSchema(description='Return value'),
+    '404': GetRequestSuccessResponseSchema(description='Return value'),
 }
 
 
@@ -183,13 +185,17 @@ def get_request(request):
         external_uid=request.validated['request_id'],
     )
     record = RequestTable.first(uid=internal_uid)
-    if not record:
-        return {'error': 'unknown request'}
-    if not record.response:
-        return {'message': 'no response yet'}
-    return {
+    result = {
         'request_id': external_uid,
         'client_id': request.validated['client_id'],
         'application_id': request.validated['application_id'],
-        'response': json.loads(record.response),
+        'response': "",
     }
+    if not record:
+        request.response.status_code = 404
+        return result
+    if not record.response:
+        request.response.status_code = 204
+        return result
+    result['response'] = json.loads(record.response)
+    return result
