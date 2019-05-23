@@ -9,18 +9,23 @@ from imiowebservicejson import request as rq
 import colander
 import json
 import uuid
+import hashlib
 
 
-def generate_uids(client_id, application_id, external_uid=None):
-    """Generate internal and external uids"""
-    if external_uid is None:
-        external_uid = uuid.uuid4().hex
-    internal_uid = '{0}-{1}-{2}'.format(
+def generate_internal_uid(client_id, application_id, external_uid):
+    """Generate the internal uid (stored in the database)"""
+    return '{0}-{1}-{2}'.format(
         client_id,
         application_id,
         external_uid,
     )
-    return internal_uid, external_uid
+
+
+def generate_external_uid(body):
+    """Generate the external uid"""
+    if body['request_type'] == 'GET':
+        return hashlib.md5(json.dumps(body)).hexdigest()
+    return uuid.uuid4().hex
 
 
 class PostRequestBodySchema(colander.MappingSchema):
@@ -150,9 +155,11 @@ def post_request(request):
         '{0}/%2Fwebservice?{1}'.format(amqp_url, publisher_parameters),
     )
     publisher.setup_queue('ws.request', 'request')
-    internal_uid, external_uid = generate_uids(
-        client_id=request.validated['client_id'],
-        application_id=request.validated['application_id'],
+    external_uid = generate_external_uid(request.validated)
+    internal_uid = generate_internal_uid(
+        request.validated['client_id'],
+        request.validated['application_id'],
+        external_uid,
     )
     msg = RequestMessage(
         request.validated['request_type'],
@@ -179,10 +186,11 @@ def post_request(request):
              schema=GetRequestBodySchema(),
              response_schemas=get_response_schemas)
 def get_request(request):
-    internal_uid, external_uid = generate_uids(
-        client_id=request.validated['client_id'],
-        application_id=request.validated['application_id'],
-        external_uid=request.validated['request_id'],
+    external_uid = request.validated['request_id']
+    internal_uid = generate_internal_uid(
+        request.validated['client_id'],
+        request.validated['application_id'],
+        external_uid,
     )
     record = RequestTable.first(uid=internal_uid)
     result = {
