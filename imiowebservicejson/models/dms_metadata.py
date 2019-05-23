@@ -18,17 +18,17 @@ class DMSMetadata(BaseModel):
     implements(IDMSMetadata)
 
     type_codes = {
-        '0': 'COUR_E',
-        '1': 'COUR_S',
-        '2': 'COUR_S_GEN',
-        '3': 'DELIB',
-        '4': 'EMAIL_E',
-        'Z': 'COUR_E',
+        "0": "COUR_E",
+        "1": "COUR_S",
+        "2": "COUR_S_GEN",
+        "3": "DELIB",
+        "4": "EMAIL_E",
+        "Z": "COUR_E",
     }
 
     @property
     def update_flag(self):
-        return self.get('update', False)
+        return self.get("update", False)
 
     @property
     def document_type(self):
@@ -42,31 +42,28 @@ class DMSMetadata(BaseModel):
     @property
     def client_id(self):
         """Return the client_id without the document type"""
-        return '{0}{1}'.format(
-            self.json_object.client_id[:2],
-            self.json_object.client_id[3:],
+        return "{0}{1}".format(
+            self.json_object.client_id[:2], self.json_object.client_id[3:]
         )
 
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata)
 def scan_date_validation(event):
     try:
-        datetime.strptime(event.context.scan_date, '%Y-%m-%d')
+        datetime.strptime(event.context.scan_date, "%Y-%m-%d")
     except ValueError:
         raise ValidationError(
-            u'SCAN_DATE_INVALID',
-            u"The value for the field 'scan_date' is invalid",
+            u"SCAN_DATE_INVALID", u"The value for the field 'scan_date' is invalid"
         )
 
 
 @subscriber(ValidatorEvent, implement=IDMSMetadata)
 def scan_hour_validation(event):
     try:
-        datetime.strptime(event.context.scan_hour, '%H:%M:%S')
+        datetime.strptime(event.context.scan_hour, "%H:%M:%S")
     except ValueError:
         raise ValidationError(
-            u'SCAN_HOUR_INVALID',
-            u"The value for the field 'scan_hour' is invalid",
+            u"SCAN_HOUR_INVALID", u"The value for the field 'scan_hour' is invalid"
         )
 
 
@@ -76,29 +73,27 @@ def unicity_validation(event):
         return
     userid = security.unauthenticated_userid(event.request)
     external_id = event.context.external_id
-    file_data = File.first(user=userid,
-                           external_id=external_id,
-                           order_by=[desc(File.version)])
+    file_data = File.first(
+        user=userid, external_id=external_id, order_by=[desc(File.version)]
+    )
     if file_data is not None and file_data.filepath is not None:
         raise ValidationError(
-            u'EXTERNAL_ID_DUPLICATE',
+            u"EXTERNAL_ID_DUPLICATE",
             u"The value for the field 'external_id' already exist",
         )
 
 
-@subscriber(ValidatorEvent, implement=IDMSMetadata, version='>=1.2')
+@subscriber(ValidatorEvent, implement=IDMSMetadata, version=">=1.2")
 def external_id_validation(event):
     if event.context.external_id[:7] != event.context.full_client_id:
         raise ValidationError(
-            u'INVALID_EXTERNAL_ID',
-            u"The value for the field 'external_id' is invalid",
+            u"INVALID_EXTERNAL_ID", u"The value for the field 'external_id' is invalid"
         )
 
 
-@subscriber(ValidatorEvent, implement=IDMSMetadata, version='>=1.2')
+@subscriber(ValidatorEvent, implement=IDMSMetadata, version=">=1.2")
 def client_id_validation(event):
     if event.context.document_type is None:
         raise ValidationError(
-            u'INVALID_CLIENT_ID',
-            u"The value for the field 'client_id' is invalid",
+            u"INVALID_CLIENT_ID", u"The value for the field 'client_id' is invalid"
         )

@@ -14,7 +14,6 @@ from imiowebservicejson.models import dms_metadata
 
 
 class TestDMSMetadata(unittest.TestCase):
-
     def setUp(self):
         self._file_first = File.first
         self._unauthenticated_userid = security.unauthenticated_userid
@@ -25,7 +24,7 @@ class TestDMSMetadata(unittest.TestCase):
 
     @property
     def _schema(self):
-        return get_schemas('dms_metadata', '1.0')[0]
+        return get_schemas("dms_metadata", "1.0")[0]
 
     @property
     def _test_values(self):
@@ -47,7 +46,7 @@ class TestDMSMetadata(unittest.TestCase):
 
     def test_update_flag(self):
         values = self._test_values
-        values['update'] = True
+        values["update"] = True
         model = self._get_model(values)
         self.assertEqual(True, model.update_flag)
 
@@ -57,81 +56,76 @@ class TestDMSMetadata(unittest.TestCase):
 
     def test_scan_date_validation(self):
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model})()
+        event = type("event", (object,), {"context": model})()
         self.assertIsNone(dms_metadata.scan_date_validation(event))
 
     def test_scan_date_validation_error(self):
         model = self._get_model(self._test_values)
-        model.scan_date = '2014-02-31'
-        event = type('event', (object, ), {'context': model})()
-        self.assertRaises(ValidationError,
-                          dms_metadata.scan_date_validation, event)
+        model.scan_date = "2014-02-31"
+        event = type("event", (object,), {"context": model})()
+        self.assertRaises(ValidationError, dms_metadata.scan_date_validation, event)
 
     def test_scan_hour_validation(self):
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model})()
+        event = type("event", (object,), {"context": model})()
         self.assertIsNone(dms_metadata.scan_hour_validation(event))
 
     def test_scan_hour_validation_error(self):
         model = self._get_model(self._test_values)
-        model.scan_hour = '25:00:00'
-        event = type('event', (object, ), {'context': model})()
-        self.assertRaises(ValidationError,
-                          dms_metadata.scan_hour_validation, event)
+        model.scan_hour = "25:00:00"
+        event = type("event", (object,), {"context": model})()
+        self.assertRaises(ValidationError, dms_metadata.scan_hour_validation, event)
 
     def test_unicity_validation(self):
         File.first = Mock(return_value=None)
-        security.unauthenticated_userid = Mock(return_value='testuser')
+        security.unauthenticated_userid = Mock(return_value="testuser")
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
+        event = type("event", (object,), {"context": model, "request": {}})()
         self.assertIsNone(dms_metadata.unicity_validation(event))
 
     def test_unicity_validation_update(self):
         model = self._get_model(self._test_values)
         model.update = True
-        event = type('event', (object, ), {'context': model})()
+        event = type("event", (object,), {"context": model})()
         self.assertIsNone(dms_metadata.unicity_validation(event))
 
     def test_unicity_validation_existing_metadata(self):
         # With file
-        file_data = type('file', (object, ), {'filepath': 'test'})()
+        file_data = type("file", (object,), {"filepath": "test"})()
         File.first = Mock(return_value=file_data)
-        security.unauthenticated_userid = Mock(return_value='testuser')
+        security.unauthenticated_userid = Mock(return_value="testuser")
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
-        self.assertRaises(ValidationError, dms_metadata.unicity_validation,
-                          event)
+        event = type("event", (object,), {"context": model, "request": {}})()
+        self.assertRaises(ValidationError, dms_metadata.unicity_validation, event)
 
         # Without file
         file_data.filepath = None
         File.first = Mock(return_value=file_data)
-        security.unauthenticated_userid = Mock(return_value='testuser')
+        security.unauthenticated_userid = Mock(return_value="testuser")
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
+        event = type("event", (object,), {"context": model, "request": {}})()
         self.assertIsNone(dms_metadata.unicity_validation(event))
 
     def test_external_id_validation(self):
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
+        event = type("event", (object,), {"context": model, "request": {}})()
         self.assertIsNone(dms_metadata.external_id_validation(event))
 
     def test_external_id_validation_error(self):
         values = self._test_values
-        values['client_id'] = 'FOO'
+        values["client_id"] = "FOO"
         model = self._get_model(values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
-        self.assertRaises(ValidationError, dms_metadata.external_id_validation,
-                          event)
+        event = type("event", (object,), {"context": model, "request": {}})()
+        self.assertRaises(ValidationError, dms_metadata.external_id_validation, event)
 
     def test_client_id_validation(self):
         model = self._get_model(self._test_values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
+        event = type("event", (object,), {"context": model, "request": {}})()
         self.assertIsNone(dms_metadata.client_id_validation(event))
 
     def test_client_id_validation_error(self):
         values = self._test_values
-        values['client_id'] = '01Y4620'
+        values["client_id"] = "01Y4620"
         model = self._get_model(values)
-        event = type('event', (object, ), {'context': model, 'request': {}})()
-        self.assertRaises(ValidationError, dms_metadata.client_id_validation,
-                          event)
+        event = type("event", (object,), {"context": model, "request": {}})()
+        self.assertRaises(ValidationError, dms_metadata.client_id_validation, event)

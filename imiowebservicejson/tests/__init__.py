@@ -12,16 +12,15 @@ import os
 
 
 class TestAppBaseTestCase(unittest.TestCase):
-
     def setUp(self):
         cwd = os.path.dirname(__file__)
-        settings = appconfig('config:%s' % os.path.join(cwd, '../test.ini'))
+        settings = appconfig("config:%s" % os.path.join(cwd, "../test.ini"))
         self.app = TestApp(main({}, **settings))
 
     def tearDown(self):
         session = temporary_session(DBSession.bind)
-        delete_tables = ('router', 'request')
+        delete_tables = ("router", "request")
         for table in delete_tables:
-            session.execute('delete from {0}'.format(table))
+            session.execute("delete from {0}".format(table))
         session.commit()
         testing.tearDown()

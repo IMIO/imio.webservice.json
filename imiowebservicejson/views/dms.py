@@ -20,17 +20,16 @@ from imiowebservicejson.views.base import validate_object
 log = logging.getLogger(__name__)
 
 
-@view_config(route_name='dms_metadata', renderer='json', permission='query')
+@view_config(route_name="dms_metadata", renderer="json", permission="query")
 @exception_handler()
-@json_validator(schema_name='dms_metadata', model=DMSMetadata)
+@json_validator(schema_name="dms_metadata", model=DMSMetadata)
 @json_logging(log)
 def dms_metadata(request, input, response):
     userid = security.unauthenticated_userid(request)
-    dms_file = File.first(user=userid,
-                          external_id=input.external_id,
-                          order_by=[desc(File.version)])
-    if dms_file is None or input.update_flag is True and \
-       dms_file.filepath is not None:
+    dms_file = File.first(
+        user=userid, external_id=input.external_id, order_by=[desc(File.version)]
+    )
+    if dms_file is None or input.update_flag is True and dms_file.filepath is not None:
         version = File.count(user=userid, external_id=input.external_id) + 1
         dms_file = File()
         dms_file.version = version
@@ -50,15 +49,15 @@ def dms_metadata(request, input, response):
     return response
 
 
-@view_config(route_name='file_upload', renderer='json', permission='query')
+@view_config(route_name="file_upload", renderer="json", permission="query")
 @exception_handler()
 @http_logging(log)
 def file_upload(request):
-    request.matchdict['version'] = '1.0'
+    request.matchdict["version"] = "1.0"
     return dms_file_upload(request)
 
 
-@view_config(route_name='dms_file_upload', renderer='json', permission='query')
+@view_config(route_name="dms_file_upload", renderer="json", permission="query")
 @exception_handler()
 @http_logging(log)
 def dms_file_upload(request):
@@ -67,11 +66,9 @@ def dms_file_upload(request):
 
     error = validate_object(request, upload)
     if error is not None:
-        return failure(str(error), error_code=getattr(error, 'code', None))
+        return failure(str(error), error_code=getattr(error, "code", None))
 
     upload.move()
     upload.save_reference()
 
-    return {
-        "success": True,
-        "message": "File uploaded successfully"}
+    return {"success": True, "message": "File uploaded successfully"}

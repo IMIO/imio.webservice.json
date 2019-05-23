@@ -9,11 +9,12 @@ def pytest_sessionstart():
     from imio.dataexchange.db import DBSession
     from imio.dataexchange.db import DeclarativeBase
     from imio.dataexchange.db.mappers.file import File
+
     File  # Pyflakes fix
 
     cwd = os.path.dirname(__file__)
-    settings = appconfig('config:%s' % os.path.join(cwd, 'test.ini'))
-    engine = engine_from_config(settings, 'sqlalchemy.')
+    settings = appconfig("config:%s" % os.path.join(cwd, "test.ini"))
+    engine = engine_from_config(settings, "sqlalchemy.")
 
     DBSession.configure(bind=engine)
     DeclarativeBase.metadata.bind = engine
@@ -22,4 +23,4 @@ def pytest_sessionstart():
     # Initialize the sequence
     DBSession.execute("select nextval('file_id_seq')").fetchall()
 
-    os.environ['GED_UPLOAD_PATH'] = './'
+    os.environ["GED_UPLOAD_PATH"] = "./"

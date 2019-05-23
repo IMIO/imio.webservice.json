@@ -12,7 +12,6 @@ import unittest
 
 
 class ViewTestCase(unittest.TestCase):
-
     def setUp(self):
         self.maxDiff = None
         self.config = testing.setUp()
@@ -20,7 +19,7 @@ class ViewTestCase(unittest.TestCase):
         self._save_tmpfile = FileUpload.save_tmpfile
         self._move = FileUpload.move
         self._save_reference = FileUpload.save_reference
-        DBSession.add(FileType(id='COUR_E', description='description'))
+        DBSession.add(FileType(id="COUR_E", description="description"))
         DBSession.flush()
 
     def tearDown(self):
@@ -34,10 +33,12 @@ class ViewTestCase(unittest.TestCase):
     @property
     def _request(self):
         request = testing.DummyRequest()
-        settings = {'traceback.debug': True}
-        request.registry = type('registry', (object, ),
-                                {'settings': settings,
-                                 'notify': Mock(return_value=None)})()
+        settings = {"traceback.debug": True}
+        request.registry = type(
+            "registry",
+            (object,),
+            {"settings": settings, "notify": Mock(return_value=None)},
+        )()
         return request
 
     @property
@@ -51,17 +52,18 @@ class ViewTestCase(unittest.TestCase):
                 "id": {
                     "description": "The unique id",
                     "type": "string",
-                    "pattern": "^.+$"
+                    "pattern": "^.+$",
                 }
             },
-            "required": ["id"]
+            "required": ["id"],
         }
 
     def _view_test(self, viewname, json_name, request, **out_kwargs):
         import os
-        json_path = os.path.join(os.path.dirname(__file__), 'json', json_name)
-        in_json = open(os.path.join(json_path, 'in.json')).read().strip()
-        out_json = open(os.path.join(json_path, 'out.json')).read().strip()
+
+        json_path = os.path.join(os.path.dirname(__file__), "json", json_name)
+        in_json = open(os.path.join(json_path, "in.json")).read().strip()
+        out_json = open(os.path.join(json_path, "out.json")).read().strip()
         request.json = in_json
         request.json_body = json.loads(in_json)
 

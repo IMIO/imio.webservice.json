@@ -6,7 +6,7 @@ from pyramid.view import view_config
 from imiowebservicejson.filerender import FileRender
 
 
-@view_config(route_name='file_latest', renderer='string', permission='access')
+@view_config(route_name="file_latest", renderer="string", permission="access")
 def file_latest(request):
     renderer = FileRender(request)
     if renderer.dms_file is None:
@@ -14,7 +14,7 @@ def file_latest(request):
     return renderer.render()
 
 
-@view_config(route_name='file', renderer='string', permission='access')
+@view_config(route_name="file", renderer="string", permission="access")
 def file(request):
     renderer = FileRender(request)
     if renderer.dms_file is None:

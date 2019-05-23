@@ -11,7 +11,7 @@
         },
         "type": {
             "description": "The type of the document",
-            "enum": ["FACT", "COUR_E", "COUR_S"]
+            "enum": ["FACT", "COUR_E", "COUR_S", "EMAIL"]
         },
         "pages_number": {
             "description": "The number of pages",

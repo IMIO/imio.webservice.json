@@ -11,15 +11,13 @@ class TestsViewsSchema(ViewTestCase):
     views = schema
 
     def test_schema_request(self):
-        security.unauthenticated_userid = Mock(return_value=u'testuser')
+        security.unauthenticated_userid = Mock(return_value=u"testuser")
         request = self._request
-        request.matchdict = {'name': 'dms_metadata',
-                             'version': '1.0'}
-        self._view_test('schema', 'schema_request', request)
+        request.matchdict = {"name": "dms_metadata", "version": "1.0"}
+        self._view_test("schema", "schema_request", request)
 
     def test_schema_request_error(self):
-        security.unauthenticated_userid = Mock(return_value=u'testuser')
+        security.unauthenticated_userid = Mock(return_value=u"testuser")
         request = self._request
-        request.matchdict = {'name': 'dms_metadata',
-                             'version': '0.1'}
-        self._view_test('schema', 'schema_request_error', request)
+        request.matchdict = {"name": "dms_metadata", "version": "0.1"}
+        self._view_test("schema", "schema_request_error", request)

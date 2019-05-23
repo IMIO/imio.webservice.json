@@ -4,7 +4,7 @@ from zope.interface import Interface
 
 
 class IValidatorEvent(Interface):
-    context = Attribute('The object to validate')
+    context = Attribute("The object to validate")
 
 
 class IFileUpload(Interface):
