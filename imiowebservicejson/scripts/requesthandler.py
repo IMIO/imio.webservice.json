@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from ConfigParser import ConfigParser
+from datetime import datetime
+from datetime import timedelta
 from imio.amqp import BaseConsumer
 from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db import temporary_session
@@ -76,6 +78,7 @@ class RequestHandler(BaseConsumer):
             Request.uid == message.uid,
         ).first()
         request.response = json.dumps(result)
+        request.expiration_date = datetime.now() + timedelta(minutes=5)
         session.add(request)
         session.commit()
         session.close()

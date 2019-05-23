@@ -2,6 +2,7 @@
 
 from cornice import Service
 from cornice.validators import colander_body_validator
+from datetime import datetime
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson import request as rq
@@ -161,6 +162,15 @@ def post_request(request):
         request.validated['application_id'],
         external_uid,
     )
+    record = RequestTable.first(uid=internal_uid)
+    result = {
+        'request_id': external_uid,
+        'client_id': request.validated['client_id'],
+        'application_id': request.validated['application_id'],
+    }
+    if record:
+        if record.expiration_date and record.expiration_date > datetime.now():
+            return result
     msg = RequestMessage(
         request.validated['request_type'],
         request.validated['path'],
@@ -170,16 +180,16 @@ def post_request(request):
         internal_uid,
     )
 
-    record = RequestTable(uid=internal_uid)
-    record.insert()
+    if record and record.expiration_date:
+        record.expiration_date = None
+        record.response = None
+        record.update()
+    else:
+        record = RequestTable(uid=internal_uid)
+        record.insert()
     publisher.add_message(msg)
     publisher.start()
-
-    return {
-        'request_id': external_uid,
-        'client_id': request.validated['client_id'],
-        'application_id': request.validated['application_id'],
-    }
+    return result
 
 
 @request.get(validators=(colander_body_validator, ),
