@@ -17,17 +17,17 @@ import json
 import sqlalchemy as sa
 
 
-class RequestHandler(BaseConsumer):
+class BaseRequestHandler(BaseConsumer):
     logger_name = "request_handler"
     log_file = "requesthandler.log"
     exchange = "ws.request"
-    queue = "ws.request"
-    routing_key = "request"
+    queue = None
+    routing_key = None
 
     def start(self, db_config, error_count):
         self.db_config = db_config
         self.error_count = error_count
-        super(RequestHandler, self).start()
+        super(BaseRequestHandler, self).start()
 
     def get_url(self, message, session):
         """ Get the routed url for the given message """
@@ -76,7 +76,7 @@ class RequestHandler(BaseConsumer):
             else:
                 message.error_count += 1
                 publisher = SinglePublisher(self._url)
-                publisher.setup_queue("ws.error", "error")
+                publisher.setup_queue("ws.request.error", "request.error")
                 publisher.add_message(message)
                 publisher.start()
                 return
@@ -94,7 +94,17 @@ class RequestHandler(BaseConsumer):
         return session
 
 
-def main():
+class ReadRequestHandler(BaseRequestHandler):
+    queue = "ws.request.read"
+    routing_key = "request.read"
+
+
+class WriteRequestHandler(BaseRequestHandler):
+    queue = "ws.request.write"
+    routing_key = "request.write"
+
+
+def execute(cls, queue_key):
     parser = argparse.ArgumentParser(description=u"Handle requests")
     parser.add_argument("config_uri", type=str)
 
@@ -105,11 +115,19 @@ def main():
     url = config.get("app:main", "rabbitmq.url")
     error_count = config.get("app:main", "handler.error.count")
     connection_parameters = "connection_attempts=3&heartbeat_interval=3600"
-    consumer = RequestHandler(
-        "{0}/%2Fwebservice?{1}".format(url, connection_parameters)
+    consumer = cls("{0}/%2Fwebservice?{1}".format(url, connection_parameters))
+    consumer.setup_queue(
+        "ws.request.{0}".format(queue_key), "request".format(queue_key)
     )
-    consumer.setup_queue("ws.request", "request")
     try:
         consumer.start(config._sections.get("app:main"), int(error_count))
     except KeyboardInterrupt:
         consumer.stop()
+
+
+def read_handler():
+    execute(ReadRequestHandler, "read")
+
+
+def write_handler():
+    execute(WriteRequestHandler, "write")

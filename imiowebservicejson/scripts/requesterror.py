@@ -11,9 +11,9 @@ import time
 class RequestError(BaseConsumer):
     logger_name = "request_error"
     log_file = "requesterror.log"
-    exchange = "ws.error"
-    queue = "ws.error"
-    routing_key = "error"
+    exchange = "ws.request"
+    queue = "ws.request.error"
+    routing_key = "request.error"
 
     def start(self, wait_duration=2):
         self.wait_duration = wait_duration
@@ -22,7 +22,13 @@ class RequestError(BaseConsumer):
     def treat_message(self, message):
         time.sleep(self.wait_duration)
         publisher = SinglePublisher(self._url)
-        publisher.setup_queue("ws.request", "request")
+        if message.type == "GET":
+            queue_key = "read"
+        else:
+            queue_key = "write"
+        publisher.setup_queue(
+            "ws.request.{0}".format(queue_key), "request.{0}".format(queue_key)
+        )
         publisher.add_message(message)
         publisher.start()
 
@@ -39,7 +45,7 @@ def main():
     wait_duration = config.get("app:main", "handler.error.wait")
     connection_parameters = "connection_attempts=3&heartbeat_interval=3600"
     consumer = RequestError("{0}/%2Fwebservice?{1}".format(url, connection_parameters))
-    consumer.setup_queue("ws.error", "error")
+    consumer.setup_queue("ws.request.error", "request.error")
     try:
         consumer.start(wait_duration=int(wait_duration))
     except KeyboardInterrupt:

@@ -137,7 +137,13 @@ def post_request(request):
     publisher = rq.SinglePublisher(
         "{0}/%2Fwebservice?{1}".format(amqp_url, publisher_parameters)
     )
-    publisher.setup_queue("ws.request", "request")
+    if request.validated.get("request_type") == "GET":
+        queue_key = "read"
+    else:
+        queue_key = "write"
+    publisher.setup_queue(
+        "ws.request.{0}".format(queue_key), "request.{0}".format(queue_key)
+    )
     external_uid = generate_external_uid(request.validated)
     internal_uid = generate_internal_uid(
         request.validated["client_id"],

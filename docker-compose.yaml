@@ -107,23 +107,33 @@ services:
     command: /start.sh email_dispatcher /home/imio/config/development.ini
     depends_on:
       - instance
-  request_handler:
+  request_read_handler:
     image: docker-staging.imio.be/webservicejson/mutual:latest
     user: imio
     volumes:
       - ./config:/home/imio/config
       - ./data:/home/imio/data
     working_dir: /home/imio/imio.webservice.json
-    command: /start.sh request_handler /home/imio/config/development.ini
+    command: /start.sh request_read_handler /home/imio/config/development.ini
     depends_on:
       - instance
-  request_error:
+  request_write_handler:
     image: docker-staging.imio.be/webservicejson/mutual:latest
     user: imio
     volumes:
       - ./config:/home/imio/config
       - ./data:/home/imio/data
     working_dir: /home/imio/imio.webservice.json
-    command: /start.sh request_error /home/imio/config/development.ini
+    command: /start.sh request_write_handler /home/imio/config/development.ini
+    depends_on:
+      - instance
+  request_error_handler:
+    image: docker-staging.imio.be/webservicejson/mutual:latest
+    user: imio
+    volumes:
+      - ./config:/home/imio/config
+      - ./data:/home/imio/data
+    working_dir: /home/imio/imio.webservice.json
+    command: /start.sh request_error_handler /home/imio/config/development.ini
     depends_on:
       - instance
