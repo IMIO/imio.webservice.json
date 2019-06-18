@@ -4,6 +4,18 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Handle separatly read and write requests
+  [mpeeters]
+
+- Implement an expiration and caching mecanism for requests and responses
+  [mpeeters]
+
+- Improve request_id generation to allow caching
+  [mpeeters]
+
+- Use HTTP response codes to differenciate the get_request endpoint responses
+  [mpeeters]
+
 - Upgrade imio.dataexchange.db to 0.3.2
   [mpeeters]
 
