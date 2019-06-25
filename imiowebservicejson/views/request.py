@@ -2,15 +2,16 @@
 
 from cornice import Service
 from cornice.validators import colander_body_validator
+from cornice.validators import colander_querystring_validator
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson import request as rq
 from imiowebservicejson import utils
 
 import colander
+import hashlib
 import json
 import uuid
-import hashlib
 
 
 def generate_internal_uid(client_id, application_id, external_uid):
@@ -182,8 +183,18 @@ def post_request(request):
     return result
 
 
+def request_get_validator(request, **kwargs):
+    if request.body:
+        validator = colander_body_validator
+        kwargs['schema'].name = 'body'
+    else:
+        validator = colander_querystring_validator
+        kwargs['schema'].name = 'querystring'
+    validator(request, **kwargs)
+
+
 @request.get(
-    validators=(colander_body_validator,),
+    validators=(request_get_validator,),
     schema=GetRequestBodySchema(),
     response_schemas=get_response_schemas,
 )

@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- ISI-41: Add the possibility to use query string for GET request
+  [mpeeters]
+
 - Handle separatly read and write requests
   [mpeeters]
 
