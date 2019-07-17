@@ -6,7 +6,7 @@ CMD_BASE="/home/imio/imio.webservice.json/bin/"
 CMD="$CMD_BASE/$1"
 
 if [[ "$1" == "pserve"* ]]; then
-  while ! nc -z postgres 5432;
+  while ! nc -z ${DB_HOST} ${DB_PORT};
   do
     echo "wait for postgres";
     sleep 1;
@@ -19,7 +19,7 @@ else
     echo "wait for pyramid";
     sleep 2;
   done;
-  while ! nc -z rabbitmq 5672;
+  while ! nc -z ${MQ_HOST} ${MQ_PORT};
   do
     echo "wait for rabbitmq";
     sleep 2;
