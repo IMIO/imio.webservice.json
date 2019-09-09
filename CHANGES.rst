@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- ISI-47: Add `cache_duration` and `ignore_cache` parameters
+  [mpeeters]
+
 - ISI-41: Add the possibility to use query string for GET request
   [mpeeters]
 

@@ -44,6 +44,16 @@ class PostRequestBodySchema(colander.MappingSchema):
         colander.String(), description="The path to the application"
     )
 
+    cache_duration = colander.SchemaNode(
+        colander.Integer(), description="The cache duration in seconds", missing=300
+    )
+
+    ignore_cache = colander.SchemaNode(
+        colander.Boolean(),
+        description="Ignore existing cache (if present)",
+        missing=False,
+    )
+
     parameters = colander.SchemaNode(
         colander.Mapping(unknown="preserve"),
         description="The parameters of the request",
@@ -78,6 +88,16 @@ class PostRequestResponseSchema(colander.MappingSchema):
 
     application_id = colander.SchemaNode(
         colander.String(), description="The id of the application"
+    )
+
+    cache_duration = colander.SchemaNode(
+        colander.Integer(), description="The cache duration in seconds", missing=300
+    )
+
+    ignore_cache = colander.SchemaNode(
+        colander.Boolean(),
+        description="Ignore existing cache (if present)",
+        missing=False,
     )
 
 
@@ -157,11 +177,8 @@ def post_request(request):
         "client_id": request.validated["client_id"],
         "application_id": request.validated["application_id"],
     }
-    if record:
-        if not record.expiration_date or (
-            record.expiration_date and record.expiration_date > utils.now()
-        ):
-            return result
+    if utils.has_request_cache(record, ignore_cache=request.validated["ignore_cache"]):
+        return result
     msg = RequestMessage(
         request.validated["request_type"],
         request.validated["path"],
@@ -169,8 +186,10 @@ def post_request(request):
         request.validated["application_id"],
         request.validated["client_id"],
         internal_uid,
+        request.validated["cache_duration"],
     )
 
+    # Invalidate cache informations if it is necessary
     if record and record.expiration_date:
         record.expiration_date = None
         record.response = None
@@ -186,10 +205,10 @@ def post_request(request):
 def request_get_validator(request, **kwargs):
     if request.body:
         validator = colander_body_validator
-        kwargs['schema'].name = 'body'
+        kwargs["schema"].name = "body"
     else:
         validator = colander_querystring_validator
-        kwargs['schema'].name = 'querystring'
+        kwargs["schema"].name = "querystring"
     validator(request, **kwargs)
 
 
