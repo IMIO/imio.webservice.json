@@ -82,7 +82,9 @@ class BaseRequestHandler(BaseConsumer):
                 return
         request = session.query(Request).filter(Request.uid == message.uid).first()
         request.response = json.dumps(result)
-        request.expiration_date = datetime.now() + timedelta(minutes=5)
+        request.expiration_date = datetime.now() + timedelta(
+            seconds=message.cache_duration
+        )
         session.add(request)
         session.commit()
         session.close()
