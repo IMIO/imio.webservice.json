@@ -5,6 +5,7 @@ from imio.dataexchange.db import DBSession
 from imio.dataexchange.db import temporary_session
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson.tests import TestAppBaseTestCase
+from imiowebservicejson.views import request
 
 import json
 import mock
@@ -20,6 +21,44 @@ class FakeMD5(object):
 
 class TestRequestService(TestAppBaseTestCase):
     """Tests requests views"""
+
+    @mock.patch(
+        "uuid.uuid4", mock.Mock(return_value=type("obj", (object,), {"hex": "ABC"})())
+    )
+    def test_generate_external_uid_basic_post(self):
+        body = {
+            "path": "/test",
+            "request_type": "POST",
+            "application_id": "APP",
+            "client_id": "CLI",
+            "parameters": {"foo": "bar"},
+        }
+        external_uid = request.generate_external_uid(body)
+        self.assertEqual("ABC", external_uid)
+
+    def test_generate_external_uid_basic_get(self):
+        body = {
+            "path": "/test",
+            "request_type": "GET",
+            "application_id": "APP",
+            "client_id": "CLI",
+            "parameters": {"foo": "bar"},
+        }
+        external_uid = request.generate_external_uid(body)
+        self.assertEqual("2d4a3cfef68790d69eb102c5937311fc", external_uid)
+
+    def test_generate_external_uid_get_with_cache(self):
+        body = {
+            "client_id": "CLI",
+            "application_id": "APP",
+            "path": "/test",
+            "request_type": "GET",
+            "ignore_cache": True,
+            "cache_duration": 1000,
+            "parameters": {"foo": "bar"},
+        }
+        external_uid = request.generate_external_uid(body)
+        self.assertEqual("2d4a3cfef68790d69eb102c5937311fc", external_uid)
 
     @mock.patch("hashlib.md5", mock.Mock(return_value=FakeMD5("ABC")))
     @mock.patch("imiowebservicejson.request.SinglePublisher.start")
@@ -72,7 +111,9 @@ class TestRequestService(TestAppBaseTestCase):
     @mock.patch("hashlib.md5", mock.Mock(return_value=FakeMD5("ABC")))
     @mock.patch("imiowebservicejson.request.SinglePublisher.start")
     @mock.patch("imiowebservicejson.request.SinglePublisher.add_message")
-    def test_post_duplicate_ignored_cache_request_get(self, mocked_start, mocked_add_message):
+    def test_post_duplicate_ignored_cache_request_get(
+        self, mocked_start, mocked_add_message
+    ):
         params = {
             "client_id": "CLI",
             "application_id": "APP",

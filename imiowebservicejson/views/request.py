@@ -3,6 +3,7 @@
 from cornice import Service
 from cornice.validators import colander_body_validator
 from cornice.validators import colander_querystring_validator
+from copy import deepcopy
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson import request as rq
@@ -22,7 +23,10 @@ def generate_internal_uid(client_id, application_id, external_uid):
 def generate_external_uid(body):
     """Generate the external uid"""
     if body["request_type"] == "GET":
-        return hashlib.md5(json.dumps(body)).hexdigest()
+        filtered_body = {
+            k: v for k, v in body.items() if k not in ("ignore_cache", "cache_duration")
+        }
+        return hashlib.md5(json.dumps(filtered_body)).hexdigest()
     return uuid.uuid4().hex
 
 
