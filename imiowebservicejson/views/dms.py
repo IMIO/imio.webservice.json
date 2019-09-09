@@ -2,7 +2,6 @@
 
 from datetime import datetime
 from imio.dataexchange.db.mappers.file import File
-from pyramid import security
 from pyramid.view import view_config
 from sqlalchemy import desc
 import logging
@@ -25,7 +24,7 @@ log = logging.getLogger(__name__)
 @json_validator(schema_name="dms_metadata", model=DMSMetadata)
 @json_logging(log)
 def dms_metadata(request, input, response):
-    userid = security.unauthenticated_userid(request)
+    userid = request.authenticated_userid
     dms_file = File.first(
         user=userid, external_id=input.external_id, order_by=[desc(File.version)]
     )

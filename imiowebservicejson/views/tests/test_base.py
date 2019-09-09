@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from imiowebservicejson.views import base
+from imiowebservicejson.views.tests.base import ViewTestCase
 from jsonschema import ValidationError
 from mock import Mock
-
-from imiowebservicejson.views.tests.base import ViewTestCase
-from imiowebservicejson.views import base
 
 
 class TestViewsBase(ViewTestCase):
@@ -43,7 +42,7 @@ class TestViewsBase(ViewTestCase):
         )
 
     def test_validate_object(self):
-        request = self._request
+        request = self._request()
         request.registry.notify = Mock(return_value=None)
         self.assertIsNone(base.validate_object(request, None))
         request.registry.notify = Mock(side_effect=ValidationError("FOO"))

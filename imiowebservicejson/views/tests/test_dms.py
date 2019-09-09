@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 #
-from mock import Mock
-from pyramid import security
 from imio.dataexchange.db.mappers.file import File
-
 from imiowebservicejson.fileupload import FileUpload
 from imiowebservicejson.views import dms
 from imiowebservicejson.views.tests.base import ViewTestCase
+from mock import Mock
 
 
 class TestViewsDMS(ViewTestCase):
     views = dms
 
     def test_dms_metadata_basic(self):
-        security.unauthenticated_userid = Mock(return_value=u"testuser")
-        request = self._request
+        request = self._request()
+        self.config.testing_securitypolicy(userid="testuser", permissive=True)
         request.matchdict = {"version": "1.0"}
         file_id = self._get_last_file_id() + 1
         self._view_test("dms_metadata", "dms_metadata_basic", request, id=file_id)
@@ -40,8 +38,8 @@ class TestViewsDMS(ViewTestCase):
         }
         data.file_metadata = metadata
         data.insert(flush=True)
-        security.unauthenticated_userid = Mock(return_value=u"testuser")
-        request = self._request
+        request = self._request()
+        self.config.testing_securitypolicy(userid="testuser", permissive=True)
         request.matchdict = {"version": "1.0"}
         self._view_test("dms_metadata", "dms_metadata_update", request)
         data = File.first(id=1)
@@ -67,8 +65,8 @@ class TestViewsDMS(ViewTestCase):
         }
         data.file_metadata = metadata
         data.insert(flush=True)
-        security.unauthenticated_userid = Mock(return_value=u"testuser")
-        request = self._request
+        request = self._request()
+        self.config.testing_securitypolicy(userid="testuser", permissive=True)
         request.matchdict = {"version": "1.0"}
         file_id = self._get_last_file_id() + 1
         self._view_test("dms_metadata", "dms_metadata_new_version", request, id=file_id)
@@ -81,14 +79,14 @@ class TestViewsDMS(ViewTestCase):
         FileUpload.save_tmpfile = Mock(return_value=None)
         FileUpload.move = Mock(return_value=None)
         FileUpload.save_reference = Mock(return_value=None)
-        request = self._request
+        request = self._request()
         request.POST = {"filedata": None}
         result = dms.file_upload(request)
         self.assertEqual("File uploaded successfully", result["message"])
         self.assertTrue(result["success"])
 
     def test_exception_handler(self):
-        request = self._request
+        request = self._request()
         result = dms.file_upload(request)
         self.assertFalse(result["success"])
         self.assertEqual("An error occured during the process", result["message"])

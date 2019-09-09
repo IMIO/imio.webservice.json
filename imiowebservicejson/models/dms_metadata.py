@@ -71,7 +71,7 @@ def scan_hour_validation(event):
 def unicity_validation(event):
     if event.context.update_flag is True:
         return
-    userid = security.unauthenticated_userid(event.request)
+    userid = event.request.authenticated_userid
     external_id = event.context.external_id
     file_data = File.first(
         user=userid, external_id=external_id, order_by=[desc(File.version)]

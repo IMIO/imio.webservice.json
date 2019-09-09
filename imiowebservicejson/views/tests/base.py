@@ -4,7 +4,6 @@ from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file_type import FileType
 from imiowebservicejson.fileupload import FileUpload
 from mock import Mock
-from pyramid import security
 from pyramid import testing
 
 import json
@@ -15,7 +14,6 @@ class ViewTestCase(unittest.TestCase):
     def setUp(self):
         self.maxDiff = None
         self.config = testing.setUp()
-        self._unauthenticated_userid = security.unauthenticated_userid
         self._save_tmpfile = FileUpload.save_tmpfile
         self._move = FileUpload.move
         self._save_reference = FileUpload.save_reference
@@ -25,20 +23,15 @@ class ViewTestCase(unittest.TestCase):
     def tearDown(self):
         DBSession.rollback()
         testing.tearDown()
-        security.unauthenticated_userid = self._unauthenticated_userid
         FileUpload.save_tmpfile = self._save_tmpfile
         FileUpload.move = self._move
         FileUpload.save_reference = self._save_reference
 
-    @property
-    def _request(self):
-        request = testing.DummyRequest()
+    def _request(self, **kwargs):
+        request = testing.DummyRequest(**kwargs)
         settings = {"traceback.debug": True}
-        request.registry = type(
-            "registry",
-            (object,),
-            {"settings": settings, "notify": Mock(return_value=None)},
-        )()
+        request.registry.settings = settings
+        request.registry.notify = Mock(return_value=None)
         return request
 
     @property

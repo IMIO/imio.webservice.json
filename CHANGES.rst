@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Fix deprecation warnings from the latest version of pyramid
+  [mpeeters]
+
 - ISI-47: Add `cache_duration` and `ignore_cache` parameters
   [mpeeters]
 
