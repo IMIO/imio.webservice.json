@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Upgrade imio.dataexchange.core to 0.4.0 and imio.dataexchange.db to 0.4.0
+  [mpeeters]
+
 - Refactor request views to delegate the logic to the request handler process
   [mpeeters]
 
