@@ -23,7 +23,7 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     DeclarativeBase.metadata.bind = engine
     initialized_query = "select * from pg_tables where schemaname = 'public'"
-    if engine.execute(initialized_query).rowcount == 0:
+    if engine.execute(initialized_query).rowcount < 4:
         DeclarativeBase.metadata.create_all()
         init_session = temporary_session(engine)
         import_data(init_session)
