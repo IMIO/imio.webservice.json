@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from imiowebservicejson.db import get_session
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.schema import get_schemas
 from jsonschema import validate, ValidationError
 from pyramid.httpexceptions import HTTPForbidden
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import forget
 from pyramid.view import view_config
 from warlock import model_factory
-import traceback
 
-from imiowebservicejson.schema import get_schemas
-from imiowebservicejson.event import ValidatorEvent
+import traceback
 
 
 def json_logging(logger):
@@ -104,6 +105,19 @@ def validate_object(request, obj):
         notify(ValidatorEvent(request, obj))
     except ValidationError as e:
         return e
+
+
+def temporary_session(func):
+    def replacement(request):
+        session = get_session(request)
+        try:
+            result = func(request, session)
+        except Exception as e:
+            session.close()
+            raise e
+        session.close()
+        return result
+    return replacement
 
 
 @view_config(route_name='home', renderer='templates/mytemplate.pt')
