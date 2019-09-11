@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from ConfigParser import ConfigParser
-from datetime import datetime
 from datetime import timedelta
 from imio.amqp import BaseConsumer
 from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db import temporary_session
 from imio.dataexchange.db.mappers.request import Request
 from imio.dataexchange.db.mappers.router import Router
-from imiowebservicejson.request import SinglePublisher
+from imiowebservicejson import request
+from imiowebservicejson import utils
 from sqlalchemy import engine_from_config
 
 import argparse
@@ -64,29 +64,56 @@ class BaseRequestHandler(BaseConsumer):
         result = me(url, **parameters)
         return result
 
+    def get_cache(self, session, internal_uid):
+        """Verify and return an already cached response that we should use"""
+        query = session.query(Request).filter(
+            sa.and_(
+                Request.internal_uid == internal_uid,
+                Request.response != None,
+                Request.expiration_date != None,
+                Request.expiration_date > utils.now(),
+            )
+        )
+        result = query.order_by(sa.desc(Request.date)).first()
+        if result:
+            return result.response, result.expiration_date
+        return None, None
+
     def treat_message(self, message):
         session = self.get_session()
+        record = Request.first(uid=message.uid, session=session)
+        if message.ignore_cache is False:
+            cached_response, cached_expiration = self.get_cache(
+                session, record.internal_uid
+            )
+            if cached_response:
+                record.response = cached_response
+                record.expiration_date = cached_expiration
+                record.update(session=session, commit=True)
+                session.close()
+                return
+
         url = self.get_url(message, session)
+        expiration_date = None
         try:
             result = self.make_request(message, url).json()
+            expiration_date = utils.now() + timedelta(
+                seconds=message.cache_duration
+            )
         except Exception as e:
-            session.close()
             if message.error_count >= self.error_count:
                 result = {"error": str(e)}
             else:
                 message.error_count += 1
-                publisher = SinglePublisher(self._url)
+                publisher = request.SinglePublisher(self._url)
                 publisher.setup_queue("ws.request.error", "request.error")
                 publisher.add_message(message)
                 publisher.start()
+                session.close()
                 return
-        request = session.query(Request).filter(Request.uid == message.uid).first()
-        request.response = json.dumps(result)
-        request.expiration_date = datetime.now() + timedelta(
-            seconds=message.cache_duration
-        )
-        session.add(request)
-        session.commit()
+        record.response = json.dumps(result)
+        record.expiration_date = expiration_date
+        record.update(session=session, commit=True)
         session.close()
 
     def get_session(self):
