@@ -3,11 +3,10 @@
 from cornice import Service
 from cornice.validators import colander_body_validator
 from cornice.validators import colander_querystring_validator
-from copy import deepcopy
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson import request as rq
-from imiowebservicejson import utils
+from imiowebservicejson.views.base import temporary_session
 
 import colander
 import hashlib
@@ -20,14 +19,35 @@ def generate_internal_uid(client_id, application_id, external_uid):
     return "{0}-{1}-{2}".format(client_id, application_id, external_uid)
 
 
-def generate_external_uid(body):
-    """Generate the external uid"""
+def generate_internal_hash(body):
+    """Generate the internal hash uid based on the request body"""
     if body["request_type"] == "GET":
         filtered_body = {
             k: v for k, v in body.items() if k not in ("ignore_cache", "cache_duration")
         }
         return hashlib.md5(json.dumps(filtered_body)).hexdigest()
     return uuid.uuid4().hex
+
+
+def generate_uid():
+    """Generate the external uid"""
+    return uuid.uuid4().hex
+
+
+def generate_uids(body):
+    internal_hash = generate_internal_hash(body)
+    external_hash = generate_uid()
+    external_uid = generate_internal_uid(
+        body["client_id"],
+        body["application_id"],
+        external_hash,
+    )
+    internal_uid = generate_internal_uid(
+        body["client_id"],
+        body["application_id"],
+        internal_hash,
+    )
+    return external_hash, external_uid, internal_uid
 
 
 class PostRequestBodySchema(colander.MappingSchema):
@@ -154,8 +174,8 @@ request = Service(
     schema=PostRequestBodySchema(),
     response_schemas=post_response_schemas,
 )
-def post_request(request):
-
+@temporary_session
+def post_request(request, session):
     # Insert into the request queue
     amqp_url = request.registry.settings.get("rabbitmq.url")
     publisher_parameters = "connection_attempts=3&heartbeat_interval=3600"
@@ -169,38 +189,25 @@ def post_request(request):
     publisher.setup_queue(
         "ws.request.{0}".format(queue_key), "request.{0}".format(queue_key)
     )
-    external_uid = generate_external_uid(request.validated)
-    internal_uid = generate_internal_uid(
-        request.validated["client_id"],
-        request.validated["application_id"],
-        external_uid,
-    )
-    record = RequestTable.first(uid=internal_uid)
+    external_hash, external_uid, internal_uid = generate_uids(request.validated)
     result = {
-        "request_id": external_uid,
+        "request_id": external_hash,
         "client_id": request.validated["client_id"],
         "application_id": request.validated["application_id"],
     }
-    if utils.has_request_cache(record, ignore_cache=request.validated["ignore_cache"]):
-        return result
     msg = RequestMessage(
         request.validated["request_type"],
         request.validated["path"],
         request.validated.get("parameters", {}),
         request.validated["application_id"],
         request.validated["client_id"],
-        internal_uid,
-        request.validated["cache_duration"],
+        external_uid,
+        cache_duration=request.validated["cache_duration"],
+        ignore_cache=request.validated["ignore_cache"]
     )
 
-    # Invalidate cache informations if it is necessary
-    if record and record.expiration_date:
-        record.expiration_date = None
-        record.response = None
-        record.update()
-    else:
-        record = RequestTable(uid=internal_uid)
-        record.insert()
+    record = RequestTable(uid=external_uid, internal_uid=internal_uid)
+    record.insert(session=session, commit=True)
     publisher.add_message(msg)
     publisher.start()
     return result
@@ -222,15 +229,13 @@ def request_get_validator(request, **kwargs):
     response_schemas=get_response_schemas,
 )
 def get_request(request):
-    external_uid = request.validated["request_id"]
-    internal_uid = generate_internal_uid(
-        request.validated["client_id"],
-        request.validated["application_id"],
-        external_uid,
+    request_id = request.validated["request_id"]
+    external_uid = generate_internal_uid(
+        request.validated["client_id"], request.validated["application_id"], request_id
     )
-    record = RequestTable.first(uid=internal_uid)
+    record = RequestTable.first(uid=external_uid)
     result = {
-        "request_id": external_uid,
+        "request_id": request_id,
         "client_id": request.validated["client_id"],
         "application_id": request.validated["application_id"],
         "response": "",
