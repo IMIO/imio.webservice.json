@@ -4,6 +4,12 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Refactor request views to delegate the logic to the request handler process
+  [mpeeters]
+
+- Ensure that the database is initialized if a table is missing
+  [mpeeters]
+
 - Fix deprecation warnings from the latest version of pyramid
   [mpeeters]
 
