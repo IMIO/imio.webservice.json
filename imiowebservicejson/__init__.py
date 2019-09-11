@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import engine_from_config
 
+from imio.dataexchange.db import DBSession
+from imio.dataexchange.db import DeclarativeBase
+from imio.dataexchange.db import temporary_session
+from imio.dataexchange.db.scripts.init_db import import_data
+from imiowebservicejson.authentication import check_authentication
+from imiowebservicejson.predicates import ImplementPredicate
+from imiowebservicejson.predicates import VersionPredicate
 from pyramid.authentication import BasicAuthAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator
 from pyramid.security import Allow
 from pyramid.security import Authenticated
 from pyramid.settings import asbool
-
-from imio.dataexchange.db import DBSession
-from imio.dataexchange.db import DeclarativeBase
-from imio.dataexchange.db import temporary_session
-from imio.dataexchange.db.scripts.init_db import import_data
-
-from imiowebservicejson.authentication import check_authentication
-from imiowebservicejson.predicates import ImplementPredicate
-from imiowebservicejson.predicates import VersionPredicate
+from sqlalchemy import engine_from_config
 
 
 def main(global_config, **settings):
