@@ -66,7 +66,7 @@ class BaseRequestHandler(BaseConsumer):
 
     def get_cache(self, session, internal_uid):
         """Verify and return an already cached response that we should use"""
-        query = session.query(Request).filter(
+        query = session.query(Request.response, Request.expiration_date).filter(
             sa.and_(
                 Request.internal_uid == internal_uid,
                 Request.response != None,
