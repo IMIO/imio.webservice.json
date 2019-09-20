@@ -26,8 +26,9 @@ def main(global_config, **settings):
     if engine.execute(initialized_query).rowcount < 4:
         DeclarativeBase.metadata.create_all()
         init_session = temporary_session(engine)
-        import_data(init_session)
         init_session.close()
+    if engine.execute(initialized_query).rowcount == 0:
+        import_data(init_session)
 
     settings["traceback.debug"] = asbool(settings.get("traceback.debug", "false"))
     authn_policy = BasicAuthAuthenticationPolicy(check_authentication)
