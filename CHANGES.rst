@@ -4,6 +4,15 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Do not reimport data if only a new table need to be created during database initialization
+  [mpeeters]
+
+- Improve request query by reducing the number of queried columns
+  [mpeeters]
+
+- Upgrade imio.amqp to 0.2.1 and imio.dataexchange.db to 0.4.1
+  [mpeeters]
+
 - Upgrade imio.dataexchange.core to 0.4.0 and imio.dataexchange.db to 0.4.0
   [mpeeters]
 
