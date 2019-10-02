@@ -66,5 +66,6 @@ setup(
     request_read_handler = imiowebservicejson.scripts.requesthandler:read_handler
     request_write_handler = imiowebservicejson.scripts.requesthandler:write_handler
     request_error_handler = imiowebservicejson.scripts.requesterror:main
+    file_cleanup = imiowebservicejson.scripts.cleanup:main
     """,
 )

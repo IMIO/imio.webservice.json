@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Add a script to cleanup old uploaded files
+  [mpeeters]
+
 - Do not reimport data if only a new table need to be created during database initialization
   [mpeeters]
 
