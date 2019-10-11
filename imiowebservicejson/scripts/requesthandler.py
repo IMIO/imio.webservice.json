@@ -19,7 +19,7 @@ import sqlalchemy as sa
 
 class BaseRequestHandler(BaseConsumer):
     logger_name = "request_handler"
-    log_file = "requesthandler.log"
+    log_file = None
     exchange = "ws.request"
     queue = None
     routing_key = None

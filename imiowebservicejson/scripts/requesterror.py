@@ -10,7 +10,7 @@ import time
 
 class RequestError(BaseConsumer):
     logger_name = "request_error"
-    log_file = "requesterror.log"
+    log_file = None
     exchange = "ws.request"
     queue = "ws.request.error"
     routing_key = "request.error"

@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Change logging for handler scripts
+  [mpeeters]
+
 - Upgrade imio.amqp to 0.2.2
   [mpeeters]
 

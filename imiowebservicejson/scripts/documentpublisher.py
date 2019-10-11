@@ -13,7 +13,7 @@ from imio.dataexchange.core.document import create_document
 
 class DocumentPublisher(BasePublisher):
     logger_name = "document_notifier"
-    log_file = "docnotifier.log"
+    log_file = None
 
     def add_messages(self):
         query = File.query(amqp_status=False, order_by=["id"])
