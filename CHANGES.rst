@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Upgrade imio.amqp to 0.2.2
+  [mpeeters]
+
 - Add a script to cleanup old uploaded files
   [mpeeters]
 
