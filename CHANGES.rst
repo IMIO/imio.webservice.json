@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Upgrade imio.amqp to 0.3.0 and imio.dataexchange.core to 0.5.0
+  [mpeeters]
+
 - Change logging for handler scripts
   [mpeeters]
 
