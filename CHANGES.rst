@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Adapt the document publisher to be resilient to RabbitMQ restart
+  [mpeeters]
+
 - Upgrade imio.amqp to 0.3.0 and imio.dataexchange.core to 0.5.0
   [mpeeters]
 
