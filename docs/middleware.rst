@@ -11,7 +11,7 @@ Debugging
 2. Ensure that there is no pending message in RabbitMQ
 ------------------------------------------------------
 
-- Connect to RabbitMQ throug the web interface : :code:`http://server:15672`
+- Connect to RabbitMQ through the web interface : :code:`http://server:15672`
 - Verify the content of the queues :code:`ws.request.error` / :code:`ws.request.read` / :code:`ws.request.write` in the Queues tab.
 
 3. Verify the queue consumers logs
