@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Adapt the async request processes to be resilient to RabbitMQ restart
+  [mpeeters]
+
 - Adapt the document publisher to be resilient to RabbitMQ restart
   [mpeeters]
 

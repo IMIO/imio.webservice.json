@@ -9,12 +9,14 @@ from imio.dataexchange.db.mappers.request import Request
 from imio.dataexchange.db.mappers.router import Router
 from imiowebservicejson import request
 from imiowebservicejson import utils
+from pika.exceptions import AMQPConnectionError
 from sqlalchemy import engine_from_config
 
 import argparse
-import requests
 import json
+import requests
 import sqlalchemy as sa
+import time
 
 
 class BaseRequestHandler(BaseConsumer):
@@ -133,6 +135,15 @@ class WriteRequestHandler(BaseRequestHandler):
     routing_key = "request.write"
 
 
+def generate_consumer(cls, url, queue_key):
+    connection_parameters = "connection_attempts=3&heartbeat_interval=3600"
+    consumer = cls("{0}/%2Fwebservice?{1}".format(url, connection_parameters))
+    consumer.setup_queue(
+        "ws.request.{0}".format(queue_key), "request".format(queue_key)
+    )
+    return consumer
+
+
 def execute(cls, queue_key):
     parser = argparse.ArgumentParser(description=u"Handle requests")
     parser.add_argument("config_uri", type=str)
@@ -143,15 +154,21 @@ def execute(cls, queue_key):
 
     url = config.get("app:main", "rabbitmq.url")
     error_count = config.get("app:main", "handler.error.count")
-    connection_parameters = "connection_attempts=3&heartbeat_interval=3600"
-    consumer = cls("{0}/%2Fwebservice?{1}".format(url, connection_parameters))
-    consumer.setup_queue(
-        "ws.request.{0}".format(queue_key), "request".format(queue_key)
-    )
-    try:
-        consumer.start(config._sections.get("app:main"), int(error_count))
-    except KeyboardInterrupt:
-        consumer.stop()
+    while True:
+        try:
+            consumer = generate_consumer(cls, url, queue_key)
+            consumer.start(config._sections.get("app:main"), int(error_count))
+        except AMQPConnectionError:
+            if consumer._connection:
+                try:
+                    consumer.stop()
+                except AttributeError:
+                    # This error happen when RabbitMQ is not ready yet
+                    pass
+            time.sleep(5)
+        except KeyboardInterrupt:
+            consumer.stop()
+            break
 
 
 def read_handler():
