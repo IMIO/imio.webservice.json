@@ -10,3 +10,5 @@ before_script:
   - psql -c 'create database test;' -U postgres
 services:
   - postgresql
+addons:
+  postgresql: "11.7"
