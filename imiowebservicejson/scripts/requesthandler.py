@@ -111,18 +111,19 @@ class BaseRequestHandler(BaseConsumer):
                 publisher.setup_queue("ws.request.error", "request.error")
                 publisher.add_message(message)
                 publisher.start()
-                session.close()
                 return
         record.response = json.dumps(result)
         record.expiration_date = expiration_date
         record.update(session=session, commit=True)
-        session.close()
 
     def get_session(self):
-        engine = engine_from_config(self.db_config, prefix="sqlalchemy.")
-        session = temporary_session(engine)
-        DeclarativeBase.metadata.bind = engine
-        return session
+        # XXX Detect PostgreSQL restart to avoid losing connection
+        if not hasattr(self, "_session"):
+            engine = engine_from_config(self.db_config, prefix="sqlalchemy.")
+            session = temporary_session(engine)
+            DeclarativeBase.metadata.bind = engine
+            self._session = session
+        return self._session
 
 
 class ReadRequestHandler(BaseRequestHandler):

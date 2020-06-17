@@ -6,7 +6,6 @@ from cornice.validators import colander_querystring_validator
 from imio.dataexchange.core import Request as RequestMessage
 from imio.dataexchange.db.mappers.request import Request as RequestTable
 from imiowebservicejson import request as rq
-from imiowebservicejson.views.base import temporary_session
 
 import colander
 import hashlib
@@ -174,8 +173,7 @@ request = Service(
     schema=PostRequestBodySchema(),
     response_schemas=post_response_schemas,
 )
-@temporary_session
-def post_request(request, session):
+def post_request(request):
     # Insert into the request queue
     amqp_url = request.registry.settings.get("rabbitmq.url")
     publisher_parameters = "connection_attempts=3&heartbeat_interval=3600"
@@ -207,7 +205,7 @@ def post_request(request, session):
     )
 
     record = RequestTable(uid=external_uid, internal_uid=internal_uid)
-    record.insert(session=session, commit=True)
+    record.insert()
     publisher.add_message(msg)
     publisher.start()
     return result

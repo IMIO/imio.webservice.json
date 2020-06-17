@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Avoid to many connection error with PostgreSQL
+  [mpeeters]
+
 - Adapt the async request processes to be resilient to RabbitMQ restart
   [mpeeters]
 
