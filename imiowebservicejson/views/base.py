@@ -113,9 +113,7 @@ def temporary_session(func):
         try:
             result = func(request, session)
         except Exception as e:
-            session.close()
             raise e
-        session.close()
         return result
     return replacement
 
