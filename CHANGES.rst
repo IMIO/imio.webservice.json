@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Implement basic auth for requests
+  [mpeeters]
+
 - Avoid to many connection error with PostgreSQL
   [mpeeters]
 

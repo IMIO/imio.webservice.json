@@ -49,6 +49,11 @@ def generate_uids(body):
     return external_hash, external_uid, internal_uid
 
 
+class AuthSchema(colander.TupleSchema):
+    login = colander.SchemaNode(colander.String())
+    password = colander.SchemaNode(colander.String())
+
+
 class PostRequestBodySchema(colander.MappingSchema):
 
     client_id = colander.SchemaNode(
@@ -75,6 +80,11 @@ class PostRequestBodySchema(colander.MappingSchema):
         colander.Boolean(),
         description="Ignore existing cache (if present)",
         missing=False,
+    )
+
+    auth = AuthSchema(
+        description="Authentification parameters",
+        missing=None,
     )
 
     parameters = colander.SchemaNode(
@@ -201,7 +211,8 @@ def post_request(request):
         request.validated["client_id"],
         external_uid,
         cache_duration=request.validated["cache_duration"],
-        ignore_cache=request.validated["ignore_cache"]
+        ignore_cache=request.validated["ignore_cache"],
+        auth=request.validated["auth"],
     )
 
     record = RequestTable(uid=external_uid, internal_uid=internal_uid)

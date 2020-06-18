@@ -57,8 +57,9 @@ class BaseRequestHandler(BaseConsumer):
         me = getattr(requests, message.type.lower())
         parameters = {
             "headers": {"Accept": "application/json"},
-            "auth": ("admin", "admin"),
         }
+        if message.auth:
+            parameters["auth"] = message.auth
         if message.type.lower() in ("patch", "post", "put"):
             parameters["headers"]["Content-Type"] = "application/json"
             parameters["headers"]["Prefer"] = "return=representation"
