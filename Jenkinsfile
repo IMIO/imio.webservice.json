@@ -33,8 +33,8 @@ pipeline {
                 }
             }
             steps {
-                sh "mco shell run 'docker pull docker-staging.imio.be/webservicejson/mutual:$BUILD_ID' -I /^staging.imio.be/"
-                sh "mco shell run 'systemctl restart webservicejson.service' -I /^staging.imio.be/"
+                sh "mco shell run 'docker pull docker-staging.imio.be/webservicejson/mutual:$BUILD_ID' -I /^webservice-staging1.imio.be/"
+                sh "mco shell run 'systemctl restart webservicejson.service' -I /^webservice-staging1.imio.be/"
             }
         }
         stage('Deploy to prod') {
