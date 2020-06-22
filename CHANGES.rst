@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Upgrade imio.dataexchange.core to 0.6.0
+  [mpeeters]
+
 - Implement basic auth for requests
   [mpeeters]
 
