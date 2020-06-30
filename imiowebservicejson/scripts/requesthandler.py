@@ -84,6 +84,7 @@ class BaseRequestHandler(BaseConsumer):
 
     def treat_message(self, message):
         session = self.get_session()
+        utils.test_temporary_session(session)
         record = Request.first(uid=message.uid, session=session)
         if message.ignore_cache is False:
             cached_response, cached_expiration = self.get_cache(

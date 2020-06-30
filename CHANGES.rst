@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Handle database disconnection for requests query and processing
+  [mpeeters]
+
 - Upgrade imio.dataexchange.core to 0.6.0
   [mpeeters]
 

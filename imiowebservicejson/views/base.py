@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from imiowebservicejson import utils
 from imiowebservicejson.db import get_session
 from imiowebservicejson.event import ValidatorEvent
 from imiowebservicejson.schema import get_schemas
@@ -110,6 +111,7 @@ def validate_object(request, obj):
 def temporary_session(func):
     def replacement(request):
         session = get_session(request)
+        utils.test_temporary_session(session)
         try:
             result = func(request, session)
         except Exception as e:
