@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, InvalidRequestError
 
 
 def now():
@@ -27,5 +27,5 @@ def test_temporary_session(session):
     """
     try:
         session.execute("select pk from router limit 1")
-    except OperationalError:
+    except (OperationalError, InvalidRequestError):
         session.rollback()
