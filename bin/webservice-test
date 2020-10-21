@@ -8,7 +8,7 @@
 AUTH="testuser:test"
 DOMAIN="http://0.0.0.0:6543"
 SCAN_TYPE="0"
-SCAN_TYPES="0 1 2 3 Y"
+SCAN_TYPES="0 1 2 3 Z"
 CLIENT="0109999"
 
 # RANDOM produces a number between 0 - 32767
@@ -36,7 +36,7 @@ fi
 if [[ $SCAN_TYPES =~ $SCAN_TYPE ]]
 then
     CLIENT="${CLIENT:0:2}$SCAN_TYPE${CLIENT:3}"
-    echo $CLIENT
+#    echo $CLIENT
 else
     echo "The first parameter must be in the list $SCAN_TYPES"
     exit
@@ -48,8 +48,8 @@ COUR_E="
     \"type\": \"COUR_E\",
     \"pages_number\": 1,
     \"client_id\": \"$CLIENT\",
-    \"scan_date\": \"2014-11-20\",
-    \"scan_hour\": \"15:00:00\",
+    \"scan_date\": \"2018-01-12\",
+    \"scan_hour\": \"15:10:39\",
     \"user\": \"testuser\",
     \"pc\": \"pc-scan01\",
     \"creator\": \"scanner\",
@@ -58,8 +58,10 @@ COUR_E="
     \"filemd5\": \"$FILEMD5\"
 }
 "
-echo $FILESIZE
-echo $COUR_E
+#    \"creating_group\": \"Direction financiere - Budgets ___ 3a7be124ac284645bd91156459931ce2\",
+#    \"treating_group\": \"Direction generale - Secretariat ___ 125c8f43181e486295c68cd3b977e9bd\"
+#echo $FILESIZE
+#echo $COUR_E
 
 if [ "$3" != "" ]
 then
@@ -76,6 +78,7 @@ do
     NBi=`printf "%08d" $NB`
     COUR_Ei=${COUR_E/IMIO$CLIENT/$CLIENT$NBi}
     ((NB++))
+    echo $COUR_Ei
     if [ "$SIMUL" -eq "1" ];
     then
         echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_Ei\" $DOMAIN/dms_metadata/$CLIENT/$VERSION"
