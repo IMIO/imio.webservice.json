@@ -16,6 +16,7 @@ case "$1" in
     $ScriptLocation/daemon-webservice $1
     $ScriptLocation/daemon-publisher $1
     $ScriptLocation/daemon-im-dispatcher $1
+    $ScriptLocation/daemon-iem-dispatcher $1
     $ScriptLocation/daemon-om-dispatcher $1
     $ScriptLocation/daemon-ogm-dispatcher $1
     $ScriptLocation/daemon-pm-dispatcher $1
