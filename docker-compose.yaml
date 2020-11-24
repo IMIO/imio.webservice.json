@@ -127,14 +127,14 @@ services:
       MQ_PORT: 5672
       DB_HOST: postgres
       DB_PORT: 5432
-  email_dispatcher:
+  incoming_email_dispatcher:
     image: docker-staging.imio.be/webservicejson/mutual:latest
     user: imio
     volumes:
       - ./config:/home/imio/config
       - ./data:/home/imio/data
     working_dir: /home/imio/imio.webservice.json
-    command: /start.sh email_dispatcher /home/imio/config/development.ini
+    command: /start.sh incoming_email_dispatcher /home/imio/config/development.ini
     depends_on:
       - instance
     environment:
