@@ -11,6 +11,9 @@ from imiowebservicejson import request
 from imiowebservicejson import utils
 from pika.exceptions import AMQPConnectionError
 from sqlalchemy import engine_from_config
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import StatementError
 
 import argparse
 import json
@@ -84,7 +87,12 @@ class BaseRequestHandler(BaseConsumer):
 
     def treat_message(self, message):
         session = self.get_session()
-        utils.test_temporary_session(session)
+        try:
+            utils.test_temporary_session(session)
+        except (OperationalError, InvalidRequestError, StatementError):
+            # Some errors may happen during rollback
+            session.remove()
+            session = self.get_session()
         record = Request.first(uid=message.uid, session=session)
         if message.ignore_cache is False:
             cached_response, cached_expiration = self.get_cache(

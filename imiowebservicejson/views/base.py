@@ -9,6 +9,9 @@ from pyramid.httpexceptions import HTTPForbidden
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import forget
 from pyramid.view import view_config
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import StatementError
 from warlock import model_factory
 
 import traceback
@@ -111,7 +114,12 @@ def validate_object(request, obj):
 def temporary_session(func):
     def replacement(request):
         session = get_session(request)
-        utils.test_temporary_session(session)
+        try:
+            utils.test_temporary_session(session)
+        except (OperationalError, InvalidRequestError, StatementError):
+            # Some errors may happen during rollback
+            session.remove()
+            session = get_session(request)
         try:
             result = func(request, session)
         except Exception as e:
