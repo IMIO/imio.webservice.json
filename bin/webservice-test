@@ -1,12 +1,15 @@
 #!/bin/bash
-# $1: scan type (optional, default:0) (supported types: 0 incomingmail, 1 outgoingmail, 2 gen outgoingmail, 3 meetingitem)
+# $1: scan type (optional, default:0) (supported types: 0 incomingmail, 1 outgoingmail, 2 gen outgoingmail, 3 meetingitem, Z incoming_email)
 # $2: number of generated elements (optional, default:1)
 # $3: external_id counter (optional, default: random)
 # $4: 'update' (optional, default: nothing)
 # $5: filename (optional, default: README.rst)
 
-AUTH="testuser:test"
-DOMAIN="http://0.0.0.0:6543"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
+
+# include authentication variables
+source $SCRIPT_DIR/webservice-test-config
+
 SCAN_TYPE="0"
 SCAN_TYPES="0 1 2 3 Z"
 CLIENT="0109999"

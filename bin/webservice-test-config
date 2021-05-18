@@ -1,0 +1,2 @@
+AUTH="testuser:test"
+DOMAIN="http://0.0.0.0:6543"
