@@ -21,6 +21,11 @@ NB=$(($RD1*$RD2+30000000))
 SIMUL=0
 FILENAME="README.rst"
 FILEMD5="23aebcae4ee8f5134da4fa5523abd3dd"
+if [ "$1" == "Z" ]
+then
+  FILENAME="email1.tar"
+  FILEMD5="5605f7efa2007b22a977429f41cf5b2c"
+fi
 
 if [ "$5" != "" ]
 then
