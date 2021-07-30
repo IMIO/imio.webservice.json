@@ -90,6 +90,7 @@ do
     if [ "$SIMUL" -eq "1" ];
     then
         echo "curl -u $AUTH -X POST -H \"Content-Type: application/json\" -d \"$COUR_Ei\" $DOMAIN/dms_metadata/$CLIENT/$VERSION"
+        # curl -u XX:YY -X POST -H "Content-Type: application/json" -d " { \"external_id\": \"010999940651934\", \"type\": \"COUR_E\", \"pages_number\": 1, \"client_id\": \"0109999\", \"scan_date\": \"2018-01-12\", \"scan_hour\": \"15:10:39\", \"user\": \"testuser\", \"pc\": \"pc-scan01\", \"creator\": \"scanner\", \"filesize\": 1284, \"filename\": \"README.rst\", \"filemd5\": \"23aebcae4ee8f5134da4fa5523abd3dd\" } " https://webservice.imio-test.be/dms_metadata/0109999/1.2
     else
         RET=`curl -u $AUTH -X POST -H "Content-Type: application/json" -d "$COUR_Ei" $DOMAIN/dms_metadata/$CLIENT/$VERSION`
         echo $RET
