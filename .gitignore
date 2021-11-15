@@ -10,6 +10,7 @@
 .project
 .pydevproject
 .settings/
+pyvenv.cfg
 webservice-json.wsgi
 bin/*
 !bin/connect_db
