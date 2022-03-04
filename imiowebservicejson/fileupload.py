@@ -207,4 +207,4 @@ class FileValidator11(FileValidatorBase):
 
     def _validate_md5(self):
         if self.md5 != self.metadata_md5.lower():
-            raise ValidationError(u"MD5_MISMATCH", u"MD5 check: difference found")
+            raise ValidationError(u"MD5_MISMATCH", u"MD5 check: difference found on external id '{}'".format(self.data.external_id))
