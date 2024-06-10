@@ -23,7 +23,7 @@ def generate_internal_hash(body):
     """Generate the internal hash uid based on the request body"""
     if body["request_type"] == "GET":
         filtered_body = {
-            k: v for k, v in body.items() if k not in ("ignore_cache", "cache_duration")
+            k: v for k, v in list(body.items()) if k not in ("ignore_cache", "cache_duration")
         }
         return hashlib.md5(json.dumps(filtered_body)).hexdigest()
     return uuid.uuid4().hex

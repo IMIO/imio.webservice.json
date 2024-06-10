@@ -5,7 +5,7 @@ from imio.dataexchange.db import temporary_session
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.router import Router
 
-import json
+from . import json
 
 
 class TestRouterService(TestAppBaseTestCase):

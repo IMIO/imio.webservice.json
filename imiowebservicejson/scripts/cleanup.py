@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from datetime import timedelta
 from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db import temporary_session

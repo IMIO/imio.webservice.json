@@ -2,7 +2,7 @@
 
 import os
 import unittest
-from StringIO import StringIO
+from io import StringIO
 
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file import File
@@ -170,7 +170,7 @@ class TestFileUpload(unittest.TestCase):
     def test_validate_file_no_data(self):
         self._create_tmp_file()
         event = ValidatorEvent(None, self._file())
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValidationError, ".*no metadata.*", validate_file, event
         )
 
@@ -221,7 +221,7 @@ class TestFileUpload(unittest.TestCase):
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file())
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValidationError, ".*filesize does not match.*", validate_file, event
         )
 
@@ -245,7 +245,7 @@ class TestFileUpload(unittest.TestCase):
         record.file_metadata = metadata
         record.insert(flush=True)
         event = ValidatorEvent(None, self._file())
-        self.assertRaisesRegexp(
+        self.assertRaisesRegex(
             ValidationError, ".*MD5 check: difference found.*", validate_file_11, event
         )
 

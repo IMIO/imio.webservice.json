@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from datetime import timedelta
 from imio.amqp import BaseConsumer
 from imio.dataexchange.db import DeclarativeBase

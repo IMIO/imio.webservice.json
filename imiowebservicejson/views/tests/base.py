@@ -6,7 +6,7 @@ from imiowebservicejson.fileupload import FileUpload
 from mock import Mock
 from pyramid import testing
 
-import json
+from . import json
 import unittest
 
 
@@ -65,7 +65,7 @@ class ViewTestCase(unittest.TestCase):
 
         in_json = json.loads(in_json)
         out_json = json.loads(out_json)
-        for key, value in out_kwargs.items():
+        for key, value in list(out_kwargs.items()):
             out_json[key] = value
         self.assertEqual(out_json, result)
 
