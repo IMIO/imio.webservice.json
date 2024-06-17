@@ -5,7 +5,7 @@ import os
 import re
 import shutil
 
-from zope.interface import implements
+from zope.interface import implementer
 from pyramid.events import subscriber
 
 from imio.dataexchange.db.mappers.file import File
@@ -45,8 +45,8 @@ def get_blob_path(id):
     return path
 
 
+@implementer(IFileUpload)
 class FileUpload(object):
-    implements(IFileUpload)
 
     def __init__(self, request):
         self.request = request

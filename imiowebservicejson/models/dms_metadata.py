@@ -2,7 +2,7 @@
 from datetime import datetime
 from sqlalchemy import desc
 
-from zope.interface import implements
+from zope.interface import implementer
 from pyramid.events import subscriber
 from pyramid import security
 
@@ -14,8 +14,8 @@ from imiowebservicejson.interfaces import IDMSMetadata
 from imiowebservicejson.models.base import BaseModel
 
 
+@implementer(IDMSMetadata)
 class DMSMetadata(BaseModel):
-    implements(IDMSMetadata)
 
     type_codes = {
         "0": "COUR_E",
