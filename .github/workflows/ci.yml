@@ -16,7 +16,7 @@ jobs:
       - name: Build push and notify
         uses: IMIO/gha/build-push-notify@v1.0.1
         with:
-          IMAGE_NAME: webservicejson
+          IMAGE_NAME: docs/webservicejson
           IMAGE_TAG: latest
           REGISTRY_URL: ${{ secrets.HARBOR_URL }}
           REGISTRY_USERNAME: ${{ secrets.DOCS_HARBOR_USERNAME }}
