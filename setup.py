@@ -21,6 +21,7 @@ requires = [
     'imio.dataexchange.core',
     'imio.dataexchange.db',
     'imio.amqp',
+    'configparser',
     'cornice',
     'cornice_swagger',
     'requests',
