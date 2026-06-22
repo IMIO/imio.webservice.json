@@ -31,16 +31,16 @@ docker-image:
 	docker build --pull -t webservicejson/mutual:latest .
 
 up:
-	docker-compose up
+	docker compose up
 
 start:
-	docker-compose start
+	docker compose start
 
 stop:
-	docker-compose stop
+	docker compose stop
 
 dev:
-	docker-compose -f docker-compose-dev.yaml up
+	docker compose -f docker-compose-dev.yaml up
 
 cleanup:
 	docker run --rm --network="imiowebservicejson_default" -v $(PWD)/data:/home/imio/data -v $(PWD)/config:/home/imio/config docker-staging.imio.be/webservicejson/mutual:latest /home/imio/imio.webservice.json/bin/file_cleanup /home/imio/config/development.ini 0
