@@ -20,7 +20,7 @@ class ImplementPredicate(object):
 
 class VersionPredicate(object):
     def __init__(self, versions, config):
-        if isinstance(versions, str):
+        if isinstance(versions, basestring):
             versions = (versions,)
         self.versions = versions
 

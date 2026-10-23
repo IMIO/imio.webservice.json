@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from configparser import ConfigParser
+from ConfigParser import ConfigParser
 from imio.amqp import BaseConsumer
 from imiowebservicejson.request import SinglePublisher
 from pika.exceptions import AMQPConnectionError

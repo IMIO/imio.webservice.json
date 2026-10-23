@@ -3,7 +3,7 @@
 from imiowebservicejson.tests import TestAppBaseTestCase
 from imiowebservicejson.views import request
 
-from . import json
+import json
 import mock
 
 

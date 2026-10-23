@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from configparser import ConfigParser
+from ConfigParser import ConfigParser
 from imio.amqp import BasePublisher
 from imio.dataexchange.core.document import create_document
 from imio.dataexchange.db import DBSession
