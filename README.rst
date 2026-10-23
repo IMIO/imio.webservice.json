@@ -142,7 +142,7 @@ Or insert the seed data manually:
 .. code-block:: bash
 
    cd /srv/src/imio.webservice.json
-   bin/pserve development.ini
+   uv run pserve development.ini
 
 The webservice runs on port 6543. The AMQP consumer in iA.Docs fetches the file
 content back from this URL (configured as ``ws_url`` in ``zope.conf``), so it
@@ -174,14 +174,14 @@ Start the ZEO server first, then the Zope instances:
    cd /srv/src/imio.webservice.json
 
    # Publishes File records from PostgreSQL to the RabbitMQ exchange
-   bin/document_publisher development.ini
+   uv run document_publisher development.ini
 
    # Start the dispatcher matching your document type:
-   bin/incomingmail_dispatcher development.ini            # COUR_E
-   bin/outgoingmail_dispatcher development.ini            # COUR_S
-   bin/outgoinggeneratedmail_dispatcher development.ini   # COUR_S_GEN
-   bin/deliberation_dispatcher development.ini            # DELIB
-   bin/incoming_email_dispatcher development.ini          # EMAIL_E
+   uv run incomingmail_dispatcher development.ini            # COUR_E
+   uv run outgoingmail_dispatcher development.ini            # COUR_S
+   uv run outgoinggeneratedmail_dispatcher development.ini   # COUR_S_GEN
+   uv run deliberation_dispatcher development.ini            # DELIB
+   uv run incoming_email_dispatcher development.ini          # EMAIL_E
 
 6. Find a valid scan_id
 -----------------------
