@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.exc import StatementError
+from sqlalchemy import text
 
 
 def now():
@@ -28,6 +29,6 @@ def test_temporary_session(session):
     This avoid an error when the connection was closed by database.
     """
     try:
-        session.execute("select pk from router limit 1")
+        session.execute(text("select pk from router limit 1"))
     except (OperationalError, InvalidRequestError, StatementError):
         session.rollback()

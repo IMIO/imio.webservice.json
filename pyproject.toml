@@ -1,0 +1,58 @@
+[project]
+name = "imio.webservice.json"
+version = "0.9.0.dev0"
+description = "imio.webservice.json"
+readme = "README.rst"
+requires-python = ">=3.14"
+dependencies = [
+    "cornice>=6.1.0",
+    "cornice-swagger>=1.0.1",
+    "imio-amqp",
+    "imio-dataexchange-core",
+    "imio-dataexchange-db",
+    "jsonschema>=4.26.0",
+    "pyramid==2.1",
+    "pyramid-chameleon>=0.3",
+    "pyramid-debugtoolbar>=4.12.1",
+    "pyramid-tm>=2.6",
+    "requests>=2.34.2",
+    "waitress>=3.0.2",
+    "warlock>=2.1.0",
+    "zope-sqlalchemy>=4.1",
+]
+
+[project.scripts]
+document_publisher = "imiowebservicejson.scripts.documentpublisher:main"
+request_read_handler = "imiowebservicejson.scripts.requesthandler:read_handler"
+request_write_handler = "imiowebservicejson.scripts.requesthandler:write_handler"
+request_error_handler = "imiowebservicejson.scripts.requesterror:main"
+file_cleanup = "imiowebservicejson.scripts.cleanup:main"
+
+[project.entry-points."paste.app_factory"]
+main = "imiowebservicejson:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["imiowebservicejson*"]
+
+[tool.pytest.ini_options]
+addopts = "--capture=no"
+testpaths = ["imiowebservicejson"]
+
+[tool.uv.sources]
+imio-dataexchange-core = { path = "devel/imio.dataexchange.core", editable = true }
+imio-dataexchange-db = { path = "devel/imio.dataexchange.db", editable = true }
+imio-amqp = { path = "devel/imio.amqp", editable = true }
+
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+    "mock>=5.2.0",
+    "pyquery>=2.1.0",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "webtest>=3.0.7",
+]

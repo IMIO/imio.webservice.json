@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from imio.amqp import BaseConsumer
 from imiowebservicejson.request import SinglePublisher
 from pika.exceptions import AMQPConnectionError
@@ -35,7 +35,7 @@ class RequestError(BaseConsumer):
 
 
 def generate_consumer(url):
-    connection_parameters = "connection_attempts=3&heartbeat_interval=3600"
+    connection_parameters = "connection_attempts=3&heartbeat=3600"
     consumer = RequestError("{0}/%2Fwebservice?{1}".format(url, connection_parameters))
     consumer.setup_queue("ws.request.error", "request.error")
     return consumer

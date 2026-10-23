@@ -14,6 +14,8 @@ from pyramid.security import Allow
 from pyramid.security import Authenticated
 from pyramid.settings import asbool
 from sqlalchemy import engine_from_config
+from sqlalchemy import text
+from zope.sqlalchemy import register
 
 
 def main(global_config, **settings):
@@ -21,14 +23,15 @@ def main(global_config, **settings):
     """
     engine = engine_from_config(settings, "sqlalchemy.")
     DBSession.configure(bind=engine)
-    DeclarativeBase.metadata.bind = engine
-    initialized_query = "select * from pg_tables where schemaname = 'public'"
-    if engine.execute(initialized_query).rowcount < 4:
-        DeclarativeBase.metadata.create_all()
-        init_session = temporary_session(engine)
-        init_session.close()
-    if engine.execute(initialized_query).rowcount == 0:
-        import_data(init_session)
+    register(DBSession)
+    initialized_query = text("select * from pg_tables where schemaname = 'public'")
+    with engine.connect() as connection:
+        if connection.execute(initialized_query).rowcount < 4:
+            DeclarativeBase.metadata.create_all(engine)
+            init_session = temporary_session(engine)
+            init_session.close()
+        if connection.execute(initialized_query).rowcount == 0:
+            import_data(init_session)
 
     settings["traceback.debug"] = asbool(settings.get("traceback.debug", "false"))
     authn_policy = BasicAuthAuthenticationPolicy(check_authentication)

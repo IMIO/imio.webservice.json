@@ -10,7 +10,7 @@ fi
 
 NAME="daemon-webservice"
 P_PATH="$ScriptLocation/.."
-DAEMON="$P_PATH/bin/pserve $P_PATH/development.ini"
+DAEMON="$P_PATH/.venv/bin/pserve $P_PATH/development.ini"
 PIDFILE="$P_PATH/$NAME.pid"
 LOGFILE="$P_PATH/$NAME.log"
 

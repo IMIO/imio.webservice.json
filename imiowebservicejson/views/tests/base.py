@@ -5,6 +5,7 @@ from imio.dataexchange.db.mappers.file_type import FileType
 from imiowebservicejson.fileupload import FileUpload
 from mock import Mock
 from pyramid import testing
+from sqlalchemy import text
 
 import json
 import unittest
@@ -65,9 +66,9 @@ class ViewTestCase(unittest.TestCase):
 
         in_json = json.loads(in_json)
         out_json = json.loads(out_json)
-        for key, value in out_kwargs.items():
+        for key, value in list(out_kwargs.items()):
             out_json[key] = value
         self.assertEqual(out_json, result)
 
     def _get_last_file_id(self):
-        return DBSession.execute("select last_value from file_id_seq").fetchone()[0]
+        return DBSession.execute(text("select last_value from file_id_seq")).fetchone()[0]

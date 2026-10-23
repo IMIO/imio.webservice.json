@@ -6,6 +6,7 @@ from imio.dataexchange.db.mappers.file import File
 from imio.dataexchange.db.mappers.file_type import FileType
 from imio.dataexchange.db import DBSession
 from datetime import datetime
+from sqlalchemy import text
 
 import unittest
 import mock
@@ -13,8 +14,8 @@ import mock
 
 class TestCleanup(unittest.TestCase):
     def _cleanup_database(self):
-        self.session.execute("delete from file")
-        self.session.execute("delete from file_type")
+        self.session.execute(text("delete from file"))
+        self.session.execute(text("delete from file_type"))
         self.session.commit()
 
     def setUp(self):

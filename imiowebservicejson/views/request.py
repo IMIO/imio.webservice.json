@@ -23,9 +23,12 @@ def generate_internal_hash(body):
     """Generate the internal hash uid based on the request body"""
     if body["request_type"] == "GET":
         filtered_body = {
-            k: v for k, v in body.items() if k not in ("ignore_cache", "cache_duration")
+            k: v for k, v in list(body.items()) if k not in ("ignore_cache", "cache_duration")
         }
-        return hashlib.md5(json.dumps(filtered_body)).hexdigest()
+        return hashlib.md5(
+            # sorted so the same request gives the same hash whatever its key order
+            json.dumps(filtered_body, sort_keys=True).encode("utf-8")
+        ).hexdigest()
     return uuid.uuid4().hex
 
 
@@ -188,7 +191,7 @@ request = Service(
 def post_request(request, session):
     # Insert into the request queue
     amqp_url = request.registry.settings.get("rabbitmq.url")
-    publisher_parameters = "connection_attempts=3&heartbeat_interval=3600"
+    publisher_parameters = "connection_attempts=3&heartbeat=3600"
     publisher = rq.SinglePublisher(
         "{0}/%2Fwebservice?{1}".format(amqp_url, publisher_parameters)
     )

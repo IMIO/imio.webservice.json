@@ -5,6 +5,7 @@ from imio.dataexchange.db import temporary_session
 from imiowebservicejson import main
 from paste.deploy.loadwsgi import appconfig
 from pyramid import testing
+from sqlalchemy import text
 from webtest import TestApp
 
 import unittest
@@ -21,6 +22,6 @@ class TestAppBaseTestCase(unittest.TestCase):
         session = temporary_session(DBSession.bind)
         delete_tables = ("router", "request")
         for table in delete_tables:
-            session.execute("delete from {0}".format(table))
+            session.execute(text("delete from {0}".format(table)))
         session.commit()
         testing.tearDown()

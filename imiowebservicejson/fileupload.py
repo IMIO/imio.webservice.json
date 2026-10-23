@@ -5,7 +5,7 @@ import os
 import re
 import shutil
 
-from zope.interface import implements
+from zope.interface import implementer
 from pyramid.events import subscriber
 
 from imio.dataexchange.db.mappers.file import File
@@ -45,9 +45,8 @@ def get_blob_path(id):
     return path
 
 
+@implementer(IFileUpload)
 class FileUpload(object):
-    implements(IFileUpload)
-
     def __init__(self, request):
         self.request = request
         self._file = request.POST["filedata"]
@@ -95,7 +94,7 @@ class FileUpload(object):
 
     def calculate_md5(self):
         path = os.path.exists(self.filepath) and self.filepath or self.tmp_path
-        f = open(path, "r")
+        f = open(path, "rb")
         return hashlib.md5(f.read()).hexdigest()
 
     @handle_exception(remove_file, "tmp_path")

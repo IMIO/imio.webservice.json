@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from datetime import timedelta
-from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db import temporary_session
 from imio.dataexchange.db.mappers.file import File
 from sqlalchemy import engine_from_config
@@ -60,7 +59,6 @@ class FileCleaner(object):
     def get_session(self):
         engine = engine_from_config(self.config, prefix="sqlalchemy.")
         session = temporary_session(engine)
-        DeclarativeBase.metadata.bind = engine
         return session
 
 

@@ -9,7 +9,7 @@ else
 fi
 
 dir="$ScriptLocation/.."
-cmd="bin/document_publisher development.ini"
+cmd=".venv/bin/document_publisher development.ini"
 
 name=`basename $0`
 pid_file="$dir/$name.pid"

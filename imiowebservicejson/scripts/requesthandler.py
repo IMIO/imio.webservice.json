@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from datetime import timedelta
 from imio.amqp import BaseConsumer
-from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db import temporary_session
 from imio.dataexchange.db.mappers.request import Request
 from imio.dataexchange.db.mappers.router import Router
@@ -131,7 +130,6 @@ class BaseRequestHandler(BaseConsumer):
         if not hasattr(self, "_session"):
             engine = engine_from_config(self.db_config, prefix="sqlalchemy.")
             session = temporary_session(engine)
-            DeclarativeBase.metadata.bind = engine
             self._session = session
         return self._session
 
@@ -147,7 +145,7 @@ class WriteRequestHandler(BaseRequestHandler):
 
 
 def generate_consumer(cls, url, queue_key):
-    connection_parameters = "connection_attempts=3&heartbeat_interval=3600"
+    connection_parameters = "connection_attempts=3&heartbeat=3600"
     consumer = cls("{0}/%2Fwebservice?{1}".format(url, connection_parameters))
     consumer.setup_queue(
         "ws.request.{0}".format(queue_key), "request".format(queue_key)
