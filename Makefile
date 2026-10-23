@@ -17,16 +17,6 @@ deb-staging:
 
 .PHONY: deb
 
-.PHONY: bootstrap
-bootstrap:
-	if command -v python2 >/dev/null && command -v virtualenv; then virtualenv -p python2 . ; elif command -v virtualenv-2.7; then virtualenv-2.7 . ;fi
-	./bin/pip install -r requirements.txt
-
-.PHONY: buildout
-buildout:
-	if ! test -f bin/buildout;then make bootstrap;fi
-	bin/buildout -vt 5;
-
 docker-image:
 	docker build --pull -t webservicejson/mutual:latest .
 

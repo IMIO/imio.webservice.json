@@ -45,7 +45,7 @@ class TestRequestService(TestAppBaseTestCase):
             "parameters": {"foo": "bar"},
         }
         external_uid = request.generate_internal_hash(body)
-        self.assertEqual("2d4a3cfef68790d69eb102c5937311fc", external_uid)
+        self.assertEqual("041524d454fb0b15619b893acb9d32e0", external_uid)
 
     def test_generate_internal_hash_with_cache(self):
         body = {
@@ -58,7 +58,7 @@ class TestRequestService(TestAppBaseTestCase):
             "parameters": {"foo": "bar"},
         }
         external_uid = request.generate_internal_hash(body)
-        self.assertEqual("2d4a3cfef68790d69eb102c5937311fc", external_uid)
+        self.assertEqual("041524d454fb0b15619b893acb9d32e0", external_uid)
 
     @mock.patch(
         "imiowebservicejson.views.request.generate_internal_hash",

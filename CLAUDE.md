@@ -8,20 +8,22 @@ A Pyramid web service that acts as a JSON middleware between external scanners/c
 
 ## Build & Development
 
-Uses zc.buildout (Python 2.7 virtualenv). Dependencies are checked out via mr.developer into `devel/` (imio.dataexchange.core, imio.dataexchange.db, imio.amqp).
+Uses uv (Python 3.14, `.venv/`). imio.dataexchange.core, imio.dataexchange.db and imio.amqp are installed editable from git checkouts in `devel/` (`[tool.uv.sources]` in `pyproject.toml`).
 
 ```bash
-# Bootstrap (creates virtualenv + installs buildout)
-make bootstrap
+# Fresh clone only: check out the devel packages
+git clone https://github.com/IMIO/imio.dataexchange.core.git devel/imio.dataexchange.core
+git clone https://github.com/IMIO/imio.dataexchange.db.git devel/imio.dataexchange.db
+git clone https://github.com/IMIO/imio.amqp.git devel/imio.amqp
 
-# Run buildout (installs all eggs, generates bin/ scripts)
-make buildout
+# Install everything into .venv (production: `uv sync --no-dev --no-sources` uses the PyPI releases instead of devel/)
+uv sync
 
 # Start dev services (PostgreSQL on 5433, PostgreSQL test on 5432, RabbitMQ on 5672)
 docker compose -f docker-compose-dev.yaml up
 
 # Run the dev server (port 6543)
-bin/pserve development.ini
+uv run pserve development.ini
 ```
 
 ## Testing
@@ -30,16 +32,16 @@ Tests require the `postgres_test` Docker service running (PostgreSQL on port 543
 
 ```bash
 # Run all tests
-bin/py.test
+uv run pytest
 
 # Run a single test file
-bin/py.test imiowebservicejson/tests/test_schema.py
+uv run pytest imiowebservicejson/tests/test_schema.py
 
 # Run a single test
-bin/py.test imiowebservicejson/tests/test_schema.py::TestClassName::test_method
+uv run pytest imiowebservicejson/tests/test_schema.py::TestClassName::test_method
 
 # Run with coverage
-bin/test-coverage
+uv run pytest --cov imiowebservicejson --cov-report term --cov-report html
 ```
 
 The `conftest.py` at `imiowebservicejson/conftest.py` sets up the test database session automatically.
@@ -85,7 +87,7 @@ The `conftest.py` at `imiowebservicejson/conftest.py` sets up the test database 
 
 ### Console Scripts
 
-Defined as entry points in `setup.py`, built by buildout into `bin/`:
+Defined in `[project.scripts]` of `pyproject.toml`, installed into `.venv/bin/` (run with `uv run <name>`):
 - `document_publisher` — publishes documents to target applications
 - `request_read_handler` / `request_write_handler` — consume RabbitMQ messages
 - `request_error_handler` — handles failed requests

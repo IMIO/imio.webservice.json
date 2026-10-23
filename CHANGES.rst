@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Migrated from buildout to uv (pyproject.toml) and Python 3.14, with SQLAlchemy 2 and pika 1.x.
+  [chris-adam]
+
 - Handle database disconnection for requests query and processing
   [mpeeters]
 

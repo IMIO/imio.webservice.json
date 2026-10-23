@@ -9,7 +9,7 @@ else
 fi
 
 dir="$ScriptLocation/.."
-cmd="bin/incoming_email_dispatcher development.ini"
+cmd=".venv/bin/incoming_email_dispatcher development.ini"
 
 name=`basename $0`
 pid_file="$dir/$name.pid"

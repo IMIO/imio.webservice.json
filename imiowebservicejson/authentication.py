@@ -6,7 +6,7 @@ def check_authentication(userid, passwd, request):
     user = get_user(userid, request)
     salt = request.registry.settings.get("auth.secret")
     pwd = hashlib.md5(
-        "%(salt)s%(pwd)s%(salt)s" % {"salt": salt, "pwd": passwd}
+        ("%(salt)s%(pwd)s%(salt)s" % {"salt": salt, "pwd": passwd}).encode("utf-8")
     ).hexdigest()
     if user and user.check_password(pwd) is True:
         return []

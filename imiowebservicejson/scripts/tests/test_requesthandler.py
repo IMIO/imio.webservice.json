@@ -7,6 +7,7 @@ from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.request import Request
 from imio.dataexchange.db.mappers.router import Router
 from imiowebservicejson.scripts.requesthandler import BaseRequestHandler
+from sqlalchemy import text
 
 import unittest
 import mock
@@ -42,8 +43,8 @@ class MockedRequest(object):
 
 class TestRequestHandler(unittest.TestCase):
     def _cleanup_database(self):
-        self.session.execute("delete from request")
-        self.session.execute("delete from router")
+        self.session.execute(text("delete from request"))
+        self.session.execute(text("delete from router"))
         self.session.commit()
 
     def setUp(self):

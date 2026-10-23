@@ -47,7 +47,7 @@ def exception_handler(message=u"An error occured during the process"):
                 return func(request)
             except Exception as e:
                 if request.registry.settings.get('traceback.debug') is True:
-                    print traceback.format_exc()
+                    print(traceback.format_exc())
                 return failure(
                     message,
                     error=str(e),
@@ -96,7 +96,7 @@ def failure(message, error=None, error_code=None):
 def validate_json_schema(input_json, schema):
     try:
         validate(input_json, schema)
-    except ValidationError, ve_obj:
+    except ValidationError as ve_obj:
         msg = 'Validation error'
         if len(ve_obj.path):
             msg += " on '%s'" % ', '.join(ve_obj.path)

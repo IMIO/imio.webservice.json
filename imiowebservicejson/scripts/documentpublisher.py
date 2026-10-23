@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from imio.amqp import BasePublisher
 from imio.dataexchange.core.document import create_document
 from imio.dataexchange.db import DBSession
-from imio.dataexchange.db import DeclarativeBase
 from imio.dataexchange.db.mappers.file import File
 from pika.exceptions import AMQPConnectionError
 from sqlalchemy import engine_from_config
@@ -36,7 +35,7 @@ class DocumentPublisher(BasePublisher):
 
 def generate_publisher(url):
     publisher = DocumentPublisher(
-        "{0}/%2Fwebservice?connection_attempts=3&" "heartbeat_interval=3600".format(url)
+        "{0}/%2Fwebservice?connection_attempts=3&" "heartbeat=3600".format(url)
     )
     publisher.setup_queue("dms.deliberation", "DELIB")
     publisher.setup_queue("dms.incomingmail", "COUR_E")
@@ -55,10 +54,7 @@ def main():
     config.read(args.config_uri)
 
     engine = engine_from_config(config._sections.get("app:main"), prefix="sqlalchemy.")
-    # Remove the transaction manager
-    del DBSession.session_factory.kw["extension"]
     DBSession.configure(bind=engine)
-    DeclarativeBase.metadata.bind = engine
 
     url = config.get("app:main", "rabbitmq.url")
     while True:
