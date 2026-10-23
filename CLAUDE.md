@@ -8,7 +8,7 @@ A Pyramid web service that acts as a JSON middleware between external scanners/c
 
 ## Build & Development
 
-Uses uv (Python 3.14, `.venv/`). imio.dataexchange.core, imio.dataexchange.db and imio.amqp are installed editable from git checkouts in `devel/` (`[tool.uv.sources]` in `pyproject.toml`).
+Uses uv (Python 3.14, `.venv/`). imio.dataexchange.core, imio.dataexchange.db and imio.amqp are listed in two conflicting dependency groups of `pyproject.toml`: `dev` installs them editable from git checkouts in `devel/` (group-scoped `[tool.uv.sources]`), `prod` installs the PyPI releases pinned in `uv.lock`. Bump their minimum versions in the `prod` group after a release, then run `uv lock` (needs `devel/`).
 
 ```bash
 # Fresh clone only: check out the devel packages
@@ -16,8 +16,11 @@ git clone https://github.com/IMIO/imio.dataexchange.core.git devel/imio.dataexch
 git clone https://github.com/IMIO/imio.dataexchange.db.git devel/imio.dataexchange.db
 git clone https://github.com/IMIO/imio.amqp.git devel/imio.amqp
 
-# Install everything into .venv (production: `uv sync --no-dev --no-sources` uses the PyPI releases instead of devel/)
+# Install everything into .venv (dev group: devel/ checkouts + test tools)
 uv sync
+
+# Production, as in the Dockerfile: PyPI releases, no devel/ needed
+uv sync --frozen --no-default-groups --group prod
 
 # Start dev services (PostgreSQL on 5433, PostgreSQL test on 5432, RabbitMQ on 5672)
 docker compose -f docker-compose-dev.yaml up

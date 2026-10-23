@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import os
-import unittest
-from io import BytesIO
-
 from imio.dataexchange.db import DBSession
 from imio.dataexchange.db.mappers.file import File
 from imio.dataexchange.db.mappers.file_type import FileType
-
 from imiowebservicejson.event import ValidatorEvent
 from imiowebservicejson.exception import ValidationError
 from imiowebservicejson.fileupload import FileUpload
@@ -15,6 +10,10 @@ from imiowebservicejson.fileupload import get_blob_path
 from imiowebservicejson.fileupload import remove_file
 from imiowebservicejson.fileupload import validate_file
 from imiowebservicejson.fileupload import validate_file_11
+from io import BytesIO
+
+import os
+import unittest
 
 
 class TestFileUpload(unittest.TestCase):
@@ -130,6 +129,13 @@ class TestFileUpload(unittest.TestCase):
         self._file().save_tmpfile()
         self.assertTrue(os.path.exists(self._file().tmp_path))
         self.assertEqual("FOOBAR", open(self._file().tmp_path).read())
+
+    def test_save_tmpfile_binary(self):
+        self._tmp_files.append("120")
+        upload = self._file()
+        upload._file.file = BytesIO(b"PK\x03\x04\xbc")  # not UTF-8, like an .odt
+        upload.save_tmpfile()
+        self.assertEqual(b"PK\x03\x04\xbc", open(upload.tmp_path, "rb").read())
 
     def test_move(self):
         self._create_tmp_file()

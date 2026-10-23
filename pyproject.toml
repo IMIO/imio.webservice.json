@@ -7,9 +7,6 @@ requires-python = ">=3.14"
 dependencies = [
     "cornice>=6.1.0",
     "cornice-swagger>=1.0.1",
-    "imio-amqp",
-    "imio-dataexchange-core",
-    "imio-dataexchange-db",
     "jsonschema>=4.26.0",
     "pyramid==2.1",
     "pyramid-chameleon>=0.3",
@@ -42,13 +39,27 @@ include = ["imiowebservicejson*"]
 addopts = "--capture=no"
 testpaths = ["imiowebservicejson"]
 
+[tool.uv]
+# The imio packages come from the devel/ checkouts in dev and from PyPI in prod:
+# `uv sync` for dev, `uv sync --frozen --no-default-groups --group prod` for prod
+default-groups = ["dev"]
+conflicts = [[{ group = "dev" }, { group = "prod" }]]
+
 [tool.uv.sources]
-imio-dataexchange-core = { path = "devel/imio.dataexchange.core", editable = true }
-imio-dataexchange-db = { path = "devel/imio.dataexchange.db", editable = true }
-imio-amqp = { path = "devel/imio.amqp", editable = true }
+imio-dataexchange-core = { path = "devel/imio.dataexchange.core", editable = true, group = "dev" }
+imio-dataexchange-db = { path = "devel/imio.dataexchange.db", editable = true, group = "dev" }
+imio-amqp = { path = "devel/imio.amqp", editable = true, group = "dev" }
 
 [dependency-groups]
+prod = [
+    "imio-amqp>=0.4.0",
+    "imio-dataexchange-core>=0.7.0",
+    "imio-dataexchange-db>=0.5.0",
+]
 dev = [
+    "imio-amqp",
+    "imio-dataexchange-core",
+    "imio-dataexchange-db",
     "ipdb>=0.13.13",
     "mock>=5.2.0",
     "pyquery>=2.1.0",
