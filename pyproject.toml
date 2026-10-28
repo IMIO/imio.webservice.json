@@ -1,6 +1,6 @@
 [project]
 name = "imio.webservice.json"
-version = "1.0.0"
+version = "1.0.1.dev0"
 description = "imio.webservice.json"
 readme = "README.rst"
 requires-python = ">=3.14"
