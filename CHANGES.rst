@@ -4,6 +4,10 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Fixed binary file downloads on Python 3: `GET /file/...` streams the stored bytes as an attachment,
+  with a `Content-Type` guessed from the extension.
+  [chris-adam]
+
 - Added a GitHub Actions workflow running the tests and pushing the Docker image to Harbor on tags.
   [chris-adam]
 

@@ -21,7 +21,10 @@ class FileRender(object):
 
     def render(self):
         # Files are binary (pdf, odt...): stream the bytes, the view renderer is skipped
-        return FileResponse(self.filepath, request=self.request)
+        response = FileResponse(self.filepath, request=self.request)
+        # Uploads keep their extension: never render an uploaded .html or .svg inline
+        response.content_disposition = "attachment"
+        return response
 
     @property
     def filepath(self):

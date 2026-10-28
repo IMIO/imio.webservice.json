@@ -38,3 +38,4 @@ class TestFileRender(unittest.TestCase):
             response = FileRender(request).render()
             self.assertEqual(content, response.body)
             self.assertEqual("application/vnd.oasis.opendocument.text", response.content_type)
+            self.assertEqual("attachment", response.content_disposition)
