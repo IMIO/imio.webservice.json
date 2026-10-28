@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.0 (unreleased)
+1.0.0 (2026-10-28)
 ------------------
 
 - Migrated from buildout to uv (pyproject.toml) and Python 3.14, with SQLAlchemy 2 and pika 1.x.
