@@ -1,18 +1,17 @@
 Changelog
 =========
 
-0.9.0 (unreleased)
+1.0.0 (unreleased)
 ------------------
 
-- Fixed binary file downloads on Python 3: `GET /file/...` streams the stored bytes as an attachment,
-  with a `Content-Type` guessed from the extension.
+- Migrated from buildout to uv (pyproject.toml) and Python 3.14, with SQLAlchemy 2 and pika 1.x.
   [chris-adam]
 
 - Added a GitHub Actions workflow running the tests and pushing the Docker image to Harbor on tags.
   [chris-adam]
 
-- Migrated from buildout to uv (pyproject.toml) and Python 3.14, with SQLAlchemy 2 and pika 1.x.
-  [chris-adam]
+0.9.0 (unreleased)
+------------------
 
 - Handle database disconnection for requests query and processing
   [mpeeters]
