@@ -440,6 +440,13 @@ prod = [
     { name = "imio-dataexchange-core", version = "0.7.0", source = { registry = "https://pypi.org/simple" } },
     { name = "imio-dataexchange-db", version = "0.5.0", source = { registry = "https://pypi.org/simple" } },
 ]
+test = [
+    { name = "mock" },
+    { name = "pyquery" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "webtest" },
+]
 
 [package.metadata]
 requires-dist = [
@@ -472,6 +479,13 @@ prod = [
     { name = "imio-amqp", specifier = ">=0.4.0" },
     { name = "imio-dataexchange-core", specifier = ">=0.7.0" },
     { name = "imio-dataexchange-db", specifier = ">=0.5.0" },
+]
+test = [
+    { name = "mock", specifier = ">=5.2.0" },
+    { name = "pyquery", specifier = ">=2.1.0" },
+    { name = "pytest", specifier = ">=9.1.1" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "webtest", specifier = ">=3.0.7" },
 ]
 
 [[package]]
@@ -1030,7 +1044,7 @@ name = "pytest"
 version = "9.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'group-20-imio-webservice-json-dev' and extra == 'group-20-imio-webservice-json-prod')" },
     { name = "iniconfig" },
     { name = "packaging" },
     { name = "pluggy" },
@@ -1046,7 +1060,7 @@ name = "pytest-cov"
 version = "7.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "coverage", marker = "extra == 'group-20-imio-webservice-json-dev'" },
+    { name = "coverage" },
     { name = "pluggy" },
     { name = "pytest" },
 ]

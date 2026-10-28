@@ -4,6 +4,9 @@ Changelog
 0.9.0 (unreleased)
 ------------------
 
+- Added a GitHub Actions workflow running the tests and pushing the Docker image to Harbor on tags.
+  [chris-adam]
+
 - Migrated from buildout to uv (pyproject.toml) and Python 3.14, with SQLAlchemy 2 and pika 1.x.
   [chris-adam]
 

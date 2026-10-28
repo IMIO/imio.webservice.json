@@ -61,6 +61,10 @@ dev = [
     "imio-dataexchange-core",
     "imio-dataexchange-db",
     "ipdb>=0.13.13",
+    { include-group = "test" },
+]
+# Test tools without the devel/ checkouts, for the CI: `--group prod --group test`
+test = [
     "mock>=5.2.0",
     "pyquery>=2.1.0",
     "pytest>=9.1.1",
