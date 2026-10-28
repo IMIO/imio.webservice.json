@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import desc
-
 from imio.dataexchange.db.mappers.file import File
+from pyramid.response import FileResponse
+from sqlalchemy import desc
 
 
 class FileRender(object):
     def __init__(self, request):
+        self.request = request
         filters = {
             "client_id": request.matchdict.get("client_id"),
             "external_id": request.matchdict.get("external_id"),
@@ -19,8 +20,11 @@ class FileRender(object):
         return File.first(**kwargs)
 
     def render(self):
-        f = open(self.filepath, "r")
-        return f.read()
+        # Files are binary (pdf, odt...): stream the bytes, the view renderer is skipped
+        response = FileResponse(self.filepath, request=self.request)
+        # Uploads keep their extension: never render an uploaded .html or .svg inline
+        response.content_disposition = "attachment"
+        return response
 
     @property
     def filepath(self):

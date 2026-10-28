@@ -36,7 +36,7 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_DEFAULT_VHOST: "/webservice"
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status", "||", "exit", "1"]
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 5s
       timeout: 5s
       retries: 3

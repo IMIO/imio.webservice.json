@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
+from imio.dataexchange.db.mappers.file import File
+from imiowebservicejson.event import ValidatorEvent
+from imiowebservicejson.exception import ValidationError
+from imiowebservicejson.interfaces import IFileUpload
+from pyramid.events import subscriber
+from zope.interface import implementer
+
 import hashlib
 import logging
 import os
 import re
 import shutil
-
-from zope.interface import implementer
-from pyramid.events import subscriber
-
-from imio.dataexchange.db.mappers.file import File
-
-from imiowebservicejson.event import ValidatorEvent
-from imiowebservicejson.exception import ValidationError
-from imiowebservicejson.interfaces import IFileUpload
 
 
 logger = logging.getLogger("root")
@@ -76,13 +74,13 @@ class FileUpload(object):
 
     @property
     def size(self):
-        """ Return the temporary file size """
+        """Return the temporary file size"""
         stats = os.stat(self.tmp_path)
         return stats.st_size
 
     @property
     def data(self):
-        """ Return the data of the uploaded file """
+        """Return the data of the uploaded file"""
         if not hasattr(self, "_data"):
             self._data = File.first(id=self.id)
         return self._data
@@ -111,7 +109,7 @@ class FileUpload(object):
 
     @handle_exception(remove_file, "tmp_path")
     def move(self):
-        """ Move the temporary file """
+        """Move the temporary file"""
         if os.path.exists(self.basepath) is False:
             os.makedirs(self.basepath)
         shutil.move(self.tmp_path, self.filepath)
@@ -187,8 +185,7 @@ class FileValidator10(FileValidatorBase):
         if self.filesize != self.metadata_filesize:
             raise ValidationError(
                 u"FILESIZE_MISMATCH",
-                u"The filesize does not match (%s != %s)"
-                % (self.filesize, self.metadata_filesize),
+                u"The filesize does not match (%s != %s)" % (self.filesize, self.metadata_filesize),
             )
 
 
@@ -206,4 +203,6 @@ class FileValidator11(FileValidatorBase):
 
     def _validate_md5(self):
         if self.md5 != self.metadata_md5.lower():
-            raise ValidationError(u"MD5_MISMATCH", u"MD5 check: difference found on external id '{}'".format(self.data.external_id))
+            raise ValidationError(
+                u"MD5_MISMATCH", u"MD5 check: difference found on external id '{}'".format(self.data.external_id)
+            )

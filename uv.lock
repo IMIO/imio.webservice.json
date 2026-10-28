@@ -1,6 +1,10 @@
 version = 1
 revision = 3
 requires-python = ">=3.14"
+conflicts = [[
+    { package = "imio-webservice-json", group = "dev" },
+    { package = "imio-webservice-json", group = "prod" },
+]]
 
 [[package]]
 name = "asttokens"
@@ -334,6 +338,18 @@ dev = [
 ]
 
 [[package]]
+name = "imio-amqp"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pika" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/18/12/5fcd3855544f86ab7d82d8fd39dd7206f9c4fedd3679cda07414546dd003/imio_amqp-0.4.0.tar.gz", hash = "sha256:311dfe96b84b754f5ba81547eb2a7423fa7e8057803cbfbbc124d7464717947d", size = 16032, upload-time = "2026-10-23T13:35:42.664Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/26/e7/2357f5fe775fefc23d1d812c0690d3710d4bf5aeec47516168fe3c69caa3/imio_amqp-0.4.0-py3-none-any.whl", hash = "sha256:374261a7681cbe254ebe272885da347901913bb3800ca84a46b6ce077293d35b", size = 12240, upload-time = "2026-10-23T13:35:41.747Z" },
+]
+
+[[package]]
 name = "imio-dataexchange-core"
 version = "0.6.2.dev0"
 source = { editable = "devel/imio.dataexchange.core" }
@@ -348,6 +364,18 @@ requires-dist = [
     { name = "setuptools" },
 ]
 provides-extras = ["script"]
+
+[[package]]
+name = "imio-dataexchange-core"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "setuptools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/69/e3/3a813df00b66d1e67a2d1faedfe8e9118c9a27310a17f07c5b1856094533/imio_dataexchange_core-0.7.0.tar.gz", hash = "sha256:ea64ce3418e3486c85dc45f7b7b2f00e003b442eea057a83a04122e44fa5bf59", size = 17667, upload-time = "2026-10-23T13:36:25.518Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c8/2e/014b372b8d8fb3d87d56a0ce1546cfdb42b5e202dd974e910103a9d88bd1/imio_dataexchange_core-0.7.0-py3-none-any.whl", hash = "sha256:a9a050b6fee665ca0e47acbe5639eca6e845246cea67db0d3ed2a4bbb81ccd6d", size = 9962, upload-time = "2026-10-23T13:36:24.577Z" },
+]
 
 [[package]]
 name = "imio-dataexchange-db"
@@ -365,15 +393,25 @@ requires-dist = [
 ]
 
 [[package]]
+name = "imio-dataexchange-db"
+version = "0.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "psycopg2" },
+    { name = "sqlalchemy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/cd/65/6211c59e67093662bc0cdf8819db03e1d1cfebacffdbe53f4c218bdca02a/imio_dataexchange_db-0.5.0.tar.gz", hash = "sha256:49342425d6a96f25f86d1374171a1645a18aa3df87493ad388206f8f46cc3ed0", size = 12028, upload-time = "2026-10-23T13:36:53.071Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bc/99/0a0e8179b39455aad12e7bd096653294825038511e9c886d1a94ff2a7c59/imio_dataexchange_db-0.5.0-py3-none-any.whl", hash = "sha256:84d8e401c2cf25d96fa092cefcd748bfd3538172d22f42f3b3a09b205285f3e5", size = 6442, upload-time = "2026-10-23T13:36:52.264Z" },
+]
+
+[[package]]
 name = "imio-webservice-json"
 version = "0.9.0.dev0"
 source = { editable = "." }
 dependencies = [
     { name = "cornice" },
     { name = "cornice-swagger" },
-    { name = "imio-amqp" },
-    { name = "imio-dataexchange-core" },
-    { name = "imio-dataexchange-db" },
     { name = "jsonschema" },
     { name = "pyramid" },
     { name = "pyramid-chameleon" },
@@ -387,7 +425,22 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "imio-amqp", version = "0.3.1.dev0", source = { editable = "devel/imio.amqp" } },
+    { name = "imio-dataexchange-core", version = "0.6.2.dev0", source = { editable = "devel/imio.dataexchange.core" } },
+    { name = "imio-dataexchange-db", version = "0.5.0.dev0", source = { editable = "devel/imio.dataexchange.db" } },
     { name = "ipdb" },
+    { name = "mock" },
+    { name = "pyquery" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "webtest" },
+]
+prod = [
+    { name = "imio-amqp", version = "0.4.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "imio-dataexchange-core", version = "0.7.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "imio-dataexchange-db", version = "0.5.0", source = { registry = "https://pypi.org/simple" } },
+]
+test = [
     { name = "mock" },
     { name = "pyquery" },
     { name = "pytest" },
@@ -399,9 +452,6 @@ dev = [
 requires-dist = [
     { name = "cornice", specifier = ">=6.1.0" },
     { name = "cornice-swagger", specifier = ">=1.0.1" },
-    { name = "imio-amqp", editable = "devel/imio.amqp" },
-    { name = "imio-dataexchange-core", editable = "devel/imio.dataexchange.core" },
-    { name = "imio-dataexchange-db", editable = "devel/imio.dataexchange.db" },
     { name = "jsonschema", specifier = ">=4.26.0" },
     { name = "pyramid", specifier = "==2.1" },
     { name = "pyramid-chameleon", specifier = ">=0.3" },
@@ -415,7 +465,22 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "imio-amqp", editable = "devel/imio.amqp" },
+    { name = "imio-dataexchange-core", editable = "devel/imio.dataexchange.core" },
+    { name = "imio-dataexchange-db", editable = "devel/imio.dataexchange.db" },
     { name = "ipdb", specifier = ">=0.13.13" },
+    { name = "mock", specifier = ">=5.2.0" },
+    { name = "pyquery", specifier = ">=2.1.0" },
+    { name = "pytest", specifier = ">=9.1.1" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "webtest", specifier = ">=3.0.7" },
+]
+prod = [
+    { name = "imio-amqp", specifier = ">=0.4.0" },
+    { name = "imio-dataexchange-core", specifier = ">=0.7.0" },
+    { name = "imio-dataexchange-db", specifier = ">=0.5.0" },
+]
+test = [
     { name = "mock", specifier = ">=5.2.0" },
     { name = "pyquery", specifier = ">=2.1.0" },
     { name = "pytest", specifier = ">=9.1.1" },
@@ -979,7 +1044,7 @@ name = "pytest"
 version = "9.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'group-20-imio-webservice-json-dev' and extra == 'group-20-imio-webservice-json-prod')" },
     { name = "iniconfig" },
     { name = "packaging" },
     { name = "pluggy" },

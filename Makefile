@@ -18,7 +18,7 @@ deb-staging:
 .PHONY: deb
 
 docker-image:
-	docker build --pull -t webservicejson/mutual:latest .
+	docker build --pull -t harbor.imio.be/docs/webservicejson:dev .
 
 up:
 	docker compose up
@@ -33,4 +33,4 @@ dev:
 	docker compose -f docker-compose-dev.yaml up
 
 cleanup:
-	docker run --rm --network="imiowebservicejson_default" -v $(PWD)/data:/home/imio/data -v $(PWD)/config:/home/imio/config docker-staging.imio.be/webservicejson/mutual:latest /home/imio/imio.webservice.json/bin/file_cleanup /home/imio/config/development.ini 0
+	docker run --rm --network="imiowebservicejson_default" -v $(PWD)/data:/home/imio/data -v $(PWD)/config:/home/imio/config harbor.imio.be/docs/webservicejson:dev /home/imio/imio.webservice.json/.venv/bin/file_cleanup /home/imio/config/development.ini 0
