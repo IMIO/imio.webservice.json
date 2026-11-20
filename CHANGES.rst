@@ -4,7 +4,8 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added Trivy security scans: filesystem on every push/PR and weekly, image after its push to Harbor.
+  [chris-adam]
 
 
 1.0.0 (2026-10-28)

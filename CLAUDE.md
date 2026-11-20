@@ -10,7 +10,7 @@ A Pyramid web service that acts as a JSON middleware between external scanners/c
 
 Uses uv (Python 3.14, `.venv/`). imio.dataexchange.core, imio.dataexchange.db and imio.amqp are listed in two conflicting dependency groups of `pyproject.toml`: `dev` installs them editable from git checkouts in `devel/` (group-scoped `[tool.uv.sources]`), `prod` installs the PyPI releases pinned in `uv.lock`. Bump their minimum versions in the `prod` group after a release, then run `uv lock` (needs `devel/`).
 
-CI (`.github/workflows/main.yml`) runs the tests on every push/PR against the PyPI releases (`--group prod --group test`, no `devel/`), and on a tag pushes `harbor.imio.be/docs/webservicejson:<tag without prefix>` (`prod/0.9.0` → `0.9.0`) once the tests pass.
+CI (`.github/workflows/main.yml`) runs the tests on every push/PR against the PyPI releases (`--group prod --group test`, no `devel/`), and on a tag pushes `harbor.imio.be/docs/webservicejson:<tag without prefix>` (`prod/0.9.0` → `0.9.0`) once the tests pass, then Trivy-scans that image. `.github/workflows/trivy.yml` Trivy-scans the repo (uv.lock, secrets, Dockerfile) on every push/PR and weekly; HIGH/CRITICAL findings with a fix fail the job, results land in GitHub Code Scanning.
 
 ```bash
 # Fresh clone only: check out the devel packages

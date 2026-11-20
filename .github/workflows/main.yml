@@ -49,3 +49,23 @@ jobs:
           REGISTRY_USERNAME: ${{ secrets.DOCS_HARBOR_USERNAME }}
           REGISTRY_PASSWORD: ${{ secrets.DOCS_HARBOR_PASSWORD }}
           MATTERMOST_WEBHOOK_URL: ${{ secrets.DOCS_MATTERMOST_WEBHOOK_URL }}
+
+  # Base image and installed packages of the image just pushed
+  trivy-image:
+    needs: build-push
+    runs-on:
+      group: self-hosted
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - run: echo "IMAGE_TAG=${GITHUB_REF_NAME##*/}" >> "$GITHUB_ENV"
+      - uses: IMIO/gha/trivy-scan-notify@v8
+        with:
+          SCAN_TYPE: image
+          IMAGE_REF: ${{ secrets.HARBOR_URL }}/docs/webservicejson:${{ env.IMAGE_TAG }}
+          TRIVYIGNORES: ''
+          TRIVY_USERNAME: ${{ secrets.DOCS_HARBOR_USERNAME }}
+          TRIVY_PASSWORD: ${{ secrets.DOCS_HARBOR_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.DOCS_MATTERMOST_WEBHOOK_URL }}

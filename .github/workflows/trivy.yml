@@ -1,0 +1,26 @@
+name: Trivy security scan
+on:
+  push:
+  pull_request:
+  # New CVEs show up without any commit
+  schedule:
+    - cron: '0 4 * * 1'  # Every Monday at 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  # uv.lock dependencies, secrets and Dockerfile. The image is scanned in main.yml after its push
+  trivy-fs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: IMIO/gha/trivy-scan-notify@v8
+        with:
+          SCAN_TYPE: fs
+          SCANNERS: vuln,secret,misconfig
+          TRIVYIGNORES: ''
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Only the weekly scan notifies, not every push
+          MATTERMOST_WEBHOOK_URL: ${{ github.event_name == 'schedule' && secrets.DOCS_MATTERMOST_WEBHOOK_URL || '' }}
