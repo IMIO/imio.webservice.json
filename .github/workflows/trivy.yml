@@ -17,6 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: IMIO/gha/trivy-scan-notify@v8
+        env:
+          # imio.amqp and imio.dataexchange.* are in the prod group, not in [project] dependencies,
+          # so Trivy takes them (and pika, psycopg2...) for dev dependencies and skips them
+          TRIVY_INCLUDE_DEV_DEPS: 'true'
         with:
           SCAN_TYPE: fs
           SCANNERS: vuln,secret,misconfig

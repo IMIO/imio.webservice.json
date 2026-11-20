@@ -60,6 +60,10 @@ jobs:
       security-events: write
     steps:
       - run: echo "IMAGE_TAG=${GITHUB_REF_NAME##*/}" >> "$GITHUB_ENV"
+      # The SARIF upload takes its commit from the workspace HEAD, stale on a self-hosted runner
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: IMIO/gha/trivy-scan-notify@v8
         with:
           SCAN_TYPE: image
